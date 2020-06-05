@@ -201,7 +201,7 @@ public class Restaurant extends Entity
 	{
 		return "Name: " + getName() + "\n" +
 			"Owner: " + getOwnerName() + "\n" +
-			"Genre: " + fieldToString(getGenre()) + "\n" +
+			"Genre: " + fieldToString(getCuisine()) + "\n" +
 			"Price: " + fieldToString(getPrice()) + "\n" +
 			"City: " + fieldToString(getCity()) + "\n" +
 			"Description: " + fieldToString(getDescription()) + "\n";

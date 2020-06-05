@@ -25,7 +25,7 @@ public class RequestHandlerPool implements Runnable
 	{
 		try {
 			while (!pool.isShutdown())
-				pool.execute(new Client(serverSocket.accept()));
+				pool.execute(new RequestHandler(serverSocket.accept()));
 		} catch (IOException ex) {
 			Logger.getLogger(RequestHandlerPool.class.getName()).log(Level.SEVERE, null, ex);
 			shutdown();
