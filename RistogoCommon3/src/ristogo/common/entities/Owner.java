@@ -20,6 +20,12 @@ public class Owner extends User
 	 * @param username The username.
 	 * @param password The password.
 	 */
+	
+	public Owner(String username, String password)
+	{
+		super(username);
+		setPassword(password);
+	}
 	public Owner(String username, String password, String birth)
 	{
 		super(username);

@@ -20,6 +20,13 @@ public class Customer extends User
 	 * @param username The username.
 	 * @param password The password.
 	 */
+	
+	public Customer(String username, String password)
+	{
+		super(username);
+		setPassword(password);
+	}
+	
 	public Customer(String username, String password, String birth)
 	{
 		super(username);
