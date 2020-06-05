@@ -123,6 +123,14 @@ public abstract class User extends Entity
 	{
 		return this.password;
 	}
+	
+	public String getBirth() {
+		return birth;
+	}
+
+	public void setBirth(String birth) {
+		this.birth = birth;
+	}
 
 	protected final static String hashPassword(String password)
 	{
@@ -217,4 +225,5 @@ public abstract class User extends Entity
 	{
 		return (this instanceof Owner);
 	}
+
 }
