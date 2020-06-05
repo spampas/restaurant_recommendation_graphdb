@@ -25,6 +25,14 @@ public class Message implements Serializable
 
 	protected final List<Entity> entities = new ArrayList<>();
 
+	protected Message(List<Entity> entities)
+	{
+		if (entities == null)
+			return;
+		for (Entity entity : entities)
+			this.entities.add(entity);
+	}
+	
 	protected Message(Entity... entities)
 	{
 		if (entities != null)
@@ -117,6 +125,31 @@ public class Message implements Serializable
 	public Entity getEntity()
 	{
 		return getEntity(0);
+	}
+	
+	public <E extends Entity> E getEntity(Class<E> clazz)
+	{
+		for (Entity entity: entities)
+			if (clazz.isAssignableFrom(entity.getClass()))
+				return clazz.cast(entity);
+		return null;
+	}
+
+	public <E extends Entity> List<E> getEntities(Class<E> clazz)
+	{
+		List<E> entityList = new ArrayList<E>();
+		for (Entity entity: entities)
+			if (clazz.isAssignableFrom(entity.getClass()))
+				entityList.add(clazz.cast(entity));
+		return entityList;
+	}
+
+	public boolean hasEntity(Class<?> clazz)
+	{
+		for (Entity entity: entities)
+			if (clazz.isAssignableFrom(entity.getClass()))
+				return true;
+		return false;
 	}
 
 	/**

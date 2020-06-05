@@ -14,8 +14,10 @@ public abstract class User extends Entity
 	private static final long serialVersionUID = -1609868778409848632L;
 
 	protected String username;
-
+	
 	protected String password;
+	
+	protected String birth;
 
 	/**
 	 * Creates an User.
@@ -41,7 +43,7 @@ public abstract class User extends Entity
 	 */
 	public User(int id, String username)
 	{
-		this(id, username, null);
+		this(id, username, null, null);
 	}
 
 	/**
@@ -51,7 +53,7 @@ public abstract class User extends Entity
 	 */
 	public User(String username, String password)
 	{
-		this(0, username, password);
+		this(0, username, password, null);
 	}
 
 	/**
@@ -60,12 +62,13 @@ public abstract class User extends Entity
 	 * @param username Username of the user.
 	 * @param password Plain pasword of the user.
 	 */
-	public User(int id, String username, String password)
+	public User(int id, String username, String password, String birth)
 	{
 		super(id);
 		setUsername(username);
 		if (password != null)
 			setPassword(password);
+		this.birth = birth; //TODO check format date
 	}
 
 	/**

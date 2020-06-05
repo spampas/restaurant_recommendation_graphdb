@@ -2,7 +2,7 @@ package ristogo.common.entities.enums;
 
 import java.util.logging.Logger;
 
-public enum Genre
+public enum Cuisine
 {
 	PIZZA,
 	JAPANESE,
@@ -25,7 +25,7 @@ public enum Genre
 		case STEAKHOUSE:
 			return "SteakHouse";
 		default:
-			Logger.getLogger(Genre.class.getName()).severe("Invalid enum value.");
+			Logger.getLogger(Cuisine.class.getName()).severe("Invalid enum value.");
 			return "Unknown";
 		}
 	}

@@ -1,9 +1,11 @@
 package ristogo.common.net;
 
+import java.util.Arrays;
+import java.util.List;
+
 import ristogo.common.entities.Customer;
 import ristogo.common.entities.Entity;
 import ristogo.common.entities.Owner;
-import ristogo.common.entities.Reservation;
 import ristogo.common.entities.Restaurant;
 import ristogo.common.entities.User;
 
@@ -21,11 +23,18 @@ public class RequestMessage extends Message
 	 * @param action The type of action requested.
 	 * @param entities The list of entities to attach.
 	 */
-	public RequestMessage(ActionRequest action, Entity... entities)
+	
+	public RequestMessage(ActionRequest action, List<Entity> entities)
 	{
 		super(entities);
 		this.action = action;
 	}
+
+	public RequestMessage(ActionRequest action,  Entity... entities)
+	{
+		this(action, Arrays.asList(entities));
+	}
+
 
 	/**
 	 * Returns the type of action requested.
@@ -62,26 +71,11 @@ public class RequestMessage extends Message
 
 		case EDIT_RESTAURANT:
 		case DELETE_RESTAURANT:
-		case LIST_RESERVATIONS:
 			return getEntityCount() == 1 && getEntity() instanceof Restaurant;
-		case EDIT_RESERVATION:
-		case DELETE_RESERVATION:
-			return getEntityCount() == 1 && getEntity() instanceof Reservation;
-		case RESERVE:
-		case CHECK_SEATS:
-			if (getEntityCount() < 1 || getEntityCount() > 2)
-				return false;
-			for (Entity entity: getEntities())
-				if (entity instanceof Reservation)
-					hasReservation = true;
-				else if (entity instanceof Restaurant)
-					hasRestaurant = true;
-			return (getEntityCount() == 2 && hasReservation && hasRestaurant) || (getEntityCount() == 1 && hasReservation);
 		case LIST_RESTAURANTS:
 			return (getEntityCount() == 0) || (getEntityCount() == 1 && getEntity() instanceof Restaurant);
 		case LOGOUT:
 		case GET_OWN_RESTAURANT:
-		case LIST_OWN_RESERVATIONS:
 			return getEntityCount() == 0;
 		default:
 			return false;

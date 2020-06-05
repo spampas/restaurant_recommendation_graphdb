@@ -3,8 +3,7 @@ package ristogo.common.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import ristogo.common.entities.enums.Genre;
-import ristogo.common.entities.enums.OpeningHours;
+import ristogo.common.entities.enums.Cuisine;
 import ristogo.common.entities.enums.Price;
 
 public class Restaurant extends Entity
@@ -21,7 +20,7 @@ public class Restaurant extends Entity
 	/**
 	 * The Genre of the restaurant.
 	 */
-	protected Genre genre;
+	protected Cuisine cuisine;
 	/**
 	 * The Price target in a scale from ECONOMIC to LUXURY.
 	 */
@@ -31,26 +30,12 @@ public class Restaurant extends Entity
 	 */
 	protected String city;
 	/**
-	 * The address where the restaurant is located.
-	 */
-	protected String address;
-	/**
 	 * A description of the restaurant.
 	 */
 	protected String description;
-	/**
-	 * The number of seats available in the restaurant.
-	 */
-	protected int seats;
-	/**
-	 * The opening hours of the restaurant.
-	 */
-	protected OpeningHours openingHours;
-	protected List<Reservation> activeReservations = new ArrayList<>();
-
-	/**
-	 * Creates a restaurant.
-	 */
+	
+	
+	
 	public Restaurant()
 	{
 		super();
@@ -72,7 +57,7 @@ public class Restaurant extends Entity
 	 */
 	public Restaurant(String ownerName)
 	{
-		this(0, ownerName + "'s Restaurant", ownerName, null, null, null, null, null, 0, OpeningHours.BOTH);
+		this(0, ownerName + "'s Restaurant", ownerName, null, null, null, null);
 	}
 
 	/**
@@ -88,19 +73,16 @@ public class Restaurant extends Entity
 	 * @param seats Restaurant's total number of seats.
 	 * @param openingHours Restaurant's opening hours.
 	 */
-	public Restaurant(int id, String name, String ownerName, Genre genre, Price price, String city, String address, String description, int seats, OpeningHours openingHours)
+	public Restaurant(int id, String name, String ownerName, Cuisine genre, Price price, String city,  String description)
 	{
 
 		super(id);
 		this.name = name;
 		this.ownerName = ownerName;
-		this.genre = genre;
+		this.cuisine = cuisine;
 		this.price = price;
 		this.city = city;
-		this.address = address;
 		this.description = description;
-		this.seats = seats;
-		this.openingHours = openingHours;
 	}
 
 	/**
@@ -143,18 +125,18 @@ public class Restaurant extends Entity
 	 * FGets the genre.
 	 * @return The genre.
 	 */
-	public Genre getGenre()
+	public Cuisine getGenre()
 	{
-		return genre;
+		return cuisine;
 	}
 
 	/**
 	 * Sets the genre.
 	 * @param genre The genre.
 	 */
-	public void setGenre(Genre genre)
+	public void setGenre(Cuisine cuisine)
 	{
-		this.genre = genre;
+		this.cuisine = cuisine;
 	}
 
 	/**
@@ -192,25 +174,6 @@ public class Restaurant extends Entity
 	{
 		this.city = city;
 	}
-
-	/**
-	 * Gets the address.
-	 * @return The address.
-	 */
-	public String getAddress()
-	{
-		return address;
-	}
-
-	/**
-	 * Sets the address.
-	 * @param address The address.
-	 */
-	public void setAddress(String address)
-	{
-		this.address = address;
-	}
-
 	/**
 	 * Gets the description.
 	 * @return The description.
@@ -229,41 +192,6 @@ public class Restaurant extends Entity
 		this.description = description;
 	}
 
-	/**
-	 * Gets the total number of seats.
-	 * @return The total number of seats.
-	 */
-	public int getSeats()
-	{
-		return seats;
-	}
-
-	/**
-	 * Sets the total number of seats.
-	 * @param seats The total number of seats.
-	 */
-	public void setSeats(int seats)
-	{
-		this.seats = seats;
-	}
-
-	/**
-	 * Gets the opening hours.
-	 * @return The opening hours.
-	 */
-	public OpeningHours getOpeningHours()
-	{
-		return openingHours;
-	}
-
-	/**
-	 * Sets the opening hours.
-	 * @param openingHours The opening hours.
-	 */
-	public void setOpeningHours(OpeningHours openingHours)
-	{
-		this.openingHours = openingHours;
-	}
 
 	/**
 	 * {@inheritDoc}
@@ -276,10 +204,7 @@ public class Restaurant extends Entity
 			"Genre: " + fieldToString(getGenre()) + "\n" +
 			"Price: " + fieldToString(getPrice()) + "\n" +
 			"City: " + fieldToString(getCity()) + "\n" +
-			"Address: " + fieldToString(getAddress()) + "\n" +
-			"Description: " + fieldToString(getDescription()) + "\n" +
-			"Seats: " + getSeats() + "\n" +
-			"Opening hours: " + getOpeningHours().toString() + "\n";
+			"Description: " + fieldToString(getDescription()) + "\n";
 	}
 
 	private String fieldToString(Object field)
