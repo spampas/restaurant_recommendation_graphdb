@@ -1,8 +1,6 @@
 package ristogo.ui.menus;
 
 import java.util.SortedSet;
-
-import ristogo.common.entities.Reservation;
 import ristogo.common.entities.User;
 import ristogo.net.Protocol;
 import ristogo.ui.Console;
@@ -42,8 +40,4 @@ public abstract class Menu
 		this.prompt = prompt;
 	}
 
-	protected static String getReservationMenuName(Reservation reservation)
-	{
-		return reservation.getRestaurantName() + " " + reservation.getDate() + " " + reservation.getTime() + " x" + reservation.getSeats();
-	}
 }

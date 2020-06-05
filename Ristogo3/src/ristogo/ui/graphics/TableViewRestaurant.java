@@ -7,7 +7,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import ristogo.common.entities.Entity;
 import ristogo.common.entities.Restaurant;
-import ristogo.common.entities.enums.Genre;
+import ristogo.common.entities.enums.Cuisine;
 import ristogo.common.entities.enums.Price;
 import ristogo.common.net.ResponseMessage;
 import ristogo.net.Protocol;
@@ -35,8 +35,8 @@ final class TableViewRestaurant extends TableView<RestaurantBean>
 		nameColumn.setMinWidth(150);
 		nameColumn.setMaxWidth(150);
 
-		TableColumn<RestaurantBean, Genre> typeColumn = new TableColumn<RestaurantBean, Genre>("Type");
-		typeColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
+		TableColumn<RestaurantBean, Cuisine> typeColumn = new TableColumn<RestaurantBean, Cuisine>("Type");
+		typeColumn.setCellValueFactory(new PropertyValueFactory<>("cuisine"));
 		typeColumn.setStyle(GUIConfig.getCSSTableColumnStyle());
 		typeColumn.setMinWidth(100);
 		typeColumn.setMaxWidth(100);
@@ -53,13 +53,7 @@ final class TableViewRestaurant extends TableView<RestaurantBean>
 		cityColumn.setMinWidth(100);
 		cityColumn.setMaxWidth(100);
 
-		TableColumn<RestaurantBean, String> addressColumn = new TableColumn<RestaurantBean, String>("Address");
-		addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
-		addressColumn.setStyle(GUIConfig.getCSSTableColumnStyle());
-		addressColumn.setMinWidth(200);
-		addressColumn.setMaxWidth(200);
-
-		getColumns().addAll(nameColumn, typeColumn, priceColumn, cityColumn, addressColumn);
+		getColumns().addAll(nameColumn, typeColumn, priceColumn, cityColumn);
 		setItems(restaurantList);
 
 	}

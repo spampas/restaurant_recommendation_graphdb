@@ -18,7 +18,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import ristogo.common.entities.Reservation;
 import ristogo.common.entities.Restaurant;
 import ristogo.common.entities.User;
 import ristogo.common.net.ResponseMessage;
@@ -72,11 +71,6 @@ public final class RistogoGUI extends Application
 		reservationsTableTitle.setTextFill(GUIConfig.getFgColor());
 		reservationsTableTitle.setStyle(GUIConfig.getCSSFormTitleStyle());
 
-		TableViewReservation reservationsTable = new TableViewReservation();
-		reservationsTable.refreshReservations();
-
-		BookForm bookForm = new BookForm(reservationsTable::refreshReservations);
-
 		TextField findCityField = new TextField();
 		findCityField.setPromptText("insert a name of a city");
 		findCityField.setMinSize(200, 30);
@@ -113,15 +107,10 @@ public final class RistogoGUI extends Application
 			Restaurant restaurant = restaurantsTable.getSelectedEntity();
 			if (restaurant == null)
 				return;
-			bookForm.fill(restaurant);
+			
+			// TODO: Gestire evento
+			
 			descriptionField.setText(restaurant.getDescription());
-		});
-
-		reservationsTable.setOnMouseClicked((event) -> {
-			Reservation reservation = reservationsTable.getSelectedEntity();
-			if (reservation == null)
-				return;
-			bookForm.fill(reservation);
 		});
 
 		find.setOnAction((event) -> {
@@ -134,8 +123,8 @@ public final class RistogoGUI extends Application
 		VBox leftPart = new VBox(10);
 		VBox rightPart = new VBox(10);
 
-		leftPart.getChildren().addAll(title, bookForm);
-		rightPart.getChildren().addAll(reservationsTableTitle,findBox, restaurantsTable, descriptionBox, restaurantsTableTitle, reservationsTable);
+		// TODO: Aggiungere elementi a leftPart
+		rightPart.getChildren().addAll(reservationsTableTitle,findBox, restaurantsTable, descriptionBox, restaurantsTableTitle);
 		applicationInterface.getChildren().addAll(leftPart, rightPart);
 
 		leftPart.setStyle(GUIConfig.getCSSInterfacePartStyle());
@@ -155,25 +144,13 @@ public final class RistogoGUI extends Application
 		restaurantForm = new ModifyRestaurantForm(this::getOwnRestaurant);
 		getOwnRestaurant();
 
-		Label reservationsTableTitle = new Label("List of Reservations at your restaurant");
-		reservationsTableTitle.setFont(GUIConfig.getFormTitleFont());
-		reservationsTableTitle.setTextFill(GUIConfig.getFgColor());
-		reservationsTableTitle.setStyle(GUIConfig.getCSSFormTitleStyle());
-
-		TableViewReservation reservationsTable = new TableViewReservation(restaurant);
-		reservationsTable.refreshReservations();
-
-		FormButton refreshButton = new FormButton("Refresh");
-
-		refreshButton.setOnAction((ActionEvent ev) -> {
-			reservationsTable.refreshReservations();
-		});
-
 		VBox leftPart = new VBox(10);
 		VBox rightPart = new VBox(10);
 
 		leftPart.getChildren().addAll(title, restaurantForm);
-		rightPart.getChildren().addAll(reservationsTableTitle, reservationsTable, refreshButton);
+		
+		// TODO: Aggiungere elementi in rightPart
+		
 		applicationInterface.getChildren().addAll(leftPart, rightPart);
 
 		leftPart.setStyle(GUIConfig.getCSSInterfacePartStyle());

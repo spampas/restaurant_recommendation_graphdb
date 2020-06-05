@@ -125,7 +125,7 @@ public class Restaurant extends Entity
 	 * FGets the genre.
 	 * @return The genre.
 	 */
-	public Cuisine getGenre()
+	public Cuisine getCuisine()
 	{
 		return cuisine;
 	}
@@ -134,7 +134,7 @@ public class Restaurant extends Entity
 	 * Sets the genre.
 	 * @param genre The genre.
 	 */
-	public void setGenre(Cuisine cuisine)
+	public void setCuisine(Cuisine cuisine)
 	{
 		this.cuisine = cuisine;
 	}

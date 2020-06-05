@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import ristogo.common.entities.Customer;
 import ristogo.common.entities.Entity;
 import ristogo.common.entities.Owner;
-import ristogo.common.entities.Reservation;
 import ristogo.common.entities.Restaurant;
 import ristogo.common.entities.User;
 import ristogo.common.net.ActionRequest;

@@ -13,8 +13,8 @@ public class UserMenu extends Menu
 	protected SortedSet<MenuEntry> getMenu()
 	{
 		SortedSet<MenuEntry> menu = new TreeSet<>();
-		menu.add(new MenuEntry(1, "View your currently active reservations", this::handleViewOwnReservations));
-		menu.add(new MenuEntry(2, "Reserve a table", this::handleReserve));
+		//TODO: Aggiungere menù utente
+		
 		if (loggedUser.isOwner())
 			menu.add(new MenuEntry(3, "Manage your restaurant", this::handleEditRestaurant));
 		menu.add(new MenuEntry(0, "Log-Out", true, this::handleLogout));
@@ -32,11 +32,6 @@ public class UserMenu extends Menu
 		Console.println("Sucessfully logged out!");
 	}
 
-	private void handleViewOwnReservations(MenuEntry entry)
-	{
-		new OwnReservationListMenu().show();
-	}
-
 	private void handleEditRestaurant(MenuEntry entry)
 	{
 		ResponseMessage resMsg = protocol.getOwnRestaurant();
@@ -47,16 +42,4 @@ public class UserMenu extends Menu
 		new RestaurantMenu((Restaurant)resMsg.getEntity()).show();
 	}
 
-	private void handleReserve(MenuEntry entry)
-	{
-		Console.println("Search Restaurants. Insert the name of a city (or leave blank to search for all restaurants):");
-		String city = Console.askString("City");
-		if (city == null) {
-			new RestaurantListMenu().show();
-			return;
-		}
-		Restaurant restaurant = new Restaurant();
-		restaurant.setCity(city);
-		new RestaurantListMenu(restaurant).show();
-	}
 }
