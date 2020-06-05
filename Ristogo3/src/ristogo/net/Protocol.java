@@ -67,6 +67,8 @@ public class Protocol implements AutoCloseable
 
 	public ResponseMessage registerUser(Owner owner, Restaurant restaurant)
 	{
+		//TODO: Da cambiare, non occorre collegare subito il padrone al ristorante (relazione 1:N)
+		
 		ResponseMessage resMsg = sendRequest(ActionRequest.REGISTER, owner, restaurant);
 		if (resMsg.isSuccess() && !(resMsg.getEntity() instanceof Owner))
 			return getProtocolErrorMessage();
@@ -75,6 +77,7 @@ public class Protocol implements AutoCloseable
 
 	public ResponseMessage getOwnRestaurant()
 	{
+		//TODO: si possono possedere anche più ristoranti
 		return sendRequest(ActionRequest.GET_OWN_RESTAURANT);
 	}
 
@@ -88,16 +91,6 @@ public class Protocol implements AutoCloseable
 		return sendRequest(ActionRequest.DELETE_RESTAURANT, restaurant);
 	}
 
-	public ResponseMessage getOwnActiveReservations()
-	{
-		return sendRequest(ActionRequest.LIST_OWN_RESERVATIONS);
-	}
-
-	public ResponseMessage editReservation(Reservation reservation)
-	{
-		return sendRequest(ActionRequest.EDIT_RESERVATION, reservation);
-	}
-
 	public ResponseMessage getRestaurants()
 	{
 		return sendRequest(ActionRequest.LIST_RESTAURANTS);
@@ -108,30 +101,6 @@ public class Protocol implements AutoCloseable
 		return sendRequest(ActionRequest.LIST_RESTAURANTS, restaurant);
 	}
 
-	public ResponseMessage reserve(Reservation reservation, Restaurant restaurant)
-	{
-		return sendRequest(ActionRequest.RESERVE, reservation, restaurant);
-	}
-
-	public ResponseMessage deleteReservation(Reservation reservation)
-	{
-		return sendRequest(ActionRequest.DELETE_RESERVATION, reservation);
-	}
-
-	public ResponseMessage getReservations(Restaurant restaurant)
-	{
-		return sendRequest(ActionRequest.LIST_RESERVATIONS, restaurant);
-	}
-
-	public ResponseMessage checkSeats(Reservation reservation, Restaurant restaurant)
-	{
-		return sendRequest(ActionRequest.CHECK_SEATS, reservation, restaurant);
-	}
-
-	public ResponseMessage checkSeats(Reservation reservation)
-	{
-		return sendRequest(ActionRequest.CHECK_SEATS, reservation);
-	}
 
 	private ResponseMessage sendRequest(ActionRequest actionRequest, Entity... entities)
 	{
