@@ -124,11 +124,13 @@ final class LoginDialog extends Dialog<User>
 				resMsg = protocol.registerUser(new Owner(username, password), new Restaurant(username));
 			else
 				resMsg = protocol.registerUser(new Customer(username, password));
+			
 			if (!resMsg.isSuccess()) {
 				showError(resMsg.getErrorMsg());
 				event.consume();
 				return;
 			}
+			
 		}
 		resMsg = protocol.performLogin(new Customer(username, password));
 		if (!resMsg.isSuccess()) {
@@ -137,6 +139,7 @@ final class LoginDialog extends Dialog<User>
 			return;
 		}
 		loggedUser = (User)resMsg.getEntity();
+		
 	}
 
 	private void textChangeListener(ObservableValue<? extends String> observable, String oldValue, String newValue)

@@ -21,14 +21,12 @@ public class RestaurantViewer extends VBox {
 	private final Label descriptionLabel = new Label();
 	private final TextArea descriptionField = new TextArea();
 	
-	
-	private final Runnable onAction;
+
 	private Restaurant restaurant;
 	
-	public RestaurantViewer (Runnable onAction) {
+	public RestaurantViewer () {
 		
 		super(10);
-		this.onAction = onAction;
 		
 		restaurantTableTitle.setText("List of Restaurant");
 		restaurantTableTitle.setFont(GUIConfig.getFormTitleFont());
@@ -44,7 +42,7 @@ public class RestaurantViewer extends VBox {
 		find.setTextFill(GUIConfig.getInvertedFgColor());
 		find.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
 		
-		likeButton.setText("Like");
+		likeButton.setText("Put Like");
 		likeButton.setFont(GUIConfig.getButtonFont());
 		likeButton.setTextFill(GUIConfig.getInvertedFgColor());
 		likeButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
@@ -53,7 +51,7 @@ public class RestaurantViewer extends VBox {
 		findBox.getChildren().addAll(findField, find);
 
 		
-		restaurantsTable.refreshRestaurants();
+		//restaurantsTable.refreshRestaurants();
 
 		descriptionLabel.setText("Description: ");
 		descriptionLabel.setFont(GUIConfig.getBoldVeryTinyTextFont());
@@ -88,11 +86,30 @@ public class RestaurantViewer extends VBox {
 		String name = findField.getText();
 		if (name == null)
 			return;
-		restaurantsTable.refreshRestaurants(name);
+		//restaurantsTable.refreshRestaurants(name);
 	}
 	
 	private void handleLikeButtonAction(ActionEvent event)
 	{
 		//TODO
+	}
+	
+	public void changeConfigurationRestaurantViewer(int config) {
+		
+		switch(config) {
+		
+		case 0:
+			likeButton.setText("Remove Like");
+			likeButton.setVisible(false);
+			//TODO: refresh-table
+			break;
+		case 1:
+		case 2:
+			likeButton.setText("Put Like");
+			likeButton.setVisible(false);
+			//TODO: refresh-table
+		default:
+			break;
+		}
 	}
 }

@@ -3,11 +3,9 @@ package ristogo.ui.graphics;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import ristogo.common.entities.Restaurant;
 import ristogo.common.entities.User;
 import ristogo.ui.graphics.config.GUIConfig;
 
@@ -19,13 +17,11 @@ public class UserViewer extends VBox {
 	private final Button followButton = new Button();
 	private final UserTableView userTable = new UserTableView();
 	
-	private final Runnable onAction;
 	private User user;
 	
-	public UserViewer (Runnable onAction) {
+	public UserViewer () {
 		
 		super(10);
-		this.onAction = onAction;
 		
 		userTableTitle.setText("List of Restaurant");
 		userTableTitle.setFont(GUIConfig.getFormTitleFont());
@@ -50,7 +46,7 @@ public class UserViewer extends VBox {
 		findBox.getChildren().addAll(findField, find);
 
 		
-		userTable.refreshRestaurants();
+		//userTable.refreshRestaurants();
 
 	
 		userTable.setOnMouseClicked((event) -> {
@@ -69,12 +65,31 @@ public class UserViewer extends VBox {
 		String name = findField.getText();
 		if (name == null)
 			return;
-		userTable.refreshRestaurants(name);
+		//userTable.refreshRestaurants(name);
 	}
 	
 	private void handleLikeButtonAction(ActionEvent event)
 	{
 		//TODO
+	}
+	
+	public void changeConfigurationRestaurantViewer(int config) {
+		
+		switch(config) {
+		
+		case 0:
+			followButton.setText("UnFollow");
+			followButton.setVisible(false);
+			//TODO: refresh-table
+			break;
+		case 1:
+		case 2:
+			followButton.setText("Follow");
+			followButton.setVisible(false);
+			//TODO: refresh-table
+		default:
+			break;
+		}
 	}
 	
 

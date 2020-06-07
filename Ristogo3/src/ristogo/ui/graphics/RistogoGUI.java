@@ -35,15 +35,16 @@ public final class RistogoGUI extends Application
 	@Override
 	public void start(Stage primaryStage)
 	{
-		LoginDialog login = new LoginDialog();
+/*		LoginDialog login = new LoginDialog();
 		Optional<User> result = login.showAndWait();
 		result.ifPresentOrElse(
 			data -> { loggedUser = data; },
 			() -> { System.exit(0); }
 		);
-
+*/
 		HBox applicationInterface;
-		applicationInterface = loggedUser.isOwner() ? buildOwnerInterface() : buildCustomerInterface();
+		//applicationInterface = loggedUser.isOwner() ? buildOwnerInterface() : buildCustomerInterface();
+		applicationInterface = buildCustomerInterface();
 		Scene scene = new Scene(new Group(applicationInterface));
 		scene.setFill(GUIConfig.getBgColor());
 
@@ -57,7 +58,7 @@ public final class RistogoGUI extends Application
 	@Override
 	public void stop()
 	{
-		Protocol.getInstance().performLogout();
+		//Protocol.getInstance().performLogout();
 		System.exit(0);
 	}
 
@@ -65,61 +66,18 @@ public final class RistogoGUI extends Application
 	{
 		HBox applicationInterface = new HBox(10);
 		GridPane title = generateTitle();
-		Label restaurantTableTitle = new Label("List of Restaurant");
-		restaurantTableTitle.setFont(GUIConfig.getFormTitleFont());
-		restaurantTableTitle.setTextFill(GUIConfig.getFgColor());
-		restaurantTableTitle.setStyle(GUIConfig.getCSSFormTitleStyle());
-
-		TextField findField = new TextField();
-		findField.setPromptText("insert a name of a restaurant");
-		findField.setMinSize(200, 30);
-		findField.setMaxSize(200, 30);
-		Button find = new Button("Find");
-		find.setFont(GUIConfig.getButtonFont());
-		find.setTextFill(GUIConfig.getInvertedFgColor());
-		find.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
-
-		HBox findBox = new HBox(10);
-		findBox.getChildren().addAll(findField, find);
-
-		TableViewRestaurant restaurantsTable = new TableViewRestaurant();
-		restaurantsTable.refreshRestaurants();
-
-		Label descriptionLabel = new Label("Description: ");
-		descriptionLabel.setFont(GUIConfig.getBoldVeryTinyTextFont());
-		descriptionLabel.setTextFill(GUIConfig.getFgColor());
-		TextArea descriptionField = new TextArea();
-		descriptionField.setWrapText(true);
-		descriptionField.setEditable(false);
-		descriptionField.setMinSize(480, 100);
-		descriptionField.setMaxSize(480, 100);
-
-		HBox descriptionBox = new HBox(20);
-		descriptionBox.getChildren().addAll(descriptionLabel, descriptionField);
-
-	
-		restaurantsTable.setOnMouseClicked((event) -> {
-			Restaurant restaurant = restaurantsTable.getSelectedEntity();
-			if (restaurant == null)
-				return;
-			
-			// TODO: Gestire evento
-			
-			descriptionField.setText(restaurant.getDescription());
-		});
-
-		find.setOnAction((event) -> {
-			String name = findField.getText();
-			if (name == null)
-				return;
-			restaurantsTable.refreshRestaurants(name);
-		});
 
 		VBox leftPart = new VBox(10);
+		ButtonForm buttonFormLeft = new ButtonForm("friend");
+		UserViewer userTable = new UserViewer();
+		
+		leftPart.getChildren().addAll(title,buttonFormLeft, userTable);
+		
 		VBox rightPart = new VBox(10);
-
-		// TODO: Aggiungere elementi a leftPart
-		rightPart.getChildren().addAll(restaurantTableTitle,findBox, restaurantsTable, descriptionBox);
+		ButtonForm buttonFormRight = new ButtonForm("restaurant");
+		RestaurantViewer restaurantTable = new RestaurantViewer();
+		
+		rightPart.getChildren().addAll(buttonFormRight,restaurantTable);
 		applicationInterface.getChildren().addAll(leftPart, rightPart);
 
 		leftPart.setStyle(GUIConfig.getCSSInterfacePartStyle());
