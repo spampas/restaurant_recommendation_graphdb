@@ -9,6 +9,7 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
@@ -31,10 +32,12 @@ final class LoginDialog extends Dialog<User>
 	private boolean registering;
 	private final Button okButton;
 	private final Button switchButton;
+	private final DialogLabel birthLabel = new DialogLabel("Date of Birth: ");
 	private final DialogLabel confirmLabel = new DialogLabel("Confirm: ");
 	private final DialogLabel typeLabel = new DialogLabel("Type: ");
 	private final DialogLabel errorLabel = new DialogLabel("Fill out the form.");
 	private final DialogTextField usernameField = new DialogTextField("Username");
+	private final DatePicker birthField = new DatePicker();
 	private final DialogPasswordField passwordField = new DialogPasswordField("Password");
 	private final DialogPasswordField confirmField = new DialogPasswordField("Confirm password");
 	private final ChoiceBox<String> typeSelector = new ChoiceBox<String>();
@@ -61,6 +64,7 @@ final class LoginDialog extends Dialog<User>
 		errorLabel.setStyle("-fx-background-color: red;");
 		errorLabel.setVisible(false);
 		typeSelector.getItems().addAll("Customer", "Owner");
+		birthLabel.setVisible(false); birthField.setVisible(false);
 		confirmLabel.setVisible(false); confirmField.setVisible(false);
 		typeLabel.setVisible(false); typeSelector.setVisible(false);
 		typeSelector.setValue("Customer");
@@ -73,10 +77,11 @@ final class LoginDialog extends Dialog<User>
 		grid.setVgap(10);
 		grid.setPadding(new Insets(20, 150, 10, 10));
 		grid.add(usernameLabel, 0, 0); grid.add(usernameField, 1, 0);
-		grid.add(passwordLabel, 0, 1); grid.add(passwordField, 1, 1);
-		grid.add(confirmLabel, 0, 2); grid.add(confirmField, 1, 2);
-		grid.add(typeLabel, 0, 3); grid.add(typeSelector, 1, 3);
-		grid.add(errorLabel, 0, 4, 2, 1);
+		grid.add(birthLabel, 0, 1); grid.add(birthField, 1, 1);
+		grid.add(passwordLabel, 0, 2); grid.add(passwordField, 1, 2);
+		grid.add(confirmLabel, 0, 3); grid.add(confirmField, 1, 3);
+		grid.add(typeLabel, 0, 4); grid.add(typeSelector, 1, 4);
+		grid.add(errorLabel, 0, 5, 2, 1);
 
 		ButtonType okButtonType = new ButtonType("Login", ButtonData.OK_DONE);
 		ButtonType switchButtonType = new ButtonType("Register", ButtonData.OTHER);
@@ -114,6 +119,7 @@ final class LoginDialog extends Dialog<User>
 		String username = usernameField.getText();
 		String password = passwordField.getText();
 		if (registering) {
+			String birth = birthField.getValue().toString();
 			if (typeSelector.getValue().equals("Owner"))
 				resMsg = protocol.registerUser(new Owner(username, password), new Restaurant(username));
 			else
@@ -174,11 +180,13 @@ final class LoginDialog extends Dialog<User>
 		if (registering) {
 			switchButton.setText("Login");
 			okButton.setText("Register");
+			birthLabel.setVisible(true); birthField.setVisible(true);
 			confirmLabel.setVisible(true); confirmField.setVisible(true);
 			typeLabel.setVisible(true); typeSelector.setVisible(true);
 		} else {
 			switchButton.setText("Register");
 			okButton.setText("Login");
+			birthLabel.setVisible(false); birthField.setVisible(false);
 			confirmLabel.setVisible(false); confirmField.setVisible(false);
 			typeLabel.setVisible(false); typeSelector.setVisible(false);
 		}

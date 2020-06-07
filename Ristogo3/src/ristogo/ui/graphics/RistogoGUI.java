@@ -44,7 +44,6 @@ public final class RistogoGUI extends Application
 
 		HBox applicationInterface;
 		applicationInterface = loggedUser.isOwner() ? buildOwnerInterface() : buildCustomerInterface();
-
 		Scene scene = new Scene(new Group(applicationInterface));
 		scene.setFill(GUIConfig.getBgColor());
 
@@ -66,22 +65,22 @@ public final class RistogoGUI extends Application
 	{
 		HBox applicationInterface = new HBox(10);
 		GridPane title = generateTitle();
-		Label reservationsTableTitle = new Label("List of Restaurant: you can find restaurants searching by city");
-		reservationsTableTitle.setFont(GUIConfig.getFormTitleFont());
-		reservationsTableTitle.setTextFill(GUIConfig.getFgColor());
-		reservationsTableTitle.setStyle(GUIConfig.getCSSFormTitleStyle());
+		Label restaurantTableTitle = new Label("List of Restaurant");
+		restaurantTableTitle.setFont(GUIConfig.getFormTitleFont());
+		restaurantTableTitle.setTextFill(GUIConfig.getFgColor());
+		restaurantTableTitle.setStyle(GUIConfig.getCSSFormTitleStyle());
 
-		TextField findCityField = new TextField();
-		findCityField.setPromptText("insert a name of a city");
-		findCityField.setMinSize(200, 30);
-		findCityField.setMaxSize(200, 30);
+		TextField findField = new TextField();
+		findField.setPromptText("insert a name of a restaurant");
+		findField.setMinSize(200, 30);
+		findField.setMaxSize(200, 30);
 		Button find = new Button("Find");
 		find.setFont(GUIConfig.getButtonFont());
 		find.setTextFill(GUIConfig.getInvertedFgColor());
 		find.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
 
 		HBox findBox = new HBox(10);
-		findBox.getChildren().addAll(findCityField, find);
+		findBox.getChildren().addAll(findField, find);
 
 		TableViewRestaurant restaurantsTable = new TableViewRestaurant();
 		restaurantsTable.refreshRestaurants();
@@ -98,11 +97,7 @@ public final class RistogoGUI extends Application
 		HBox descriptionBox = new HBox(20);
 		descriptionBox.getChildren().addAll(descriptionLabel, descriptionField);
 
-		Label restaurantsTableTitle = new Label("My Reservation");
-		restaurantsTableTitle.setFont(GUIConfig.getFormTitleFont());
-		restaurantsTableTitle.setTextFill(GUIConfig.getFgColor());
-		restaurantsTableTitle.setStyle(GUIConfig.getCSSFormTitleStyle());
-
+	
 		restaurantsTable.setOnMouseClicked((event) -> {
 			Restaurant restaurant = restaurantsTable.getSelectedEntity();
 			if (restaurant == null)
@@ -114,17 +109,17 @@ public final class RistogoGUI extends Application
 		});
 
 		find.setOnAction((event) -> {
-			String city = findCityField.getText();
-			if (city == null)
+			String name = findField.getText();
+			if (name == null)
 				return;
-			restaurantsTable.refreshRestaurants(city);
+			restaurantsTable.refreshRestaurants(name);
 		});
 
 		VBox leftPart = new VBox(10);
 		VBox rightPart = new VBox(10);
 
 		// TODO: Aggiungere elementi a leftPart
-		rightPart.getChildren().addAll(reservationsTableTitle,findBox, restaurantsTable, descriptionBox, restaurantsTableTitle);
+		rightPart.getChildren().addAll(restaurantTableTitle,findBox, restaurantsTable, descriptionBox);
 		applicationInterface.getChildren().addAll(leftPart, rightPart);
 
 		leftPart.setStyle(GUIConfig.getCSSInterfacePartStyle());
@@ -135,6 +130,7 @@ public final class RistogoGUI extends Application
 
 		return applicationInterface;
 	}
+
 
 	private HBox buildOwnerInterface()
 	{
