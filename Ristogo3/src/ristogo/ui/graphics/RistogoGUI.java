@@ -82,8 +82,8 @@ public final class RistogoGUI extends Application
 
 		leftPart.setStyle(GUIConfig.getCSSInterfacePartStyle());
 		rightPart.setStyle(GUIConfig.getCSSInterfacePartStyle());
-		leftPart.setPrefSize(400, 600);
-		rightPart.setPrefSize(600, 600);
+		leftPart.setPrefSize(500, 600);
+		rightPart.setPrefSize(500, 600);
 		applicationInterface.setPrefSize(1000, 600);
 
 		return applicationInterface;
