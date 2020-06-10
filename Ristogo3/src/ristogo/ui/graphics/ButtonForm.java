@@ -1,6 +1,7 @@
 package ristogo.ui.graphics;
 
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import ristogo.ui.graphics.config.GUIConfig;
 
@@ -13,6 +14,9 @@ public class ButtonForm extends VBox{
 	
 	public ButtonForm(String type)
 	{
+		
+		super(10);
+		
 		this.type = type;
 		
 		myButton = new Button();
@@ -40,6 +44,7 @@ public class ButtonForm extends VBox{
 				break;
 		}
 		
+		this.getChildren().addAll(myButton, findButton, recommendedButton);
 		
 	}
 

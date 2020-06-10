@@ -46,9 +46,10 @@ public class RestaurantViewer extends VBox {
 		likeButton.setFont(GUIConfig.getButtonFont());
 		likeButton.setTextFill(GUIConfig.getInvertedFgColor());
 		likeButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
+		likeButton.setDisable(true);
 
 		HBox findBox = new HBox(10);
-		findBox.getChildren().addAll(findField, find);
+		findBox.getChildren().addAll(findField, find, likeButton);
 
 		
 		//restaurantsTable.refreshRestaurants();
@@ -64,6 +65,9 @@ public class RestaurantViewer extends VBox {
 
 		HBox descriptionBox = new HBox(20);
 		descriptionBox.getChildren().addAll(descriptionLabel, descriptionField);
+		
+		
+		this.getChildren().addAll(restaurantTableTitle,findBox, restaurantsTable, descriptionBox);
 
 	
 		restaurantsTable.setOnMouseClicked((event) -> {
@@ -71,8 +75,7 @@ public class RestaurantViewer extends VBox {
 			if (restaurant == null)
 				return;
 			
-			// TODO: Gestire evento
-			
+			likeButton.setDisable(false);
 			descriptionField.setText(restaurant.getDescription());
 		});
 
@@ -111,5 +114,10 @@ public class RestaurantViewer extends VBox {
 		default:
 			break;
 		}
+	}
+
+
+	public Button getLikeButton() {
+		return likeButton;
 	}
 }

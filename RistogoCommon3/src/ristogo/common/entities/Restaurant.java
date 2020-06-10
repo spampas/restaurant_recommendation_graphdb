@@ -73,7 +73,7 @@ public class Restaurant extends Entity
 	 * @param seats Restaurant's total number of seats.
 	 * @param openingHours Restaurant's opening hours.
 	 */
-	public Restaurant(int id, String name, String ownerName, Cuisine genre, Price price, String city,  String description)
+	public Restaurant(int id, String name, String ownerName, Cuisine cuisine, Price price, String city,  String description)
 	{
 
 		super(id);

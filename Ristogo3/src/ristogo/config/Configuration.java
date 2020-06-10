@@ -86,7 +86,8 @@ public class Configuration implements Serializable
 	public static Configuration getConfig()
 	{
 		if (singletonObj == null)
-			try {
+			singletonObj = new Configuration();
+		/*	try {
 				singletonObj = loadConfiguration();
 			} catch (FileNotFoundException | InvalidConfigurationException ex) {
 				if (ex instanceof FileNotFoundException)
@@ -94,7 +95,7 @@ public class Configuration implements Serializable
 				else if (ex instanceof InvalidConfigurationException)
 					Logger.getLogger(Configuration.class.getName()).config("Invalid configuration file. Loading defaults...");
 				singletonObj = new Configuration();
-			}
+			}*/
 		return singletonObj;
 	}
 

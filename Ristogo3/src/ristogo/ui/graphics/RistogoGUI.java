@@ -18,6 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ristogo.common.entities.Customer;
 import ristogo.common.entities.Restaurant;
 import ristogo.common.entities.User;
 import ristogo.common.net.ResponseMessage;
@@ -42,7 +43,8 @@ public final class RistogoGUI extends Application
 			() -> { System.exit(0); }
 		);
 */
-		HBox applicationInterface;
+		loggedUser = new Customer("ciccio", "ciccio");
+		VBox applicationInterface;
 		//applicationInterface = loggedUser.isOwner() ? buildOwnerInterface() : buildCustomerInterface();
 		applicationInterface = buildCustomerInterface();
 		Scene scene = new Scene(new Group(applicationInterface));
@@ -62,37 +64,79 @@ public final class RistogoGUI extends Application
 		System.exit(0);
 	}
 
-	private HBox buildCustomerInterface()
+	private VBox buildCustomerInterface()
 	{
-		HBox applicationInterface = new HBox(10);
+		VBox applicationInterface = new VBox(10);
+		HBox menu = new HBox(10);
 		GridPane title = generateTitle();
 
 		VBox leftPart = new VBox(10);
-		ButtonForm buttonFormLeft = new ButtonForm("friend");
+		ButtonForm buttonFormLeft = new ButtonForm("restaurant");
 		UserViewer userTable = new UserViewer();
 		
-		leftPart.getChildren().addAll(title,buttonFormLeft, userTable);
+		leftPart.getChildren().addAll(buttonFormLeft, userTable);
 		
 		VBox rightPart = new VBox(10);
-		ButtonForm buttonFormRight = new ButtonForm("restaurant");
+		ButtonForm buttonFormRight = new ButtonForm("friend");
 		RestaurantViewer restaurantTable = new RestaurantViewer();
 		
+		
 		rightPart.getChildren().addAll(buttonFormRight,restaurantTable);
-		applicationInterface.getChildren().addAll(leftPart, rightPart);
+		
+		menu.getChildren().addAll(leftPart, rightPart);
+		
+		applicationInterface.getChildren().addAll(title, menu);
 
 		leftPart.setStyle(GUIConfig.getCSSInterfacePartStyle());
 		rightPart.setStyle(GUIConfig.getCSSInterfacePartStyle());
 		leftPart.setPrefSize(500, 600);
 		rightPart.setPrefSize(500, 600);
-		applicationInterface.setPrefSize(1000, 600);
-
+		menu.setPrefSize(1000, 600);
+		
+		
+		buttonFormLeft.getMyButton().setOnMouseClicked((event) -> {
+			userTable.getFollowButton().setText("Unfollow");
+		});
+	
+		buttonFormLeft.getFindButton().setOnMouseClicked((event) -> {
+			userTable.getFollowButton().setText("Follow");
+		});
+		
+		buttonFormLeft.getRecommendedButton().setOnMouseClicked((event) -> {
+			userTable.getFollowButton().setText("Follow");
+			UserRecommendationDialog recommendationDialog = new UserRecommendationDialog();
+			Optional<User> result = recommendationDialog.showAndWait();
+			result.ifPresentOrElse(
+				data -> { loggedUser = data; },
+				() -> { }
+			);
+		});
+		
+		buttonFormRight.getMyButton().setOnMouseClicked((event) -> {
+				restaurantTable.getLikeButton().setText("Remove Like");
+		});
+		
+		buttonFormRight.getFindButton().setOnMouseClicked((event) -> {
+			restaurantTable.getLikeButton().setText("Put Like");
+		});
+		
+		buttonFormRight.getRecommendedButton().setOnMouseClicked((event) -> {
+			restaurantTable.getLikeButton().setText("Put Like");
+			RestaurantRecommendationDialog recommendationDialog = new RestaurantRecommendationDialog();
+			Optional<Restaurant> result = recommendationDialog.showAndWait();
+			result.ifPresentOrElse(
+				data -> { restaurant = data; },
+				() -> { }
+			);
+		});
+		
 		return applicationInterface;
 	}
 
 
 	private HBox buildOwnerInterface()
 	{
-		HBox applicationInterface = new HBox(10);
+		HBox applicationInterface = new HBox(20);
 
 		GridPane title = generateTitle();
 		restaurantForm = new ModifyRestaurantForm(this::getOwnRestaurant);
@@ -103,23 +147,25 @@ public final class RistogoGUI extends Application
 
 		leftPart.getChildren().addAll(title, restaurantForm);
 		
-		// TODO: Aggiungere elementi in rightPart
-		
 		applicationInterface.getChildren().addAll(leftPart, rightPart);
-
+		
+	
 		leftPart.setStyle(GUIConfig.getCSSInterfacePartStyle());
 		rightPart.setStyle(GUIConfig.getCSSInterfacePartStyle());
 		leftPart.setPrefSize(400, 600);
 		rightPart.setPrefSize(600, 600);
-		applicationInterface.setPrefSize(1000, 600);
 		rightPart.setAlignment(Pos.CENTER);
+		applicationInterface.setPrefSize(1000, 600);
+		title.setAlignment(Pos.CENTER);
+		applicationInterface.setAlignment(Pos.CENTER);
+		
 
 		return applicationInterface;
 	}
 
 	private GridPane generateTitle()
 	{
-		Label title = new Label("RistoGo");
+		Label title = new Label("RistoGo - Recommendations");
 		title.setFont(GUIConfig.getTitleFont());
 		title.setTextFill(GUIConfig.getFgColor());
 
@@ -142,8 +188,8 @@ public final class RistogoGUI extends Application
 
 		grid.add(title, 0, 0);
 		grid.add(icon, 1, 0);
-		grid.add(welcomeLabel, 0, 1);
-		grid.add(usernameLabel, 1, 1);
+		grid.add(welcomeLabel, 2, 0);
+		grid.add(usernameLabel, 3, 0);
 
 		return grid;
 	}

@@ -23,12 +23,12 @@ public class UserViewer extends VBox {
 		
 		super(10);
 		
-		userTableTitle.setText("List of Restaurant");
+		userTableTitle.setText("List of Users");
 		userTableTitle.setFont(GUIConfig.getFormTitleFont());
 		userTableTitle.setTextFill(GUIConfig.getFgColor());
 		userTableTitle.setStyle(GUIConfig.getCSSFormTitleStyle());
 		
-		findField.setPromptText("insert a name of a restaurant");
+		findField.setPromptText("insert a name of a user");
 		findField.setMinSize(200, 30);
 		findField.setMaxSize(200, 30);
 		
@@ -41,9 +41,13 @@ public class UserViewer extends VBox {
 		followButton.setFont(GUIConfig.getButtonFont());
 		followButton.setTextFill(GUIConfig.getInvertedFgColor());
 		followButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
+		followButton.setDisable(true);
 
 		HBox findBox = new HBox(10);
-		findBox.getChildren().addAll(findField, find);
+		findBox.getChildren().addAll(findField, find, followButton);
+		
+		
+		this.getChildren().addAll(userTableTitle, findBox, userTable);
 
 		
 		//userTable.refreshRestaurants();
@@ -53,6 +57,7 @@ public class UserViewer extends VBox {
 			User user = userTable.getSelectedEntity();
 			if (user == null)
 				return;
+			followButton.setDisable(false);
 		});
 
 		find.setOnAction(this::handleFindButtonAction);
@@ -90,6 +95,11 @@ public class UserViewer extends VBox {
 		default:
 			break;
 		}
+	}
+
+
+	public Button getFollowButton() {
+		return followButton;
 	}
 	
 
