@@ -27,12 +27,12 @@ public class Owner extends User
 		setPassword(password);
 	}
 	
-	public Owner(String username, String password, String state, String region, String city)
+	public Owner(String username, String password, String state, String country, String city)
 	{
 		super(username);
 		setPassword(password);
 		setState(state);
-		setRegion(region);
+		setCountry(country);
 		setCity(city);
 	}
 }

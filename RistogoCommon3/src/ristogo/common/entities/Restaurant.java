@@ -32,7 +32,7 @@ public class Restaurant extends Entity
 	/**
 	 * The region where the restaurant is.
 	 */
-	protected String region;
+	protected String country;
 	/**
 	 * The city where the restaurant is.
 	 */
@@ -64,7 +64,7 @@ public class Restaurant extends Entity
 	 */
 	public Restaurant(String ownerName)
 	{
-		this(0, ownerName + "'s Restaurant", ownerName, null, null, null, null);
+		this(0, ownerName + "'s Restaurant", ownerName, null, null, null, null, null, null);
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class Restaurant extends Entity
 	 * @param seats Restaurant's total number of seats.
 	 * @param openingHours Restaurant's opening hours.
 	 */
-	public Restaurant(int id, String name, String ownerName, Cuisine cuisine, Price price, String city,  String description)
+	public Restaurant(int id, String name, String ownerName, Cuisine cuisine, Price price, String state, String country, String city,  String description)
 	{
 
 		super(id);
@@ -88,6 +88,8 @@ public class Restaurant extends Entity
 		this.ownerName = ownerName;
 		this.cuisine = cuisine;
 		this.price = price;
+		this.state = state;
+		this.country = country;
 		this.city = city;
 		this.description = description;
 	}
@@ -163,7 +165,40 @@ public class Restaurant extends Entity
 	{
 		this.price = price;
 	}
+	/**
+	 * Gets the state.
+	 * @return The state.
+	 */
+	public String getState()
+	{
+		return state;
+	}
 
+	/**
+	 * Sets the state.
+	 * @param state The state.
+	 */
+	public void setState(String state)
+	{
+		this.state = state;
+	}
+	/**
+	 * Gets the country.
+	 * @return The country.
+	 */
+	public String getCountry()
+	{
+		return country;
+	}
+
+	/**
+	 * Sets the country.
+	 * @param country The country.
+	 */
+	public void setCountry(String country)
+	{
+		this.country = country;
+	}
 	/**
 	 * Gets the city.
 	 * @return The city.
@@ -210,6 +245,8 @@ public class Restaurant extends Entity
 			"Owner: " + getOwnerName() + "\n" +
 			"Genre: " + fieldToString(getCuisine()) + "\n" +
 			"Price: " + fieldToString(getPrice()) + "\n" +
+			"State: " + fieldToString(getState()) + "\n" +
+			"Country: " + fieldToString(getCountry()) + "\n" +
 			"City: " + fieldToString(getCity()) + "\n" +
 			"Description: " + fieldToString(getDescription()) + "\n";
 	}

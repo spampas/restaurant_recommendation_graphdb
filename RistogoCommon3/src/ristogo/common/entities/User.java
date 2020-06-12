@@ -19,7 +19,7 @@ public abstract class User extends Entity
 	
 	protected String state;
 	
-	protected String region;
+	protected String country;
 	
 	protected String city;
 	
@@ -67,14 +67,14 @@ public abstract class User extends Entity
 	 * @param username Username of the user.
 	 * @param password Plain pasword of the user.
 	 */
-	public User(int id, String username, String password, String state, String region, String city)
+	public User(int id, String username, String password, String state, String country, String city)
 	{
 		super(id);
 		setUsername(username);
 		if (password != null)
 			setPassword(password);
 		this.state = state;
-		this.region = region;
+		this.country = country;
 		this.city = city;
 	}
 		
@@ -131,26 +131,50 @@ public abstract class User extends Entity
 		return this.password;
 	}
 	
+	/**
+	 * Returns the state of the User.
+	 * @return String The state.
+	 */
 	public String getState() {
 		return state;
 	}
-
+	
+	/**
+	 * Sets the state of the user.
+	 * @param state The state.
+	 */
 	public void setState(String state) {
 		this.state = state;
 	}
 	
-	public String getRegion() {
-		return region;
-	}
-
-	public void setRegion(String region) {
-		this.region = region;
+	/**
+	 * Returns the country of the User.
+	 * @return String The country.
+	 */
+	public String getCountry() {
+		return country;
 	}
 	
+	/**
+	 * Sets the country of the user.
+	 * @param country The country.
+	 */
+	public void setCountry(String country) {
+		this.country = country;
+	}
+	
+	/**
+	 * Returns the city of the User.
+	 * @return String The city.
+	 */
 	public String getCity() {
 		return city;
 	}
-
+	
+	/**
+	 * Sets the city of the user.
+	 * @param city The city.
+	 */
 	public void setCity(String city) {
 		this.city = city;
 	}
