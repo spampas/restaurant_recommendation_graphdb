@@ -28,7 +28,7 @@ import ristogo.ui.graphics.controls.FormButton;
 
 public final class RistogoGUI extends Application
 {
-	private static User loggedUser;
+	public static User loggedUser;
 	private static Restaurant restaurant;
 
 	private static ModifyRestaurantForm restaurantForm;
