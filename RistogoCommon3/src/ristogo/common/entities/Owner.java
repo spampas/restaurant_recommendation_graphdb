@@ -26,10 +26,13 @@ public class Owner extends User
 		super(username);
 		setPassword(password);
 	}
-	public Owner(String username, String password, String birth)
+	
+	public Owner(String username, String password, String state, String region, String city)
 	{
 		super(username);
 		setPassword(password);
-		setBirth(birth);
+		setState(state);
+		setRegion(region);
+		setCity(city);
 	}
 }

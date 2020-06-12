@@ -17,7 +17,12 @@ public abstract class User extends Entity
 	
 	protected String password;
 	
-	protected String birth;
+	protected String state;
+	
+	protected String region;
+	
+	protected String city;
+	
 
 	/**
 	 * Creates an User.
@@ -43,7 +48,7 @@ public abstract class User extends Entity
 	 */
 	public User(int id, String username)
 	{
-		this(id, username, null, null);
+		this(id, username, null, null, null, null);
 	}
 
 	/**
@@ -53,7 +58,7 @@ public abstract class User extends Entity
 	 */
 	public User(String username, String password)
 	{
-		this(0, username, password, null);
+		this(0, username, password, null, null, null);
 	}
 
 	/**
@@ -62,15 +67,17 @@ public abstract class User extends Entity
 	 * @param username Username of the user.
 	 * @param password Plain pasword of the user.
 	 */
-	public User(int id, String username, String password, String birth)
+	public User(int id, String username, String password, String state, String region, String city)
 	{
 		super(id);
 		setUsername(username);
 		if (password != null)
 			setPassword(password);
-		this.birth = birth; //TODO check format date
+		this.state = state;
+		this.region = region;
+		this.city = city;
 	}
-
+		
 	/**
 	 * Sets the username of the User.
 	 * @param username Username of the User.
@@ -124,14 +131,30 @@ public abstract class User extends Entity
 		return this.password;
 	}
 	
-	public String getBirth() {
-		return birth;
+	public String getState() {
+		return state;
 	}
 
-	public void setBirth(String birth) {
-		this.birth = birth;
+	public void setState(String state) {
+		this.state = state;
+	}
+	
+	public String getRegion() {
+		return region;
 	}
 
+	public void setRegion(String region) {
+		this.region = region;
+	}
+	
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+	
 	protected final static String hashPassword(String password)
 	{
 		String passwordHash;

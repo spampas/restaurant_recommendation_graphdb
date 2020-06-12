@@ -26,6 +26,14 @@ public class Restaurant extends Entity
 	 */
 	protected Price price;
 	/**
+	 * The state where the restaurant is.
+	 */
+	protected String state;
+	/**
+	 * The region where the restaurant is.
+	 */
+	protected String region;
+	/**
 	 * The city where the restaurant is.
 	 */
 	protected String city;
@@ -33,7 +41,6 @@ public class Restaurant extends Entity
 	 * A description of the restaurant.
 	 */
 	protected String description;
-	
 	
 	
 	public Restaurant()

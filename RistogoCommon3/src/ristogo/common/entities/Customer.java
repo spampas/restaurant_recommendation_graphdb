@@ -27,10 +27,12 @@ public class Customer extends User
 		setPassword(password);
 	}
 	
-	public Customer(String username, String password, String birth)
+	public Customer(String username, String password, String state, String region, String city)
 	{
 		super(username);
 		setPassword(password);
-		setBirth(birth);
+		setState(state);
+		setRegion(region);
+		setCity(city);
 	}
 }
