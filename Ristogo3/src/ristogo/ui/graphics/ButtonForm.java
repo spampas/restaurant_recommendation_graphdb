@@ -23,16 +23,19 @@ public class ButtonForm extends VBox{
 		myButton.setFont(GUIConfig.getButtonFont());
 		myButton.setTextFill(GUIConfig.getInvertedFgColor());
 		myButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
+		myButton.setPrefWidth(300);
 		
 		findButton = new Button();
 		findButton.setFont(GUIConfig.getButtonFont());
 		findButton.setTextFill(GUIConfig.getInvertedFgColor());
 		findButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
+		findButton.setPrefWidth(300);
 		
 		recommendedButton = new Button();
 		recommendedButton.setFont(GUIConfig.getButtonFont());
 		recommendedButton.setTextFill(GUIConfig.getInvertedFgColor());
 		recommendedButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
+		recommendedButton.setPrefWidth(300);
 		
 		switch(type)
 		{

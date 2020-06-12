@@ -67,28 +67,48 @@ public final class RistogoGUI extends Application
 	private VBox buildCustomerInterface()
 	{
 		VBox applicationInterface = new VBox(10);
-		HBox menu = new HBox(10);
+		HBox menu = new HBox();
 		GridPane title = generateTitle();
-
+		
 		VBox leftPart = new VBox(10);
+		VBox leftMenu = new VBox(10);
+		Label subtitleUser = new Label("Users Menu");
+		subtitleUser.setFont(GUIConfig.getTitleFont());
+		subtitleUser.setTextFill(GUIConfig.getFgColor());
 		ButtonForm buttonFormLeft = new ButtonForm("restaurant");
 		UserViewer userTable = new UserViewer();
 		
-		leftPart.getChildren().addAll(buttonFormLeft, userTable);
+		HBox optionMenu = generateOptionMenu();
+		
+		leftMenu.getChildren().addAll(buttonFormLeft, userTable, optionMenu);
+		leftPart.getChildren().addAll(subtitleUser, leftMenu);
+		leftPart.setAlignment(Pos.CENTER);
 		
 		VBox rightPart = new VBox(10);
+		VBox rightMenu = new VBox(10);
+		Label subtitleRestaurant = new Label("Restaurants Menu");
+		subtitleRestaurant.setFont(GUIConfig.getTitleFont());
+		subtitleRestaurant.setTextFill(GUIConfig.getFgColor());
 		ButtonForm buttonFormRight = new ButtonForm("friend");
 		RestaurantViewer restaurantTable = new RestaurantViewer();
 		
-		
-		rightPart.getChildren().addAll(buttonFormRight,restaurantTable);
+		rightMenu.getChildren().addAll(buttonFormRight,restaurantTable);
+		rightPart.getChildren().addAll(subtitleRestaurant, rightMenu);
+		rightPart.setAlignment(Pos.CENTER);
 		
 		menu.getChildren().addAll(leftPart, rightPart);
 		
 		applicationInterface.getChildren().addAll(title, menu);
+		applicationInterface.setAlignment(Pos.CENTER);
+		
+		applicationInterface.setStyle(GUIConfig.getCSSFormBoxStyle());
 
-		leftPart.setStyle(GUIConfig.getCSSInterfacePartStyle());
-		rightPart.setStyle(GUIConfig.getCSSInterfacePartStyle());
+		leftMenu.setStyle(GUIConfig.getCSSInterfacePartStyle());
+		leftMenu.setStyle(GUIConfig.getCSSFormBoxStyle());
+		rightMenu.setStyle(GUIConfig.getCSSInterfacePartStyle());
+		rightMenu.setStyle(GUIConfig.getCSSFormBoxStyle());
+		leftMenu.setPrefSize(500, 600);
+		rightMenu.setPrefSize(500, 600);
 		leftPart.setPrefSize(500, 600);
 		rightPart.setPrefSize(500, 600);
 		menu.setPrefSize(1000, 600);
@@ -185,6 +205,7 @@ public final class RistogoGUI extends Application
 		grid.setHgap(10);
 		grid.setVgap(30);
 		grid.setPadding(new Insets(1, 1, 5, 1));
+		grid.setMaxWidth(500);
 
 		grid.add(title, 0, 0);
 		grid.add(icon, 1, 0);
@@ -192,6 +213,29 @@ public final class RistogoGUI extends Application
 		grid.add(usernameLabel, 3, 0);
 
 		return grid;
+	}
+	
+	HBox generateOptionMenu () {
+		
+		HBox optionMenu = new HBox(10);
+		Button option = new Button("Options");
+		option.setFont(GUIConfig.getButtonFont());
+		option.setTextFill(GUIConfig.getInvertedFgColor());
+		option.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
+		
+		if(loggedUser.isOwner()) {
+			Button owner = new Button("Owner");
+			owner.setFont(GUIConfig.getButtonFont());
+			owner.setTextFill(GUIConfig.getInvertedFgColor());
+			owner.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
+			optionMenu.getChildren().addAll(owner,option);
+		}
+		else {
+			optionMenu.getChildren().addAll(option);
+		}
+		
+		return optionMenu;
+		
 	}
 
 	public static void launch(String... args)

@@ -72,7 +72,7 @@ public class UserRecommendationDialog extends Dialog<User> {
 		citySelector.getItems().addAll(/*//TODO Load cities from DB*/);
 		
 		stateSelector.setValue(RistogoGUI.loggedUser.getState());
-		countrySelector.setValue(RistogoGUI.loggedUser.getCountry());
+		//countrySelector.setValue(RistogoGUI.loggedUser.getCountry());
 		citySelector.setValue(RistogoGUI.loggedUser.getCity());
 		
 		GridPane grid = new GridPane();
@@ -124,6 +124,7 @@ public class UserRecommendationDialog extends Dialog<User> {
 	private void filterOkButtonAction(ActionEvent event)
 	{
 		filter = new Customer("aaaa", "bbbb");
+		//TODO construct the object to return to main interface
 	}
 	
 	private void textChangeListener(ObservableValue<? extends String> observable, String oldValue, String newValue)

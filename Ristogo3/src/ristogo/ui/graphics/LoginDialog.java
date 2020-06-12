@@ -67,11 +67,21 @@ final class LoginDialog extends Dialog<User>
 
 		errorLabel.setStyle("-fx-background-color: red;");
 		errorLabel.setVisible(false);
+		
 		typeSelector.getItems().addAll("Customer", "Owner");
 		confirmLabel.setVisible(false); confirmField.setVisible(false);
+		stateLabel.setVisible(false); stateSelector.setVisible(false);
+		countryLabel.setVisible(false); countrySelector.setVisible(false);
+		cityLabel.setVisible(false); citySelector.setVisible(false);
 		typeLabel.setVisible(false); typeSelector.setVisible(false);
+		
+		typeSelector.getItems().addAll("Customer", "Owner");
 		typeSelector.setValue("Customer");
-
+		
+		stateSelector.getItems().addAll(/*TODO request TO DB*/);
+		countrySelector.getItems().addAll(/*TODO request TO DB*/);
+		citySelector.getItems().addAll(/*TODO request TO DB*/);
+		
 		DialogLabel usernameLabel = new DialogLabel("Username: ");
 		DialogLabel passwordLabel = new DialogLabel("Password: ");
 
