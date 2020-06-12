@@ -224,7 +224,7 @@ public final class RistogoGUI extends Application
 		option.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
 		
 		if(loggedUser.isOwner()) {
-			Button owner = new Button("Owner");
+			Button owner = new Button("My Restaurants");
 			owner.setFont(GUIConfig.getButtonFont());
 			owner.setTextFill(GUIConfig.getInvertedFgColor());
 			owner.setStyle(GUIConfig.getInvertedCSSButtonBgColor());

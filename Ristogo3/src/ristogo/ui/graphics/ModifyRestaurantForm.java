@@ -2,10 +2,12 @@ package ristogo.ui.graphics;
 
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import ristogo.common.entities.Restaurant;
@@ -14,6 +16,7 @@ import ristogo.common.entities.enums.Price;
 import ristogo.common.net.ResponseMessage;
 import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
+import ristogo.ui.graphics.controls.DialogLabel;
 import ristogo.ui.graphics.controls.FormButton;
 import ristogo.ui.graphics.controls.FormLabel;
 
@@ -21,8 +24,10 @@ final class ModifyRestaurantForm extends VBox
 {
 	private final TextField nameField = new TextField();
 	private final ChoiceBox<Cuisine> cuisineField = new ChoiceBox<Cuisine>();
+	private final ChoiceBox<String> stateSelector = new ChoiceBox<String>();
+	private final ChoiceBox<String> countrySelector = new ChoiceBox<String>();
+	private final ChoiceBox<String> citySelector = new ChoiceBox<String>();
 	private final ChoiceBox<Price> priceField = new ChoiceBox<Price>();
-	private final TextField cityField = new TextField();
 	private final TextArea descriptionField = new TextArea();
 	private final FormButton commitButton = new FormButton("Commit");
 	private final Label errorLabel = new Label();
@@ -41,9 +46,11 @@ final class ModifyRestaurantForm extends VBox
 		title.setTextFill(GUIConfig.getFgColor());
 
 		FormLabel nameLabel = new FormLabel("Name:");
-		FormLabel typeLabel = new FormLabel("Type:");
+		FormLabel cuisineLabel = new FormLabel("Cuisine:");
 		FormLabel costLabel = new FormLabel("Cost:");
-		FormLabel cityLabel = new FormLabel("City:");
+		FormLabel stateLabel = new FormLabel("Stat: ");
+		FormLabel countryLabel = new FormLabel("Country: ");
+		FormLabel cityLabel = new FormLabel("City: ");
 		FormLabel descriptionLabel = new FormLabel("Description:");
 
 		errorLabel.setFont(GUIConfig.getTextFont());
@@ -53,6 +60,9 @@ final class ModifyRestaurantForm extends VBox
 
 		cuisineField.getItems().addAll(Cuisine.values());
 		priceField.getItems().addAll(Price.values());
+		stateSelector.getItems().addAll(/* Load from DB*/);
+		countrySelector.getItems().addAll(/* Laoad from DB*/);
+		citySelector.getItems().addAll(/*Load from DB*/);
 		descriptionField.setWrapText(true);
 		descriptionField.setMinSize(480, 100);
 		descriptionField.setMaxSize(480, 100);
@@ -60,19 +70,23 @@ final class ModifyRestaurantForm extends VBox
 		HBox nameBox = new HBox(20);
 		HBox typeBox = new HBox(20);
 		HBox costBox = new HBox(20);
-		HBox cityBox = new HBox(20);
+		GridPane locationBox = new GridPane();
 
 		nameBox.getChildren().addAll(nameLabel, nameField);
-		typeBox.getChildren().addAll(typeLabel, cuisineField);
+		typeBox.getChildren().addAll(cuisineLabel, cuisineField);
 		costBox.getChildren().addAll(costLabel, priceField);
-		cityBox.getChildren().addAll(cityLabel, cityField);
+		locationBox.setHgap(10);
+		locationBox.setVgap(10);
+		locationBox.setPadding(new Insets(20, 150, 10, 10));
+		locationBox.add(stateLabel, 0, 0); locationBox.add(stateSelector, 1, 0);
+		locationBox.add(countryLabel, 0, 1); locationBox.add(countrySelector, 1, 1);
+		locationBox.add(cityLabel, 0, 2); locationBox.add(citySelector, 1, 2);
 
-		getChildren().addAll(title, nameBox, typeBox, costBox, cityBox, descriptionLabel, descriptionField, errorLabel, commitButton);
+		getChildren().addAll(title, nameBox, typeBox, costBox, locationBox, descriptionLabel, descriptionField, errorLabel, commitButton);
 		setStyle(GUIConfig.getCSSFormBoxStyle());
 		setPrefSize(400, 600);
 
 		nameField.textProperty().addListener(this::changeTextListener);
-		cityField.textProperty().addListener(this::changeTextListener);
 
 		commitButton.setOnAction(this::handleCommitButtonAction);
 	}
@@ -85,14 +99,9 @@ final class ModifyRestaurantForm extends VBox
 	private void validate()
 	{
 		String name = nameField.getText();
-		String city = cityField.getText();
 		
 		if (name == null || name.isBlank() || name.length() > 45) {
 			showError("Invalid name.");
-			return;
-		}
-		if (city != null && city.length() > 32) {
-			showError("Invalid city.");
 			return;
 		}
 
@@ -104,7 +113,9 @@ final class ModifyRestaurantForm extends VBox
 		restaurant.setName(nameField.getText());
 		restaurant.setCuisine(cuisineField.getValue());
 		restaurant.setPrice(priceField.getValue());
-		restaurant.setCity(cityField.getText());
+		restaurant.setState(stateSelector.getValue());
+		restaurant.setCountry(countrySelector.getValue());
+		restaurant.setCity(citySelector.getValue());
 		restaurant.setDescription(descriptionField.getText());
 
 		ResponseMessage resMsg = Protocol.getInstance().editRestaurant(restaurant);
@@ -132,7 +143,9 @@ final class ModifyRestaurantForm extends VBox
 		nameField.setText(restaurant.getName());
 		cuisineField.setValue(restaurant.getCuisine());
 		priceField.setValue(restaurant.getPrice());
-		cityField.setText(restaurant.getCity());
+		stateSelector.setValue(restaurant.getState());
+		countrySelector.setValue(restaurant.getCountry());
+		citySelector.setValue(restaurant.getCity());
 		descriptionField.setText(restaurant.getDescription());
 	}
 }
