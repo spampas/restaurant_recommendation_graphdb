@@ -12,32 +12,35 @@ public class RestaurantBean extends EntityBean
 	private final SimpleStringProperty ownerName;
 	private final SimpleObjectProperty<Cuisine> cuisine;
 	private final SimpleObjectProperty<Price> price;
+	private final SimpleStringProperty state;
+	private final SimpleStringProperty country;
 	private final SimpleStringProperty city;
 	private final SimpleStringProperty description;
 
 	public RestaurantBean(int id, String name, String ownerName, Cuisine cuisine,
-		Price price, String city, String description)
+		Price price, String state, String country, String city, String description)
 	{
 		super(id);
 		this.name = new SimpleStringProperty(name);
 		this.ownerName = new SimpleStringProperty(ownerName);
 		this.cuisine = new SimpleObjectProperty<Cuisine>(cuisine);
 		this.price = new SimpleObjectProperty<Price>(price);
+		this.state = new SimpleStringProperty(state);
+		this.country = new SimpleStringProperty(country);
 		this.city = new SimpleStringProperty(city);
 		this.description = new SimpleStringProperty(description);
 	}
 	
 	public static RestaurantBean fromEntity(Restaurant restaurant)
 	{
-		return new RestaurantBean(restaurant.getId(), restaurant.getName(),
-			restaurant.getOwnerName(), restaurant.getCuisine(), restaurant.getPrice(),
-			restaurant.getCity(), restaurant.getDescription());
+		return new RestaurantBean(restaurant.getId(), restaurant.getName(), restaurant.getOwnerName(), restaurant.getCuisine(),
+			restaurant.getPrice(), restaurant.getState(), restaurant.getCountry(), restaurant.getCity(), restaurant.getDescription());
 	}
 
 	public Restaurant toEntity()
 	{
 		return new Restaurant(getId(), getName(), getOwnerName(), getCuisine(),
-			getPrice(), getCity(), getDescription());
+			getPrice(), getState(), getCountry(), getCity(), getDescription());
 	}
 
 	public String getOwnerName()
@@ -53,6 +56,16 @@ public class RestaurantBean extends EntityBean
 	public Cuisine getCuisine()
 	{
 		return cuisine.get();
+	}
+	
+	public String getState()
+	{
+		return state.get();
+	}
+	
+	public String getCountry()
+	{
+		return country.get();
 	}
 
 	public String getCity()
@@ -85,6 +98,16 @@ public class RestaurantBean extends EntityBean
 		this.cuisine.set(cuisine);
 	}
 
+	public void setState(String state)
+	{
+		this.state.set(state);
+	}
+	
+	public void setCountry(String country)
+	{
+		this.country.set(country);
+	}
+	
 	public void setCity(String city)
 	{
 		this.city.set(city);
