@@ -6,7 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import ristogo.common.entities.User;
+import ristogo.common.entities.Cuisine;
 import ristogo.ui.graphics.config.GUIConfig;
 
 public class CuisineViewer extends VBox {
@@ -16,7 +16,7 @@ public class CuisineViewer extends VBox {
 	private final TextField cuisineField = new TextField();
 	private final Button operationButton = new Button();
 	private final Button flushButton = new Button();
-	private final UserTableView userTable = new UserTableView(); //TODO: Inserire la table view corretta
+	private final CuisineTableView cuisineTable = new CuisineTableView(); //TODO: Inserire la table view corretta
 	
 	private final TextField findField = new TextField();
 	private final Button find = new Button();
@@ -61,13 +61,13 @@ public class CuisineViewer extends VBox {
 		HBox findBox = new HBox(10);
 		findBox.getChildren().addAll(findField, find);
 		
-		this.getChildren().addAll(cuisineTableTitle, cuisineBox, userTable, findBox);
+		this.getChildren().addAll(cuisineTableTitle, cuisineBox, cuisineTable, findBox);
 	
-		//userTable.refreshRestaurants();
+		//cuisineTable.refreshRestaurants();
 	
-		userTable.setOnMouseClicked((event) -> {
-			User user = userTable.getSelectedEntity();
-			if (user == null)
+		cuisineTable.setOnMouseClicked((event) -> {
+			Cuisine cuisine = cuisineTable.getSelectedEntity();
+			if (cuisine == null)
 				return;
 			operationButton.setText("Remove");
 		});
