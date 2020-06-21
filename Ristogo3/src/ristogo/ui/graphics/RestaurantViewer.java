@@ -17,7 +17,7 @@ public class RestaurantViewer extends VBox {
 	private final TextField findField = new TextField();
 	private final Button find = new Button();
 	private final Button likeButton = new Button();
-	private final TableViewRestaurant restaurantsTable = new TableViewRestaurant();
+	private final RestaurantTableView restaurantsTable = new RestaurantTableView();
 	private final Label descriptionLabel = new Label();
 	private final TextArea descriptionField = new TextArea();
 	

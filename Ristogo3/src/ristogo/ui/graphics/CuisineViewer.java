@@ -8,11 +8,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import ristogo.common.entities.Cuisine;
 import ristogo.ui.graphics.config.GUIConfig;
+import ristogo.ui.graphics.controls.FormLabel;
 
 public class CuisineViewer extends VBox {
 	
 	private final Label cuisineTableTitle = new Label();
-	private final Label cuisineLabel = new Label ("New Cuisine");
+	private final FormLabel cuisineLabel = new FormLabel ("New Cuisine");
 	private final TextField cuisineField = new TextField();
 	private final Button operationButton = new Button();
 	private final Button flushButton = new Button();
@@ -30,7 +31,6 @@ public class CuisineViewer extends VBox {
 		cuisineTableTitle.setTextFill(GUIConfig.getFgColor());
 		cuisineTableTitle.setStyle(GUIConfig.getCSSFormTitleStyle());
 		
-		cuisineLabel.setTextFill(GUIConfig.getFgColor());
 		cuisineField.setPromptText("insert a name of a cuisine");
 		cuisineField.setMinSize(200, 30);
 		cuisineField.setMaxSize(200, 30);
