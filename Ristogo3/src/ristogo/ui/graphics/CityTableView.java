@@ -37,7 +37,7 @@ public class CityTableView extends TableView<CityBean>{
 		countryColumn.setCellValueFactory(new PropertyValueFactory<>("country"));
 		countryColumn.setStyle(GUIConfig.getCSSTableColumnStyle(false));
 		countryColumn.setMinWidth(200);
-		countryColumn.setMaxWidth(120050);
+		countryColumn.setMaxWidth(200);
 		
 		TableColumn<CityBean, String> cityColumn = new TableColumn<CityBean, String>("City");
 		cityColumn.setCellValueFactory(new PropertyValueFactory<>("city"));
