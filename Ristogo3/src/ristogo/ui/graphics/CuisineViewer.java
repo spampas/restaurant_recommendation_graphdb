@@ -63,8 +63,6 @@ public class CuisineViewer extends VBox {
 		
 		this.getChildren().addAll(cuisineTableTitle, cuisineBox, cuisineTable, findBox);
 	
-		//cuisineTable.refreshRestaurants();
-	
 		cuisineTable.setOnMouseClicked((event) -> {
 			Cuisine cuisine = cuisineTable.getSelectedEntity();
 			if (cuisine == null)

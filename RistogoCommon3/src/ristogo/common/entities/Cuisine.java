@@ -26,7 +26,7 @@ public class Cuisine extends Entity{
 
 	/**
 	 * Creates the type of cuisine.
-	 * @param id Restaurant's id.
+	 * @param id Cuisine's id.
 	 * @param cuisineName The name of the cuisine.
 	 */
 	public Cuisine(int id, String cuisineName)
@@ -57,8 +57,15 @@ public class Cuisine extends Entity{
 	 * Sets the description.
 	 * @param description The description.
 	 */
-	public void setDescription(String cuisineName)
+	public void setName(String cuisineName)
 	{
 		this.cuisineName = cuisineName;
 	}
+	
+	@Override
+	public String toString() {
+		return "Name: " + getName() + "\n";
+	}
+	
+	
 }

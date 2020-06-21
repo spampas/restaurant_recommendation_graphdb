@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import ristogo.common.entities.User;
+import ristogo.common.entities.City;
 import ristogo.ui.graphics.config.GUIConfig;
 
 public class CityViewer extends VBox {
@@ -17,7 +17,7 @@ public class CityViewer extends VBox {
 	private final Button operationButton = new Button();
 	private final Button flushButton = new Button();
 	private final CityForm cityForm = new CityForm();
-	private final UserTableView userTable = new UserTableView(); //TODO: Inserire la table view corretta
+	private final CityTableView cityTable = new CityTableView(); //TODO: Inserire la table view corretta
 	
 	private final TextField findField = new TextField();
 	private final Button find = new Button();
@@ -60,13 +60,11 @@ public class CityViewer extends VBox {
 		HBox cityBox = new HBox(10);
 		cityBox.getChildren().addAll(cityForm, buttonBox);
 		
-		this.getChildren().addAll(cityTableTitle, cityBox, userTable, findBox);
+		this.getChildren().addAll(cityTableTitle, cityBox, cityTable, findBox);
 	
-		//userTable.refreshRestaurants();
-	
-		userTable.setOnMouseClicked((event) -> {
-			User user = userTable.getSelectedEntity();
-			if (user == null)
+		cityTable.setOnMouseClicked((event) -> {
+			City city = cityTable.getSelectedEntity();
+			if (city == null)
 				return;
 			operationButton.setText("Remove");
 		});

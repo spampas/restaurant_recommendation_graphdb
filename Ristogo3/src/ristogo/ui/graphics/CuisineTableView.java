@@ -27,7 +27,7 @@ public class CuisineTableView extends TableView<CuisineBean>{
 		setMaxHeight(GUIConfig.getMaxRowDisplayable() * getFixedCellSize());
 
 		TableColumn<CuisineBean, String> cuisineColumn = new TableColumn<CuisineBean, String>("Cuisine");
-		cuisineColumn.setCellValueFactory(new PropertyValueFactory<>("Name"));
+		cuisineColumn.setCellValueFactory(new PropertyValueFactory<>("cuisine"));
 		cuisineColumn.setStyle(GUIConfig.getCSSTableColumnStyle(false));
 		cuisineColumn.setMinWidth(150);
 		cuisineColumn.setMaxWidth(150);

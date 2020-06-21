@@ -1,11 +1,7 @@
 package ristogo.ui.graphics.beans;
 
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import ristogo.common.entities.Cuisine;
-import ristogo.common.entities.Customer;
-import ristogo.common.entities.Owner;
-import ristogo.common.entities.User;
 
 public class CuisineBean extends EntityBean
 {
