@@ -47,6 +47,8 @@ VBox applicationInterface = new VBox(20);
 		
 		RestaurantViewer restaurantTable = new RestaurantViewer(true);
 		
+		//TODO : add statistics of restaurant
+		
 		VBox rightPart = new VBox(10);
 		
 		rightPart.getChildren().addAll(restaurantTable);
@@ -67,9 +69,6 @@ VBox applicationInterface = new VBox(20);
 		applicationInterface.setAlignment(Pos.CENTER);
 		
 		return applicationInterface;
-		
-		
-
 		
 	}
 	
