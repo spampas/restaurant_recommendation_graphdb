@@ -21,6 +21,8 @@ public class RestaurantViewer extends VBox {
 	private final Label descriptionLabel = new Label();
 	private final TextArea descriptionField = new TextArea();
 	
+	private HBox findBox = new HBox(10);
+	
 
 	private Restaurant restaurant;
 	
@@ -48,8 +50,9 @@ public class RestaurantViewer extends VBox {
 		likeButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
 		likeButton.setDisable(true);
 
-		HBox findBox = new HBox(10);
+		
 		findBox.getChildren().addAll(findField, find, likeButton);
+		
 
 		
 		//restaurantsTable.refreshRestaurants();
@@ -81,6 +84,13 @@ public class RestaurantViewer extends VBox {
 
 		find.setOnAction(this::handleFindButtonAction);
 		likeButton.setOnAction(this::handleLikeButtonAction);
+	}
+	
+	public RestaurantViewer (boolean isRestaurantInterface) {
+		this();
+		if(isRestaurantInterface) {
+			findBox.getChildren().remove(2);
+		}
 	}
 	
 	

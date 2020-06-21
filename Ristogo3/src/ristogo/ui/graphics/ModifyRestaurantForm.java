@@ -30,6 +30,8 @@ final class ModifyRestaurantForm extends VBox
 	private final ChoiceBox<Price> priceField = new ChoiceBox<Price>();
 	private final TextArea descriptionField = new TextArea();
 	private final FormButton commitButton = new FormButton("Commit");
+	private final FormButton addNewButton = new FormButton("Add new");
+	private final FormButton deleteButton = new FormButton("Delete");
 	private final Label errorLabel = new Label();
 
 	private final Runnable onAction;
@@ -71,6 +73,7 @@ final class ModifyRestaurantForm extends VBox
 		HBox typeBox = new HBox(20);
 		HBox costBox = new HBox(20);
 		GridPane locationBox = new GridPane();
+		HBox buttonBox = new HBox(20);
 
 		nameBox.getChildren().addAll(nameLabel, nameField);
 		typeBox.getChildren().addAll(cuisineLabel, cuisineField);
@@ -81,14 +84,17 @@ final class ModifyRestaurantForm extends VBox
 		locationBox.add(stateLabel, 0, 0); locationBox.add(stateSelector, 1, 0);
 		locationBox.add(countryLabel, 0, 1); locationBox.add(countrySelector, 1, 1);
 		locationBox.add(cityLabel, 0, 2); locationBox.add(citySelector, 1, 2);
+		buttonBox.getChildren().addAll(commitButton, addNewButton, deleteButton);
 
-		getChildren().addAll(title, nameBox, typeBox, costBox, locationBox, descriptionLabel, descriptionField, errorLabel, commitButton);
+		getChildren().addAll(title, nameBox, typeBox, costBox, locationBox, descriptionLabel, descriptionField, errorLabel, buttonBox);
 		setStyle(GUIConfig.getCSSFormBoxStyle());
 		setPrefSize(400, 600);
 
 		nameField.textProperty().addListener(this::changeTextListener);
 
 		commitButton.setOnAction(this::handleCommitButtonAction);
+		addNewButton.setOnAction(this::handleAddNewButtonAction);
+		deleteButton.setOnAction(this::handleDeleteButtonAction);
 	}
 
 	private void changeTextListener(ObservableValue<? extends String> observable, String oldValue, String newValue)
@@ -122,6 +128,16 @@ final class ModifyRestaurantForm extends VBox
 		if (!resMsg.isSuccess())
 			showError(resMsg.getErrorMsg());
 		onAction.run();
+	}
+	
+	private void handleAddNewButtonAction(ActionEvent event)
+	{
+	
+	}
+	
+	private void handleDeleteButtonAction(ActionEvent event)
+	{
+
 	}
 
 	private void showError(String message)

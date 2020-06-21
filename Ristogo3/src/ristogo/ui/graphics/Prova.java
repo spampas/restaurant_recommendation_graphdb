@@ -1,9 +1,11 @@
 package ristogo.ui.graphics;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -21,11 +23,10 @@ public class Prova {
 	
 	public Prova () {
 		
-		HBox applicationInterface = new HBox(20);
-
-		//GridPane title = generateTitle();
+VBox applicationInterface = new VBox(20);
+		
 		HBox titleBox = new HBox(10);
-		GridPane title = new GridPane();
+		GridPane title = generateOwnerTitle();
 		Button returnButton = new Button("Return to the main page");
 		returnButton.setTextFill(GUIConfig.getInvertedFgColor());
 		returnButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
@@ -37,42 +38,71 @@ public class Prova {
 		ChoiceBox<String> restaurantSelector = new ChoiceBox<String>();
 		restaurantSelector.getItems().addAll(/*TODO request my restaurant name from DB*/);
 		restaurantForm = new ModifyRestaurantForm(this::getOwnRestaurant);
-		getOwnRestaurant();
+		//getOwnRestaurant();
 
 		VBox leftPart = new VBox(10);
-		VBox rightPart = new VBox(10);
 
-		leftPart.getChildren().addAll(titleBox, restaurantBox, restaurantForm);
+		leftPart.getChildren().addAll(restaurantBox, restaurantForm);
 		
 		
+		RestaurantViewer restaurantTable = new RestaurantViewer(true);
 		
-		VBox buttonBox = new VBox(10);
-		Button addButton = new Button("Add new Restaurant");
-		addButton.setTextFill(GUIConfig.getInvertedFgColor());
-		addButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
-		addButton.setPrefWidth(300);
-		Button deleteButton = new Button("Delete selected Restaurant");
-		deleteButton.setTextFill(GUIConfig.getInvertedFgColor());
-		deleteButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
-		deleteButton.setPrefWidth(300);
+		VBox rightPart = new VBox(10);
 		
-		leftPart.getChildren().addAll(buttonBox);
+		rightPart.getChildren().addAll(restaurantTable);
 		
-		applicationInterface.getChildren().addAll(leftPart, rightPart);
 		
+		HBox menu = new HBox(10);
+		menu.getChildren().addAll(leftPart, rightPart);
+		
+		
+		applicationInterface.getChildren().addAll(titleBox, menu);
 	
 		leftPart.setStyle(GUIConfig.getCSSInterfacePartStyle());
 		rightPart.setStyle(GUIConfig.getCSSInterfacePartStyle());
-		leftPart.setPrefSize(400, 600);
-		rightPart.setPrefSize(600, 600);
-		rightPart.setAlignment(Pos.CENTER);
+		leftPart.setPrefSize(500, 600);
+		rightPart.setPrefSize(500, 600);
 		applicationInterface.setPrefSize(1000, 600);
 		title.setAlignment(Pos.CENTER);
 		applicationInterface.setAlignment(Pos.CENTER);
 		
+		return applicationInterface;
+		
 		
 
 		
+	}
+	
+	private GridPane generateOwnerTitle()
+	{
+		Label title = new Label("RistoGo - Recommendations");
+		title.setFont(GUIConfig.getTitleFont());
+		title.setTextFill(GUIConfig.getFgColor());
+
+		ImageView icon = new ImageView(getClass().getResource("/resources/logo.png").toString());
+		icon.setFitHeight(30);
+		icon.setFitWidth(30);
+
+		Label restaurantsLabel = new Label("Restaurants");
+		restaurantsLabel.setFont(GUIConfig.getWelcomeFont());
+		restaurantsLabel.setTextFill(GUIConfig.getFgColor());
+
+		Label usernameLabel = new Label(loggedUser.getUsername() + "'s");
+		usernameLabel.setFont(GUIConfig.getUsernameFont());
+		usernameLabel.setTextFill(GUIConfig.getFgColor());
+
+		GridPane grid = new GridPane();
+		grid.setHgap(10);
+		grid.setVgap(30);
+		grid.setPadding(new Insets(1, 1, 5, 1));
+		grid.setMaxWidth(500);
+
+		grid.add(title, 0, 0);
+		grid.add(icon, 1, 0);
+		grid.add(usernameLabel, 2, 0);
+		grid.add(restaurantsLabel, 3, 0);
+
+		return grid;
 	}
 	
 	private void getOwnRestaurant()
