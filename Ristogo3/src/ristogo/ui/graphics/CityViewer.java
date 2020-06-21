@@ -9,26 +9,22 @@ import javafx.scene.layout.VBox;
 import ristogo.common.entities.User;
 import ristogo.ui.graphics.config.GUIConfig;
 
-public class CuisineViewer extends VBox {
+public class CityViewer extends VBox {
 	
-	private final Label cuisineTableTitle = new Label();
-	private final TextField cuisineField = new TextField();
+	private final Label cityTableTitle = new Label();
 	private final Button operationButton = new Button();
 	private final Button flushButton = new Button();
+	private final CityForm cityForm = new CityForm();
 	private final UserTableView userTable = new UserTableView(); //TODO: Inserire la table view corretta
 	
-	public CuisineViewer () {
+	public CityViewer () {
 		
 		super(10);
 		
-		cuisineTableTitle.setText("List of Cuisines");
-		cuisineTableTitle.setFont(GUIConfig.getFormTitleFont());
-		cuisineTableTitle.setTextFill(GUIConfig.getFgColor());
-		cuisineTableTitle.setStyle(GUIConfig.getCSSFormTitleStyle());
-		
-		cuisineField.setPromptText("insert a name of a cuisine");
-		cuisineField.setMinSize(200, 30);
-		cuisineField.setMaxSize(200, 30);
+		cityTableTitle.setText("List of Cities");
+		cityTableTitle.setFont(GUIConfig.getFormTitleFont());
+		cityTableTitle.setTextFill(GUIConfig.getFgColor());
+		cityTableTitle.setStyle(GUIConfig.getCSSFormTitleStyle());
 		
 		operationButton.setText("Add");
 		operationButton.setFont(GUIConfig.getButtonFont());
@@ -40,10 +36,10 @@ public class CuisineViewer extends VBox {
 		flushButton.setTextFill(GUIConfig.getInvertedFgColor());
 		flushButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
 
-		HBox cuisineBox = new HBox(10);
-		cuisineBox.getChildren().addAll(cuisineField, operationButton, flushButton);
+		HBox cityBox = new HBox(10);
+		cityBox.getChildren().addAll(cityForm, operationButton, flushButton);
 		
-		this.getChildren().addAll(cuisineTableTitle, cuisineBox, userTable);
+		this.getChildren().addAll(cityTableTitle, cityBox, userTable);
 	
 		//userTable.refreshRestaurants();
 	
@@ -54,7 +50,7 @@ public class CuisineViewer extends VBox {
 			operationButton.setText("Remove");
 		});
 		
-		cuisineField.setOnMouseClicked((event) -> {
+		cityForm.setOnMouseClicked((event) -> {
 			operationButton.setText("Add");
 		});
 
@@ -65,18 +61,23 @@ public class CuisineViewer extends VBox {
 	
 	private void handleOperationButtonAction(ActionEvent event)
 	{
-		String name = cuisineField.getText();
-		if (name == null)
+		String cityName = cityForm.getCity();
+		String countryName = cityForm.getCountry();
+		String stateName = cityForm.getState();
+		
+		if (cityName == null  || countryName == null || stateName == null)
 			return;
 		//TODO: gestire azioni
 	}
 	
 	private void handleFlushButtonAction(ActionEvent event)
 	{
-		cuisineField.setText("");
+		cityForm.setCity("");
+		cityForm.setCountry("");
+		cityForm.setState("");
 	}
 	
-	public void changeConfigurationCuisineViewer(int config) {
+	public void changeConfigurationCityViewer(int config) {
 		
 		switch(config) {
 		

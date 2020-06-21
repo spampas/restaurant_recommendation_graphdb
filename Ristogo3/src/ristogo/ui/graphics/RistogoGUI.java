@@ -174,11 +174,13 @@ public final class RistogoGUI extends Application
 		VBox rightPart = new VBox(10);
 		VBox rightMenu = new VBox(10);
 		Label subtitleCity = new Label("Cities Menu");
+		CityForm cityform = new CityForm();
 		subtitleCity.setFont(GUIConfig.getTitleFont());
 		subtitleCity.setTextFill(GUIConfig.getFgColor());
-		RestaurantViewer restaurantTable = new RestaurantViewer();
 		
-		rightMenu.getChildren().addAll(restaurantTable);
+		CityViewer cityTable = new CityViewer();
+		
+		rightMenu.getChildren().addAll(cityTable);
 		rightPart.getChildren().addAll(subtitleCity, rightMenu);
 		rightPart.setAlignment(Pos.CENTER);
 		
