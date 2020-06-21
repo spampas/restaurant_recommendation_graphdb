@@ -1,6 +1,7 @@
 package ristogo.ui.graphics;
 
 import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -24,7 +25,7 @@ public class CuisineViewer extends VBox {
 	
 	public CuisineViewer () {
 		
-		super(10);
+		super(20);
 		
 		cuisineTableTitle.setText("List of Cuisines");
 		cuisineTableTitle.setFont(GUIConfig.getFormTitleFont());
@@ -59,6 +60,7 @@ public class CuisineViewer extends VBox {
 		find.setTextFill(GUIConfig.getInvertedFgColor());
 		find.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
 		HBox findBox = new HBox(10);
+		findBox.setAlignment(Pos.CENTER);
 		findBox.getChildren().addAll(findField, find);
 		
 		this.getChildren().addAll(cuisineTableTitle, cuisineBox, cuisineTable, findBox);

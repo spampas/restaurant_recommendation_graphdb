@@ -24,7 +24,7 @@ public class CityViewer extends VBox {
 	
 	public CityViewer () {
 		
-		super(10);
+		super(20);
 		
 		cityTableTitle.setText("List of Locations");
 		cityTableTitle.setFont(GUIConfig.getFormTitleFont());
@@ -50,6 +50,7 @@ public class CityViewer extends VBox {
 		find.setTextFill(GUIConfig.getInvertedFgColor());
 		find.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
 		HBox findBox = new HBox(10);
+		findBox.setAlignment(Pos.CENTER);
 		findBox.getChildren().addAll(findField, find);
 		
 		HBox buttonBox = new HBox(60);
@@ -61,7 +62,7 @@ public class CityViewer extends VBox {
 		cityBox.getChildren().addAll(cityForm, buttonBox);
 		
 		this.getChildren().addAll(cityTableTitle, cityBox, cityTable, findBox);
-	
+		
 		cityTable.setOnMouseClicked((event) -> {
 			City city = cityTable.getSelectedEntity();
 			if (city == null)
