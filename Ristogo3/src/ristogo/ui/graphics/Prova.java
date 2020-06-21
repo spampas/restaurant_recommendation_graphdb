@@ -68,7 +68,7 @@ VBox applicationInterface = new VBox(20);
 		title.setAlignment(Pos.CENTER);
 		applicationInterface.setAlignment(Pos.CENTER);
 		
-		return applicationInterface;
+		//return applicationInterface;
 		
 	}
 	

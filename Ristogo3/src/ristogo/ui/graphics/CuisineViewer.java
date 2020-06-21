@@ -12,10 +12,14 @@ import ristogo.ui.graphics.config.GUIConfig;
 public class CuisineViewer extends VBox {
 	
 	private final Label cuisineTableTitle = new Label();
+	private final Label cuisineLabel = new Label ("New Cuisine");
 	private final TextField cuisineField = new TextField();
 	private final Button operationButton = new Button();
 	private final Button flushButton = new Button();
 	private final UserTableView userTable = new UserTableView(); //TODO: Inserire la table view corretta
+	
+	private final TextField findField = new TextField();
+	private final Button find = new Button();
 	
 	public CuisineViewer () {
 		
@@ -26,6 +30,7 @@ public class CuisineViewer extends VBox {
 		cuisineTableTitle.setTextFill(GUIConfig.getFgColor());
 		cuisineTableTitle.setStyle(GUIConfig.getCSSFormTitleStyle());
 		
+		cuisineLabel.setTextFill(GUIConfig.getFgColor());
 		cuisineField.setPromptText("insert a name of a cuisine");
 		cuisineField.setMinSize(200, 30);
 		cuisineField.setMaxSize(200, 30);
@@ -39,11 +44,24 @@ public class CuisineViewer extends VBox {
 		flushButton.setFont(GUIConfig.getButtonFont());
 		flushButton.setTextFill(GUIConfig.getInvertedFgColor());
 		flushButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
-
-		HBox cuisineBox = new HBox(10);
-		cuisineBox.getChildren().addAll(cuisineField, operationButton, flushButton);
 		
-		this.getChildren().addAll(cuisineTableTitle, cuisineBox, userTable);
+
+
+		HBox cuisineBox = new HBox(30);
+		cuisineBox.getChildren().addAll(cuisineLabel,cuisineField, operationButton, flushButton);
+		
+		findField.setPromptText("search Cuisines");
+		findField.setMinSize(200, 30);
+		findField.setMaxSize(200, 30);
+		
+		find.setText("Find");
+		find.setFont(GUIConfig.getButtonFont());
+		find.setTextFill(GUIConfig.getInvertedFgColor());
+		find.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
+		HBox findBox = new HBox(10);
+		findBox.getChildren().addAll(findField, find);
+		
+		this.getChildren().addAll(cuisineTableTitle, cuisineBox, userTable, findBox);
 	
 		//userTable.refreshRestaurants();
 	

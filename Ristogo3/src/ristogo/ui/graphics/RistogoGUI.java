@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -68,7 +69,7 @@ public final class RistogoGUI extends Application
 	{
 		VBox applicationInterface = new VBox(10);
 		HBox menu = new HBox();
-		GridPane title = generateTitle();
+		GridPane title = generateCustomerTitle();
 		
 		VBox leftPart = new VBox(10);
 		VBox leftMenu = new VBox(10);
@@ -161,7 +162,7 @@ public final class RistogoGUI extends Application
 		
 		VBox leftPart = new VBox(10);
 		VBox leftMenu = new VBox(10);
-		Label subtitleCuisine = new Label("Cuisines Menu");
+		Label subtitleCuisine = new Label("Cuisines Settings");
 		subtitleCuisine.setFont(GUIConfig.getTitleFont());
 		subtitleCuisine.setTextFill(GUIConfig.getFgColor());
 		
@@ -173,8 +174,7 @@ public final class RistogoGUI extends Application
 		
 		VBox rightPart = new VBox(10);
 		VBox rightMenu = new VBox(10);
-		Label subtitleCity = new Label("Cities Menu");
-		CityForm cityform = new CityForm();
+		Label subtitleCity = new Label("Locations Settings");
 		subtitleCity.setFont(GUIConfig.getTitleFont());
 		subtitleCity.setTextFill(GUIConfig.getFgColor());
 		
@@ -187,7 +187,6 @@ public final class RistogoGUI extends Application
 		menu.getChildren().addAll(leftPart, rightPart);
 		
 		applicationInterface.getChildren().addAll(title, menu);
-		applicationInterface.setAlignment(Pos.CENTER);
 		
 		applicationInterface.setStyle(GUIConfig.getCSSFormBoxStyle());
 
@@ -204,39 +203,60 @@ public final class RistogoGUI extends Application
 		return applicationInterface;
 	}
 
-	private HBox buildOwnerInterface()
+	private VBox buildOwnerInterface()
 	{
-		HBox applicationInterface = new HBox(20);
-
-		GridPane title = generateTitle();
+		VBox applicationInterface = new VBox(20);
+		
+		HBox titleBox = new HBox(10);
+		GridPane title = generateOwnerTitle();
+		Button returnButton = new Button("Return to the main page");
+		returnButton.setTextFill(GUIConfig.getInvertedFgColor());
+		returnButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
+		
+		titleBox.getChildren().addAll(title, returnButton);
+		
+		HBox restaurantBox = new HBox(10);
+		Label restaurantLabel = new Label("Choice one of your restaurant");
+		ChoiceBox<String> restaurantSelector = new ChoiceBox<String>();
+		restaurantSelector.getItems().addAll(/*TODO request my restaurant name from DB*/);
 		restaurantForm = new ModifyRestaurantForm(this::getOwnRestaurant);
-		getOwnRestaurant();
+		//getOwnRestaurant();
 
 		VBox leftPart = new VBox(10);
-		VBox rightPart = new VBox(10);
 
-		leftPart.getChildren().addAll(title, restaurantForm);
+		leftPart.getChildren().addAll(restaurantBox, restaurantForm);
 		
-		applicationInterface.getChildren().addAll(leftPart, rightPart);
 		
+		RestaurantViewer restaurantTable = new RestaurantViewer(true);
+		
+		//TODO : add statistics of restaurant
+		
+		VBox rightPart = new VBox(10);
+		
+		rightPart.getChildren().addAll(restaurantTable);
+		
+		
+		HBox menu = new HBox(10);
+		menu.getChildren().addAll(leftPart, rightPart);
+		
+		
+		applicationInterface.getChildren().addAll(titleBox, menu);
 	
 		leftPart.setStyle(GUIConfig.getCSSInterfacePartStyle());
 		rightPart.setStyle(GUIConfig.getCSSInterfacePartStyle());
-		leftPart.setPrefSize(400, 600);
-		rightPart.setPrefSize(600, 600);
-		rightPart.setAlignment(Pos.CENTER);
+		leftPart.setPrefSize(500, 600);
+		rightPart.setPrefSize(500, 600);
 		applicationInterface.setPrefSize(1000, 600);
 		title.setAlignment(Pos.CENTER);
 		applicationInterface.setAlignment(Pos.CENTER);
 		
-
 		return applicationInterface;
+		
 	}
 	
 	
-
-	private GridPane generateTitle()
-	{
+	private GridPane generateTitle() {
+		
 		Label title = new Label("RistoGo - Recommendations");
 		title.setFont(GUIConfig.getTitleFont());
 		title.setTextFill(GUIConfig.getFgColor());
@@ -244,6 +264,25 @@ public final class RistogoGUI extends Application
 		ImageView icon = new ImageView(getClass().getResource("/resources/logo.png").toString());
 		icon.setFitHeight(30);
 		icon.setFitWidth(30);
+		
+		GridPane grid = new GridPane();
+		grid.setHgap(10);
+		grid.setVgap(30);
+		grid.setPadding(new Insets(1, 1, 5, 1));
+		grid.setMaxWidth(500);
+
+		grid.add(title, 0, 0);
+		grid.add(icon, 1, 0);
+		
+		return grid;
+		
+	}
+	
+	
+
+	private GridPane generateCustomerTitle()
+	{
+		GridPane grid = generateTitle();
 
 		Label welcomeLabel = new Label("Welcome");
 		welcomeLabel.setFont(GUIConfig.getWelcomeFont());
@@ -253,16 +292,26 @@ public final class RistogoGUI extends Application
 		usernameLabel.setFont(GUIConfig.getUsernameFont());
 		usernameLabel.setTextFill(GUIConfig.getFgColor());
 
-		GridPane grid = new GridPane();
-		grid.setHgap(10);
-		grid.setVgap(30);
-		grid.setPadding(new Insets(1, 1, 5, 1));
-		grid.setMaxWidth(500);
-
-		grid.add(title, 0, 0);
-		grid.add(icon, 1, 0);
 		grid.add(welcomeLabel, 2, 0);
 		grid.add(usernameLabel, 3, 0);
+
+		return grid;
+	}
+	
+	private GridPane generateOwnerTitle()
+	{
+		GridPane grid = generateTitle();
+
+		Label restaurantsLabel = new Label("Restaurants");
+		restaurantsLabel.setFont(GUIConfig.getWelcomeFont());
+		restaurantsLabel.setTextFill(GUIConfig.getFgColor());
+
+		Label usernameLabel = new Label(loggedUser.getUsername() + "'s");
+		usernameLabel.setFont(GUIConfig.getUsernameFont());
+		usernameLabel.setTextFill(GUIConfig.getFgColor());
+
+		grid.add(usernameLabel, 2, 0);
+		grid.add(restaurantsLabel, 3, 0);
 
 		return grid;
 	}

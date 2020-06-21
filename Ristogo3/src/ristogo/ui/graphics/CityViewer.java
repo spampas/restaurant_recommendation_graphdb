@@ -1,6 +1,8 @@
 package ristogo.ui.graphics;
 
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -17,11 +19,14 @@ public class CityViewer extends VBox {
 	private final CityForm cityForm = new CityForm();
 	private final UserTableView userTable = new UserTableView(); //TODO: Inserire la table view corretta
 	
+	private final TextField findField = new TextField();
+	private final Button find = new Button();
+	
 	public CityViewer () {
 		
 		super(10);
 		
-		cityTableTitle.setText("List of Cities");
+		cityTableTitle.setText("List of Locations");
 		cityTableTitle.setFont(GUIConfig.getFormTitleFont());
 		cityTableTitle.setTextFill(GUIConfig.getFgColor());
 		cityTableTitle.setStyle(GUIConfig.getCSSFormTitleStyle());
@@ -35,11 +40,27 @@ public class CityViewer extends VBox {
 		flushButton.setFont(GUIConfig.getButtonFont());
 		flushButton.setTextFill(GUIConfig.getInvertedFgColor());
 		flushButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
+		
+		findField.setPromptText("search Locations by city name");
+		findField.setMinSize(200, 30);
+		findField.setMaxSize(200, 30);
+		
+		find.setText("Find");
+		find.setFont(GUIConfig.getButtonFont());
+		find.setTextFill(GUIConfig.getInvertedFgColor());
+		find.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
+		HBox findBox = new HBox(10);
+		findBox.getChildren().addAll(findField, find);
+		
+		HBox buttonBox = new HBox(60);
+		buttonBox.setAlignment(Pos.CENTER);
+		buttonBox.setMargin(operationButton, new Insets(0, 0, 0, 100));
+		buttonBox.getChildren().addAll(operationButton, flushButton);
 
 		HBox cityBox = new HBox(10);
-		cityBox.getChildren().addAll(cityForm, operationButton, flushButton);
+		cityBox.getChildren().addAll(cityForm, buttonBox);
 		
-		this.getChildren().addAll(cityTableTitle, cityBox, userTable);
+		this.getChildren().addAll(cityTableTitle, cityBox, userTable, findBox);
 	
 		//userTable.refreshRestaurants();
 	
