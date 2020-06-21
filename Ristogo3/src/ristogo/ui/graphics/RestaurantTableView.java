@@ -14,12 +14,12 @@ import ristogo.net.Protocol;
 import ristogo.ui.graphics.beans.RestaurantBean;
 import ristogo.ui.graphics.config.GUIConfig;
 
-final class TableViewRestaurant extends TableView<RestaurantBean>
+final class RestaurantTableView extends TableView<RestaurantBean>
 {
 	private final ObservableList<RestaurantBean> restaurantList;
 
 	@SuppressWarnings("unchecked")
-	TableViewRestaurant()
+	RestaurantTableView()
 	{
 		restaurantList = FXCollections.observableArrayList();
 
@@ -32,10 +32,10 @@ final class TableViewRestaurant extends TableView<RestaurantBean>
 		TableColumn<RestaurantBean, String> nameColumn = new TableColumn<RestaurantBean, String>("Name");
 		nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 		nameColumn.setStyle(GUIConfig.getCSSTableColumnStyle(false));
-		nameColumn.setMinWidth(150);
-		nameColumn.setMaxWidth(150);
+		nameColumn.setMinWidth(100);
+		nameColumn.setMaxWidth(100);
 
-		TableColumn<RestaurantBean, Cuisine> typeColumn = new TableColumn<RestaurantBean, Cuisine>("Type");
+		TableColumn<RestaurantBean, Cuisine> typeColumn = new TableColumn<RestaurantBean, Cuisine>("Cuisine");
 		typeColumn.setCellValueFactory(new PropertyValueFactory<>("cuisine"));
 		typeColumn.setStyle(GUIConfig.getCSSTableColumnStyle());
 		typeColumn.setMinWidth(100);
@@ -46,6 +46,18 @@ final class TableViewRestaurant extends TableView<RestaurantBean>
 		priceColumn.setStyle(GUIConfig.getCSSTableColumnStyle());
 		priceColumn.setMinWidth(100);
 		priceColumn.setMaxWidth(100);
+		
+		TableColumn<RestaurantBean, String> stateColumn = new TableColumn<RestaurantBean, String>("State");
+		stateColumn.setCellValueFactory(new PropertyValueFactory<>("state"));
+		stateColumn.setStyle(GUIConfig.getCSSTableColumnStyle());
+		stateColumn.setMinWidth(100);
+		stateColumn.setMaxWidth(100);
+		
+		TableColumn<RestaurantBean, String> countryColumn = new TableColumn<RestaurantBean, String>("Country");
+		countryColumn.setCellValueFactory(new PropertyValueFactory<>("country"));
+		countryColumn.setStyle(GUIConfig.getCSSTableColumnStyle());
+		countryColumn.setMinWidth(100);
+		countryColumn.setMaxWidth(100);
 
 		TableColumn<RestaurantBean, String> cityColumn = new TableColumn<RestaurantBean, String>("City");
 		cityColumn.setCellValueFactory(new PropertyValueFactory<>("city"));

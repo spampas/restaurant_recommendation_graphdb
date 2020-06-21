@@ -20,6 +20,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import ristogo.common.entities.Customer;
+import ristogo.common.entities.Owner;
 import ristogo.common.entities.Restaurant;
 import ristogo.common.entities.User;
 import ristogo.common.net.ResponseMessage;
@@ -29,6 +30,9 @@ import ristogo.ui.graphics.controls.FormButton;
 
 public final class RistogoGUI extends Application
 {
+	private static Stage stage;
+	private VBox applicationInterface;
+	
 	public static User loggedUser;
 	private static Restaurant restaurant;
 
@@ -44,10 +48,9 @@ public final class RistogoGUI extends Application
 			() -> { System.exit(0); }
 		);
 */
-		loggedUser = new Customer("ciccio", "ciccio");
-		VBox applicationInterface;
+		loggedUser = new Owner("ciccio", "ciccio");
 		//applicationInterface = loggedUser.isOwner() ? buildOwnerInterface() : buildCustomerInterface();
-		applicationInterface = buildAdminInterface();
+		applicationInterface = buildCustomerInterface();
 		Scene scene = new Scene(new Group(applicationInterface));
 		scene.setFill(GUIConfig.getBgColor());
 
@@ -56,6 +59,7 @@ public final class RistogoGUI extends Application
 		primaryStage.setScene(scene);
 		primaryStage.getIcons().add(new Image("/resources/logo.png"));
 		primaryStage.show();
+		stage = primaryStage;
 	}
 
 	@Override
@@ -205,13 +209,20 @@ public final class RistogoGUI extends Application
 
 	private VBox buildOwnerInterface()
 	{
-		VBox applicationInterface = new VBox(20);
+		VBox ownerInterface = new VBox(20);
 		
 		HBox titleBox = new HBox(10);
 		GridPane title = generateOwnerTitle();
 		Button returnButton = new Button("Return to the main page");
 		returnButton.setTextFill(GUIConfig.getInvertedFgColor());
 		returnButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
+		
+		returnButton.setOnMouseClicked((event) -> {
+			applicationInterface = buildCustomerInterface();
+			Scene newScene = new Scene(new Group(applicationInterface));
+			stage.setScene(newScene);
+			
+		});
 		
 		titleBox.getChildren().addAll(title, returnButton);
 		
@@ -240,17 +251,17 @@ public final class RistogoGUI extends Application
 		menu.getChildren().addAll(leftPart, rightPart);
 		
 		
-		applicationInterface.getChildren().addAll(titleBox, menu);
+		ownerInterface.getChildren().addAll(titleBox, menu);
 	
 		leftPart.setStyle(GUIConfig.getCSSInterfacePartStyle());
 		rightPart.setStyle(GUIConfig.getCSSInterfacePartStyle());
 		leftPart.setPrefSize(500, 600);
 		rightPart.setPrefSize(500, 600);
-		applicationInterface.setPrefSize(1000, 600);
+		ownerInterface.setPrefSize(1000, 600);
 		title.setAlignment(Pos.CENTER);
-		applicationInterface.setAlignment(Pos.CENTER);
+		ownerInterface.setAlignment(Pos.CENTER);
 		
-		return applicationInterface;
+		return ownerInterface;
 		
 	}
 	
@@ -324,8 +335,9 @@ public final class RistogoGUI extends Application
 		option.setTextFill(GUIConfig.getInvertedFgColor());
 		option.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
 		
+		Button owner = new Button("My Restaurants");
+		
 		if(loggedUser.isOwner()) {
-			Button owner = new Button("My Restaurants");
 			owner.setFont(GUIConfig.getButtonFont());
 			owner.setTextFill(GUIConfig.getInvertedFgColor());
 			owner.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
@@ -334,6 +346,15 @@ public final class RistogoGUI extends Application
 		else {
 			optionMenu.getChildren().addAll(option);
 		}
+		
+		
+		owner.setOnMouseClicked((event) -> {
+			applicationInterface = buildOwnerInterface();
+			Scene newScene = new Scene(new Group(applicationInterface));
+			stage.setScene(newScene);
+			
+		});
+		
 		
 		return optionMenu;
 		

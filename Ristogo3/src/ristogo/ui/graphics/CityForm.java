@@ -6,21 +6,19 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import ristogo.ui.graphics.config.GUIConfig;
+import ristogo.ui.graphics.controls.FormLabel;
 
 public class CityForm extends GridPane {
 
-	private final Label cityLabel = new Label("City");
-	private final Label countryLabel = new Label("Country");
-	private final Label stateLabel = new Label("State");
+	private final FormLabel cityLabel = new FormLabel("City");
+	private final FormLabel countryLabel = new FormLabel("Country");
+	private final FormLabel stateLabel = new FormLabel("State");
 	private final TextField cityField = new TextField();
 	private final TextField countryField = new TextField();
 	private final TextField stateField = new TextField();
 	
 	public CityForm()
 	{
-		stateLabel.setTextFill(GUIConfig.getFgColor());
-		countryLabel.setTextFill(GUIConfig.getFgColor());
-		cityLabel.setTextFill(GUIConfig.getFgColor());
 		cityField.setPromptText("insert a name of a city");
 		cityField.setMinSize(200, 30);
 		cityField.setMaxSize(200, 30);
