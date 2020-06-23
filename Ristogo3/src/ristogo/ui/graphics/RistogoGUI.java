@@ -50,7 +50,7 @@ public final class RistogoGUI extends Application
 */
 		loggedUser = new Owner("ciccio", "ciccio");
 		//applicationInterface = loggedUser.isOwner() ? buildOwnerInterface() : buildCustomerInterface();
-		applicationInterface = buildAdminInterface();
+		applicationInterface = buildCustomerInterface();
 		Scene scene = new Scene(new Group(applicationInterface));
 		scene.setFill(GUIConfig.getBgColor());
 
