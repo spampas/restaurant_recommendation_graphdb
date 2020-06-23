@@ -260,11 +260,11 @@ public final class RistogoGUI extends Application
 		
 		RestaurantViewer restaurantTable = new RestaurantViewer(true);
 		
-		//TODO : add statistics of restaurant
+		RestaurantStatistic statistic = new RestaurantStatistic();
 		
 		VBox rightPart = new VBox(10);
 		
-		rightPart.getChildren().addAll(restaurantTable);
+		rightPart.getChildren().addAll(restaurantTable, statistic);
 		
 		
 		HBox menu = new HBox(10);
