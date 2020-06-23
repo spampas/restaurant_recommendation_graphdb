@@ -65,7 +65,7 @@ final class RestaurantTableView extends TableView<RestaurantBean>
 		cityColumn.setMinWidth(100);
 		cityColumn.setMaxWidth(100);
 
-		getColumns().addAll(nameColumn, typeColumn, priceColumn, cityColumn);
+		getColumns().addAll(nameColumn, typeColumn, priceColumn, stateColumn, countryColumn, cityColumn);
 		setItems(restaurantList);
 
 	}
