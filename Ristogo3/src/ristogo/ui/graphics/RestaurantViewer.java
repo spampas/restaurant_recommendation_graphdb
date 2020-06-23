@@ -90,6 +90,7 @@ public class RestaurantViewer extends VBox {
 		this();
 		if(isRestaurantInterface) {
 			findBox.getChildren().remove(2);
+			this.getChildren().remove(3);
 		}
 	}
 	
