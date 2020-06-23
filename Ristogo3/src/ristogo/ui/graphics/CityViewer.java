@@ -26,7 +26,7 @@ public class CityViewer extends VBox {
 		
 		super(20);
 		
-		cityTableTitle.setText("List of Locations");
+		cityTableTitle.setText("List of Cities");
 		cityTableTitle.setFont(GUIConfig.getFormTitleFont());
 		cityTableTitle.setTextFill(GUIConfig.getFgColor());
 		cityTableTitle.setStyle(GUIConfig.getCSSFormTitleStyle());
@@ -41,7 +41,7 @@ public class CityViewer extends VBox {
 		flushButton.setTextFill(GUIConfig.getInvertedFgColor());
 		flushButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
 		
-		findField.setPromptText("search Locations by city name");
+		findField.setPromptText("search City by name");
 		findField.setMinSize(200, 30);
 		findField.setMaxSize(200, 30);
 		

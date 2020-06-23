@@ -198,7 +198,7 @@ public final class RistogoGUI extends Application
 		
 		VBox rightPart = new VBox(10);
 		VBox rightMenu = new VBox(10);
-		Label subtitleCity = new Label("Locations Settings");
+		Label subtitleCity = new Label("Cities Settings");
 		subtitleCity.setFont(GUIConfig.getTitleFont());
 		subtitleCity.setTextFill(GUIConfig.getFgColor());
 		

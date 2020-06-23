@@ -57,7 +57,7 @@ public class UserTableView extends TableView<UserBean>{
 		cityColumn.setMaxWidth(100);
 
 
-		getColumns().addAll(nameColumn, stateColumn, countryColumn, cityColumn);
+		getColumns().addAll(nameColumn, cityColumn, countryColumn,  stateColumn);
 		setItems(userList);
 
 	}
