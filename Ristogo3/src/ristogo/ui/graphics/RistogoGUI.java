@@ -48,8 +48,7 @@ public final class RistogoGUI extends Application
 			() -> { System.exit(0); }
 		);
 */
-		loggedUser = new Owner("ciccio", "ciccio");
-		//applicationInterface = loggedUser.isOwner() ? buildOwnerInterface() : buildCustomerInterface();
+		loggedUser = new Owner("admin", "admin");
 		applicationInterface = buildCustomerInterface();
 		Scene scene = new Scene(new Group(applicationInterface));
 		scene.setFill(GUIConfig.getBgColor());
@@ -121,14 +120,17 @@ public final class RistogoGUI extends Application
 		
 		buttonFormLeft.getMyButton().setOnMouseClicked((event) -> {
 			userTable.getFollowButton().setText("Unfollow");
+			userTable.getUserTableTitle().setText("List of Users that you follow");
 		});
 	
 		buttonFormLeft.getFindButton().setOnMouseClicked((event) -> {
 			userTable.getFollowButton().setText("Follow");
+			userTable.getUserTableTitle().setText("List of Users");
 		});
 		
 		buttonFormLeft.getRecommendedButton().setOnMouseClicked((event) -> {
 			userTable.getFollowButton().setText("Follow");
+			userTable.getUserTableTitle().setText("List of Users recommended to you");
 			UserRecommendationDialog recommendationDialog = new UserRecommendationDialog();
 			Optional<User> result = recommendationDialog.showAndWait();
 			result.ifPresentOrElse(
@@ -139,14 +141,17 @@ public final class RistogoGUI extends Application
 		
 		buttonFormRight.getMyButton().setOnMouseClicked((event) -> {
 				restaurantTable.getLikeButton().setText("Remove Like");
+				restaurantTable.getRestaurantTableTitle().setText("List of Restaurants that you like");
 		});
 		
 		buttonFormRight.getFindButton().setOnMouseClicked((event) -> {
 			restaurantTable.getLikeButton().setText("Put Like");
+			restaurantTable.getRestaurantTableTitle().setText("List of Restaurants");
 		});
 		
 		buttonFormRight.getRecommendedButton().setOnMouseClicked((event) -> {
 			restaurantTable.getLikeButton().setText("Put Like");
+			restaurantTable.getRestaurantTableTitle().setText("List of Restaurants recommended to you");
 			RestaurantRecommendationDialog recommendationDialog = new RestaurantRecommendationDialog();
 			Optional<Restaurant> result = recommendationDialog.showAndWait();
 			result.ifPresentOrElse(
@@ -160,9 +165,23 @@ public final class RistogoGUI extends Application
 	
 	private VBox buildAdminInterface()
 	{
-		VBox applicationInterface = new VBox(10);
+		VBox adminInterface = new VBox(10);
 		HBox menu = new HBox();
+		
+		HBox titleBox = new HBox(10);
 		GridPane title = generateTitle();
+		Button returnButton = new Button("Return to the main page");
+		returnButton.setTextFill(GUIConfig.getInvertedFgColor());
+		returnButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
+		
+		returnButton.setOnMouseClicked((event) -> {
+			applicationInterface = buildCustomerInterface();
+			Scene newScene = new Scene(new Group(applicationInterface));
+			stage.setScene(newScene);
+			
+		});
+		
+		titleBox.getChildren().addAll(title, returnButton);
 		
 		VBox leftPart = new VBox(10);
 		VBox leftMenu = new VBox(10);
@@ -190,9 +209,9 @@ public final class RistogoGUI extends Application
 		
 		menu.getChildren().addAll(leftPart, rightPart);
 		
-		applicationInterface.getChildren().addAll(title, menu);
+		adminInterface.getChildren().addAll(titleBox, menu);
 		
-		applicationInterface.setStyle(GUIConfig.getCSSFormBoxStyle());
+		adminInterface.setStyle(GUIConfig.getCSSFormBoxStyle());
 
 		leftMenu.setStyle(GUIConfig.getCSSInterfacePartStyle());
 		leftMenu.setStyle(GUIConfig.getCSSFormBoxStyle());
@@ -204,7 +223,7 @@ public final class RistogoGUI extends Application
 		rightPart.setPrefSize(500, 600);
 		menu.setPrefSize(1000, 600);	
 	
-		return applicationInterface;
+		return adminInterface;
 	}
 
 	private VBox buildOwnerInterface()
@@ -330,26 +349,31 @@ public final class RistogoGUI extends Application
 	HBox generateOptionMenu () {
 		
 		HBox optionMenu = new HBox(10);
-		Button option = new Button("Options");
-		option.setFont(GUIConfig.getButtonFont());
-		option.setTextFill(GUIConfig.getInvertedFgColor());
-		option.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
+		FormButton option = new FormButton("Options");
+		FormButton owner = new FormButton("My Restaurants");
+		FormButton admin = new FormButton("Admin Settings");
 		
-		Button owner = new Button("My Restaurants");
-		
-		if(loggedUser.isOwner()) {
-			owner.setFont(GUIConfig.getButtonFont());
-			owner.setTextFill(GUIConfig.getInvertedFgColor());
-			owner.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
-			optionMenu.getChildren().addAll(owner,option);
+		if(loggedUser.isAdmin()) {
+			optionMenu.getChildren().addAll(admin,option);
 		}
 		else {
-			optionMenu.getChildren().addAll(option);
+			if(loggedUser.isOwner()) {
+				optionMenu.getChildren().addAll(owner,option);
+			}
+			else {
+				optionMenu.getChildren().addAll(option);
+			}
 		}
-		
 		
 		owner.setOnMouseClicked((event) -> {
 			applicationInterface = buildOwnerInterface();
+			Scene newScene = new Scene(new Group(applicationInterface));
+			stage.setScene(newScene);
+			
+		});
+		
+		admin.setOnMouseClicked((event) -> {
+			applicationInterface = buildAdminInterface();
 			Scene newScene = new Scene(new Group(applicationInterface));
 			stage.setScene(newScene);
 			

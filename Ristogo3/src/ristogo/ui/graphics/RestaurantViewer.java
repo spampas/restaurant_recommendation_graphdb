@@ -30,7 +30,7 @@ public class RestaurantViewer extends VBox {
 		
 		super(10);
 		
-		restaurantTableTitle.setText("List of Restaurant");
+		restaurantTableTitle.setText("List of Restaurants");
 		restaurantTableTitle.setFont(GUIConfig.getFormTitleFont());
 		restaurantTableTitle.setTextFill(GUIConfig.getFgColor());
 		restaurantTableTitle.setStyle(GUIConfig.getCSSFormTitleStyle());
@@ -129,5 +129,9 @@ public class RestaurantViewer extends VBox {
 
 	public Button getLikeButton() {
 		return likeButton;
+	}
+
+	public Label getRestaurantTableTitle() {
+		return restaurantTableTitle;
 	}
 }

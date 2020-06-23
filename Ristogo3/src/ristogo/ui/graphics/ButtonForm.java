@@ -47,7 +47,7 @@ public class ButtonForm extends VBox{
 				break;
 		}
 		
-		this.getChildren().addAll(myButton, findButton, recommendedButton);
+		this.getChildren().addAll(findButton, myButton, recommendedButton);
 		
 	}
 

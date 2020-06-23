@@ -101,6 +101,12 @@ public class UserViewer extends VBox {
 	public Button getFollowButton() {
 		return followButton;
 	}
+
+
+	public Label getUserTableTitle() {
+		return userTableTitle;
+	}
+
 	
 
 }

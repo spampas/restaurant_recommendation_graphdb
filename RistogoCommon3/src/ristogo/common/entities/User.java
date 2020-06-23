@@ -272,5 +272,9 @@ public abstract class User extends Entity
 	{
 		return (this instanceof Owner);
 	}
+	
+	public boolean isAdmin() {
+		return this.username == "admin";
+	}
 
 }
