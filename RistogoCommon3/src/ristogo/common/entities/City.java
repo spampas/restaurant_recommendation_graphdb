@@ -4,18 +4,9 @@ public class City extends Entity{
 
 	private static final long serialVersionUID = 3048031564043965549L;
 	
-	/**
-	 * The state where the city is.
-	 */
-	protected String state;
-	/**
-	 * The region where the city is.
-	 */
-	protected String country;
-	/**
-	 * The name of the city.
-	 */
-	protected String city;
+	protected String name;
+	protected String latitude;
+	protected String longitude;
 
 	
 	public City()
@@ -35,98 +26,90 @@ public class City extends Entity{
 	/**
 	 * Creates the city.
 	 * @param id City's id.
-	 * @param stateName The name of the state.
-	 * @param countryName The name of the country.
-	 * @param cityName The name of the city.
+	 * @param name The name of the city.
+	 * @param latitude The latitude where the city is located.
+	 * @param latitude The longitude where the city is located.
 	 */
-	public City(int id, String state, String country, String city)
+	public City(int id, String name, String latitude, String longitude)
 	{
 		super(id);
-		this.state = state;
-		this.country = country;
-		this.city = city;
+		this.name = name;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		
 	}
 	
 	/**
 	 * Creates the city.
-	 * @param stateName The name of the state.
-	 * @param countryName The name of the country.
+	 * @param latitudeName The name of the latitude.
+	 * @param longitudeName The name of the longitude.
 	 * @param cityName The name of the city.
 	 */
-	public City(String state, String country, String city)
+	public City(String name, String latitude, String longitude)
 	{
-		this(0, state, country, city);
-	}
-	
-	/**
-	 * Creates the city.
-	 * * @param cityName The name of the city.
-	 */
-	public City(String city)
-	{
-		this(0, "Italy", "Tuscany", city);
+		this(0, name, latitude, longitude);
 	}
 	
 	
 	/**
-	 * Gets the state.
-	 * @return The state.
+	 * Gets the latitude.
+	 * @return The latitude.
 	 */
-	public String getState()
+	public String getLatitude()
 	{
-		return state;
+		return this.latitude;
 	}
 
 	/**
-	 * Sets the state.
-	 * @param state The state.
+	 * Sets the latitude.
+	 * @param latitude The latitude.
 	 */
-	public void setState(String state)
+	public void setLatitude(String latitude)
 	{
-		this.state = state;
+		this.latitude = latitude;
 	}
 	/**
-	 * Gets the country.
-	 * @return The country.
+	 * Gets the longitude.
+	 * @return The longitude.
 	 */
-	public String getCountry()
+	public String getLongitude()
 	{
-		return country;
-	}
-
-	/**
-	 * Sets the country.
-	 * @param country The country.
-	 */
-	public void setCountry(String country)
-	{
-		this.country = country;
-	}
-	/**
-	 * Gets the city.
-	 * @return The city.
-	 */
-	public String getCity()
-	{
-		return city;
+		return longitude;
 	}
 
 	/**
-	 * Sets the city.
-	 * @param city The city.
+	 * Sets the longitude.
+	 * @param longitude The longitude.
 	 */
-	public void setCity(String city)
+	public void setLongitude(String longitude)
 	{
-		this.city = city;
+		this.longitude = longitude;
+	}
+	/**
+	 * Gets the city name.
+	 * @return The name of the city.
+	 */
+	public String getName()
+	{
+		return name;
+	}
+
+	/**
+	 * Sets the name.
+	 * @param city name.
+	 */
+	public void setName(String name)
+	{
+		this.name = name;
 	}
 	
 	
 	@Override
 	public String toString()
 	{
-		return "State: " + fieldToString(getState()) + "\n" +
-			"Country: " + fieldToString(getCountry()) + "\n" +
-			"City: " + fieldToString(getCity()) + "\n";
+		return "latitude: " + fieldToString(getLatitude()) + "\n" +
+			"longitude: " + fieldToString(getLongitude()) + "\n" +
+			"City: " + fieldToString(getName()) + "\n";
 	}
 	
 	private String fieldToString(Object field)

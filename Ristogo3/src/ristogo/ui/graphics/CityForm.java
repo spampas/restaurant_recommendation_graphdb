@@ -10,44 +10,44 @@ import ristogo.ui.graphics.controls.FormLabel;
 
 public class CityForm extends GridPane {
 
-	private final FormLabel cityLabel = new FormLabel("City");
-	private final FormLabel countryLabel = new FormLabel("Country");
-	private final FormLabel stateLabel = new FormLabel("State");
-	private final TextField cityField = new TextField();
-	private final TextField countryField = new TextField();
-	private final TextField stateField = new TextField();
+	private final FormLabel nameLabel = new FormLabel("City");
+	private final FormLabel latitudeLabel = new FormLabel("Latitude");
+	private final FormLabel longitudeLabel = new FormLabel("Longitude");
+	private final TextField nameField = new TextField();
+	private final TextField latitudeField = new TextField();
+	private final TextField longitudeField = new TextField();
 	
 	public CityForm()
 	{
-		cityField.setPromptText("insert a name of a city");
-		cityField.setMinSize(200, 30);
-		cityField.setMaxSize(200, 30);
+		nameField.setPromptText("insert the name of the city");
+		nameField.setMinSize(200, 30);
+		nameField.setMaxSize(200, 30);
 		
-		countryField.setPromptText("insert a name of a country");
-		countryField.setMinSize(200, 30);
-		countryField.setMaxSize(200, 30);
+		latitudeField.setPromptText("insert the latitude where the city is located");
+		latitudeField.setMinSize(200, 30);
+		latitudeField.setMaxSize(200, 30);
 		
-		stateField.setPromptText("insert a name of a state");
-		stateField.setMinSize(200, 30);
-		stateField.setMaxSize(200, 30);
+		longitudeField.setPromptText("insert the longitude where the city is located");
+		longitudeField.setMinSize(200, 30);
+		longitudeField.setMaxSize(200, 30);
 		
 		setHgap(10);
 		setVgap(10);
 		setPadding(new Insets(1, 1, 5, 1));
 		setMaxWidth(500);
 
-		add(stateLabel, 0, 0); add(stateField, 1, 0);
-		add(countryLabel, 0, 1); add(countryField, 1, 1);
-		add(cityLabel, 0, 2); add(cityField, 1, 2);
+		add(nameLabel, 0, 0); add(nameField, 1, 0);
+		add(latitudeLabel, 0, 1); add(latitudeField, 1, 1);
+		add(longitudeLabel, 0, 2); add(longitudeField, 1, 2);
 		
 	}
 	
-	public String getCity() {return cityField.getText();}
-	public String getCountry() {return countryField.getText();}
-	public String getState() {return stateField.getText();}
+	public String getName() {return nameField.getText();}
+	public String getLatitude() {return latitudeField.getText();}
+	public String getLongitude() {return longitudeField.getText();}
 	
-	public void setCity(String city) {cityField.setText(city);}
-	public void setCountry(String country) {countryField.setText(country);}
-	public void setState(String state) {stateField.setText(state);}
+	public void setName(String city) {nameField.setText(city);}
+	public void setLatitude(String latitude) {latitudeField.setText(latitude);}
+	public void setLongitude(String longitude) {longitudeField.setText(longitude);}
 	
 }

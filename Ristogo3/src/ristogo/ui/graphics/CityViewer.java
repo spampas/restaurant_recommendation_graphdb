@@ -81,20 +81,20 @@ public class CityViewer extends VBox {
 	
 	private void handleOperationButtonAction(ActionEvent event)
 	{
-		String cityName = cityForm.getCity();
-		String countryName = cityForm.getCountry();
-		String stateName = cityForm.getState();
+		String cityName = cityForm.getName();
+		String cityLatitude = cityForm.getLatitude();
+		String cityLongitude = cityForm.getLongitude();
 		
-		if (cityName == null  || countryName == null || stateName == null)
+		if (cityName == null  || cityLatitude == null || cityLongitude == null)
 			return;
 		//TODO: gestire azioni
 	}
 	
 	private void handleFlushButtonAction(ActionEvent event)
 	{
-		cityForm.setCity("");
-		cityForm.setCountry("");
-		cityForm.setState("");
+		cityForm.setName("");
+		cityForm.setLatitude("");
+		cityForm.setLongitude("");
 	}
 	
 	public void changeConfigurationCityViewer(int config) {

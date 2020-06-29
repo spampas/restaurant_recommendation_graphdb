@@ -27,20 +27,20 @@ public class CityTableView extends TableView<CityBean>{
 		setMaxWidth(600);
 		setMaxHeight(GUIConfig.getMaxRowDisplayable() * getFixedCellSize());
 
-		TableColumn<CityBean, String> stateColumn = new TableColumn<CityBean, String>("State");
-		stateColumn.setCellValueFactory(new PropertyValueFactory<>("state"));
+		TableColumn<CityBean, String> stateColumn = new TableColumn<CityBean, String>("Name");
+		stateColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 		stateColumn.setStyle(GUIConfig.getCSSTableColumnStyle(false));
 		stateColumn.setMinWidth(200);
 		stateColumn.setMaxWidth(200);
 
-		TableColumn<CityBean, String> countryColumn = new TableColumn<CityBean, String>("Country");
-		countryColumn.setCellValueFactory(new PropertyValueFactory<>("country"));
+		TableColumn<CityBean, String> countryColumn = new TableColumn<CityBean, String>("Latitude");
+		countryColumn.setCellValueFactory(new PropertyValueFactory<>("latitude"));
 		countryColumn.setStyle(GUIConfig.getCSSTableColumnStyle(false));
 		countryColumn.setMinWidth(200);
 		countryColumn.setMaxWidth(200);
 		
-		TableColumn<CityBean, String> cityColumn = new TableColumn<CityBean, String>("City");
-		cityColumn.setCellValueFactory(new PropertyValueFactory<>("city"));
+		TableColumn<CityBean, String> cityColumn = new TableColumn<CityBean, String>("Longitude");
+		cityColumn.setCellValueFactory(new PropertyValueFactory<>("longitude"));
 		cityColumn.setStyle(GUIConfig.getCSSTableColumnStyle(false));
 		cityColumn.setMinWidth(200);
 		cityColumn.setMaxWidth(200);

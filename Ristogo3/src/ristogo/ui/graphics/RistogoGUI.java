@@ -48,7 +48,7 @@ public final class RistogoGUI extends Application
 			() -> { System.exit(0); }
 		);
 */
-		loggedUser = new Owner("gino", "admin");
+		loggedUser = new Owner("admin", "admin");
 		applicationInterface = buildCustomerInterface();
 		Scene scene = new Scene(new Group(applicationInterface));
 		scene.setFill(GUIConfig.getBgColor());
@@ -86,7 +86,7 @@ public final class RistogoGUI extends Application
 		optionMenu.setAlignment(Pos.CENTER);
 		
 		leftMenu.getChildren().addAll(buttonFormLeft, userTable);
-		leftPart.getChildren().addAll(subtitleUser, leftMenu, optionMenu);
+		leftPart.getChildren().addAll(subtitleUser, leftMenu);
 		leftPart.setAlignment(Pos.CENTER);
 		
 		VBox rightPart = new VBox(10);
@@ -103,7 +103,7 @@ public final class RistogoGUI extends Application
 		
 		menu.getChildren().addAll(leftPart, rightPart);
 		
-		applicationInterface.getChildren().addAll(title, menu);
+		applicationInterface.getChildren().addAll(title, menu, optionMenu);
 		applicationInterface.setAlignment(Pos.CENTER);
 		
 		applicationInterface.setStyle(GUIConfig.getCSSFormBoxStyle());

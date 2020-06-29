@@ -3,19 +3,23 @@ package ristogo.ui.graphics;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import ristogo.common.entities.User;
 import ristogo.ui.graphics.config.GUIConfig;
+import ristogo.ui.graphics.controls.FormLabel;
 
 public class UserViewer extends VBox {
 	
-	private final Label userTableTitle = new Label();
+	private final FormLabel userTableTitle = new FormLabel("List of Users");
 	private final TextField findField = new TextField();
 	private final Button find = new Button();
 	private final Button followButton = new Button();
 	private final UserTableView userTable = new UserTableView();
+	private final FormLabel cuisinesLabel = new FormLabel("Cusisines that selected user likes:");
+	private final TextArea cuisinesField = new TextArea();
 	
 	private User user;
 	
@@ -23,7 +27,6 @@ public class UserViewer extends VBox {
 		
 		super(10);
 		
-		userTableTitle.setText("List of Users");
 		userTableTitle.setFont(GUIConfig.getFormTitleFont());
 		userTableTitle.setTextFill(GUIConfig.getFgColor());
 		userTableTitle.setStyle(GUIConfig.getCSSFormTitleStyle());
@@ -42,12 +45,17 @@ public class UserViewer extends VBox {
 		followButton.setTextFill(GUIConfig.getInvertedFgColor());
 		followButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
 		followButton.setDisable(true);
+		
+		cuisinesField.setWrapText(true);
+		cuisinesField.setEditable(false);
+		cuisinesField.setMinSize(480, 100);
+		cuisinesField.setMaxSize(480, 100);
 
 		HBox findBox = new HBox(10);
 		findBox.getChildren().addAll(findField, find, followButton);
 		
 		
-		this.getChildren().addAll(userTableTitle, findBox, userTable);
+		this.getChildren().addAll(userTableTitle, findBox, userTable, cuisinesLabel, cuisinesField);
 
 		
 		//userTable.refreshRestaurants();
@@ -58,6 +66,7 @@ public class UserViewer extends VBox {
 			if (user == null)
 				return;
 			followButton.setDisable(false);
+			cuisinesField.setText(""/*convert cuisines that user likes to string"*/);
 		});
 
 		find.setOnAction(this::handleFindButtonAction);

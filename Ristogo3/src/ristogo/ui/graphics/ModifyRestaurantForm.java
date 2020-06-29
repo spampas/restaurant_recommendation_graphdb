@@ -24,8 +24,6 @@ final class ModifyRestaurantForm extends VBox
 {
 	private final TextField nameField = new TextField();
 	private final ChoiceBox<Cuisine> cuisineField = new ChoiceBox<Cuisine>();
-	private final ChoiceBox<String> stateSelector = new ChoiceBox<String>();
-	private final ChoiceBox<String> countrySelector = new ChoiceBox<String>();
 	private final ChoiceBox<String> citySelector = new ChoiceBox<String>();
 	private final ChoiceBox<Price> priceField = new ChoiceBox<Price>();
 	private final TextArea descriptionField = new TextArea();
@@ -50,8 +48,6 @@ final class ModifyRestaurantForm extends VBox
 		FormLabel nameLabel = new FormLabel("Name:");
 		FormLabel cuisineLabel = new FormLabel("Cuisine:");
 		FormLabel costLabel = new FormLabel("Cost:");
-		FormLabel stateLabel = new FormLabel("Stat: ");
-		FormLabel countryLabel = new FormLabel("Country: ");
 		FormLabel cityLabel = new FormLabel("City: ");
 		FormLabel descriptionLabel = new FormLabel("Description:");
 
@@ -62,8 +58,6 @@ final class ModifyRestaurantForm extends VBox
 
 		cuisineField.getItems().addAll(Cuisine.values());
 		priceField.getItems().addAll(Price.values());
-		stateSelector.getItems().addAll(/* Load from DB*/);
-		countrySelector.getItems().addAll(/* Laoad from DB*/);
 		citySelector.getItems().addAll(/*Load from DB*/);
 		descriptionField.setWrapText(true);
 		descriptionField.setMinSize(480, 100);
@@ -72,21 +66,17 @@ final class ModifyRestaurantForm extends VBox
 		HBox nameBox = new HBox(20);
 		HBox typeBox = new HBox(20);
 		HBox costBox = new HBox(20);
-		GridPane locationBox = new GridPane();
+		HBox cityBox = new HBox(20);
 		HBox buttonBox = new HBox(20);
 
 		nameBox.getChildren().addAll(nameLabel, nameField);
 		typeBox.getChildren().addAll(cuisineLabel, cuisineField);
 		costBox.getChildren().addAll(costLabel, priceField);
-		locationBox.setHgap(10);
-		locationBox.setVgap(10);
-		locationBox.setPadding(new Insets(20, 150, 10, 10));
-		locationBox.add(stateLabel, 0, 0); locationBox.add(stateSelector, 1, 0);
-		locationBox.add(countryLabel, 0, 1); locationBox.add(countrySelector, 1, 1);
-		locationBox.add(cityLabel, 0, 2); locationBox.add(citySelector, 1, 2);
+		cityBox.getChildren().addAll(cityLabel, citySelector);
+		
 		buttonBox.getChildren().addAll(commitButton, addNewButton, deleteButton);
 
-		getChildren().addAll(title, nameBox, typeBox, costBox, locationBox, descriptionLabel, descriptionField, errorLabel, buttonBox);
+		getChildren().addAll(title, nameBox, typeBox, costBox, cityBox, descriptionLabel, descriptionField, errorLabel, buttonBox);
 		setStyle(GUIConfig.getCSSFormBoxStyle());
 		setPrefSize(400, 600);
 
@@ -119,8 +109,6 @@ final class ModifyRestaurantForm extends VBox
 		restaurant.setName(nameField.getText());
 		restaurant.setCuisine(cuisineField.getValue());
 		restaurant.setPrice(priceField.getValue());
-		restaurant.setState(stateSelector.getValue());
-		restaurant.setCountry(countrySelector.getValue());
 		restaurant.setCity(citySelector.getValue());
 		restaurant.setDescription(descriptionField.getText());
 
@@ -159,8 +147,6 @@ final class ModifyRestaurantForm extends VBox
 		nameField.setText(restaurant.getName());
 		cuisineField.setValue(restaurant.getCuisine());
 		priceField.setValue(restaurant.getPrice());
-		stateSelector.setValue(restaurant.getState());
-		countrySelector.setValue(restaurant.getCountry());
 		citySelector.setValue(restaurant.getCity());
 		descriptionField.setText(restaurant.getDescription());
 	}

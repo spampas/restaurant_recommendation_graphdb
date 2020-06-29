@@ -12,6 +12,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -33,14 +34,12 @@ public class UserRecommendationDialog extends Dialog<User> {
 
 
 	private final Button searchButton;
-	private final DialogLabel stateLabel = new DialogLabel("State where they live: ");
-	private final DialogLabel countryLabel = new DialogLabel("Country where they live: ");
 	private final DialogLabel cityLabel = new DialogLabel("City where they live: ");
+	private final DialogLabel distanceLabel = new DialogLabel("Distance from the city selected (by default is you city)");
 	private final DialogLabel cuisineLabel = new DialogLabel("Cuisine that they like: ");
 	private final DialogLabel errorLabel = new DialogLabel("Fill out the form.");
-	private final ChoiceBox<String> stateSelector = new ChoiceBox<String>();
-	private final ChoiceBox<String> countrySelector = new ChoiceBox<String>();
 	private final ChoiceBox<String> citySelector = new ChoiceBox<String>();
+	private final TextField distanceField = new TextField();
 	private final ChoiceBox<Cuisine> cuisineSelector = new ChoiceBox<Cuisine>();
 	private User filter;
 
@@ -67,23 +66,19 @@ public class UserRecommendationDialog extends Dialog<User> {
 		
 		cuisineSelector.getItems().addAll(/*//TODO Load cuisine from DB*/);
 		
-		stateSelector.getItems().addAll(/*//TODO Load states from DB*/);
-		countrySelector.getItems().addAll(/*//TODO Load countries from DB*/);
 		citySelector.getItems().addAll(/*//TODO Load cities from DB*/);
 		
-		stateSelector.setValue(RistogoGUI.loggedUser.getState());
-		//countrySelector.setValue(RistogoGUI.loggedUser.getCountry());
 		citySelector.setValue(RistogoGUI.loggedUser.getCity());
+		distanceField.setPromptText("Distance(Km)");
 		
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
 		grid.setVgap(10);
 		grid.setPadding(new Insets(20, 150, 10, 10));
-		grid.add(stateLabel, 0, 0); grid.add(stateSelector, 1, 0);
-		grid.add(countryLabel, 0, 1); grid.add(countrySelector, 1, 1);
-		grid.add(cityLabel, 0, 2); grid.add(citySelector, 1, 2);
-		grid.add(cuisineLabel, 0, 3); grid.add(cuisineSelector, 1, 3);
-		grid.add(errorLabel, 0, 4, 2, 1);
+		grid.add(cityLabel, 0, 0); grid.add(citySelector, 1, 0);
+		grid.add(distanceLabel, 0, 1); grid.add(distanceField, 1, 1);
+		grid.add(cuisineLabel, 0, 2); grid.add(cuisineSelector, 1, 2);
+		grid.add(errorLabel, 0, 3, 2, 1);
 
 		ButtonType okButtonType = new ButtonType("Search", ButtonData.OK_DONE);
 		dialogPane.getButtonTypes().addAll(okButtonType, ButtonType.CLOSE);
@@ -91,22 +86,6 @@ public class UserRecommendationDialog extends Dialog<User> {
 		searchButton = (Button)dialogPane.lookupButton(okButtonType);
 
 		searchButton.addEventFilter(ActionEvent.ACTION, this::filterOkButtonAction);
-		
-		stateSelector.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-		      @Override
-		      public void changed(ObservableValue<? extends Number> observableValue, Number value, Number newValue) {
-		        String state = stateSelector.getItems().get((Integer) newValue);
-		        // TODO : load countries using state as condition
-		      }
-		    });
-		
-		countrySelector.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-		      @Override
-		      public void changed(ObservableValue<? extends Number> observableValue, Number value, Number newValue) {
-		        String country = countrySelector.getItems().get((Integer) newValue);
-		        // TODO : load cities using state and country  as condition
-		      }
-		    });
 	
 
 		ButtonBar buttonBar = (ButtonBar)dialogPane.lookup(".button-bar");

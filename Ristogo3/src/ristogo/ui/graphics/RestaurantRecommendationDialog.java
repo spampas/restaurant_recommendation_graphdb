@@ -10,6 +10,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,20 +24,19 @@ import ristogo.common.entities.enums.Price;
 import ristogo.ui.graphics.config.GUIConfig;
 import ristogo.ui.graphics.controls.DialogLabel;
 import ristogo.ui.graphics.controls.DialogTextField;
+import ristogo.ui.menus.forms.FormField;
 
 public class RestaurantRecommendationDialog extends Dialog<Restaurant> {
 
 	private final Button searchButton;
 	private final DialogLabel likeFilterLabel = new DialogLabel("Consider likes coming from: ");
-	private final DialogLabel stateLabel = new DialogLabel("State where they are placed: ");
-	private final DialogLabel countryLabel = new DialogLabel("Country  where they are placed: ");
-	private final DialogLabel cityLabel = new DialogLabel("City  where they are placed: ");
+	private final DialogLabel cityLabel = new DialogLabel("City where they are placed: ");
+	private final DialogLabel distanceLabel = new DialogLabel("Distance from the city selected (by default is you city)");
 	private final DialogLabel cuisineLabel = new DialogLabel("Cuisine that you like: ");
 	private final DialogLabel priceFilterLabel = new DialogLabel("Price:");
 	private final DialogLabel errorLabel = new DialogLabel("Fill out the form.");
 	private final ChoiceBox<String> likeFilterSelector = new ChoiceBox<String>();
-	private final ChoiceBox<String> stateSelector = new ChoiceBox<String>();
-	private final ChoiceBox<String> countrySelector = new ChoiceBox<String>();
+	private final TextField distanceField = new TextField();
 	private final ChoiceBox<String> citySelector = new ChoiceBox<String>();
 	private final ChoiceBox<Cuisine> cuisineSelector = new ChoiceBox<Cuisine>();
 	private final ChoiceBox<Price> priceFilterSelector = new ChoiceBox<Price>();
@@ -67,25 +67,21 @@ public class RestaurantRecommendationDialog extends Dialog<Restaurant> {
 		cuisineSelector.getItems().addAll(/* TODO load cuisine from DB */);
 		priceFilterSelector.getItems().addAll(Price.ECONOMIC, Price.LOW, Price.MIDDLE, Price.HIGH, Price.LUXURY);
 		
-		stateSelector.getItems().addAll(/*//TODO Load states from DB*/);
-		countrySelector.getItems().addAll(/*//TODO Load countries from DB*/);
 		citySelector.getItems().addAll(/*//TODO Load cities from DB*/);
 		
-		stateSelector.setValue(RistogoGUI.loggedUser.getState());
-		//countrySelector.setValue(RistogoGUI.loggedUser.getCountry());
 		citySelector.setValue(RistogoGUI.loggedUser.getCity());
+		distanceField.setPromptText("Distance(Km)");
 
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
 		grid.setVgap(10);
 		grid.setPadding(new Insets(20, 150, 10, 10));
 		grid.add(likeFilterLabel, 0, 0); grid.add(likeFilterSelector, 1, 0);
-		grid.add(stateLabel, 0, 1); grid.add(stateSelector, 1, 1);
-		grid.add(countryLabel, 0, 2); grid.add(countrySelector, 1, 2);
-		grid.add(cityLabel, 0, 3); grid.add(citySelector, 1, 3);
-		grid.add(cuisineLabel, 0, 4); grid.add(cuisineSelector, 1, 4);
-		grid.add(priceFilterLabel, 0, 5); grid.add(priceFilterSelector, 1, 5);
-		grid.add(errorLabel, 0, 6, 2, 1);
+		grid.add(cityLabel, 0, 1); grid.add(citySelector, 1, 1);
+		grid.add(distanceLabel, 0, 2); grid.add(distanceField, 1, 2);
+		grid.add(cuisineLabel, 0, 3); grid.add(cuisineSelector, 1, 3);
+		grid.add(priceFilterLabel, 0, 4); grid.add(priceFilterSelector, 1, 4);
+		grid.add(errorLabel, 0, 5, 2, 1);
 
 		ButtonType okButtonType = new ButtonType("Search", ButtonData.OK_DONE);
 		dialogPane.getButtonTypes().addAll(okButtonType, ButtonType.CLOSE);

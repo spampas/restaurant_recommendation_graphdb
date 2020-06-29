@@ -5,54 +5,54 @@ import ristogo.common.entities.City;
 
 public class CityBean extends EntityBean
 {
-	private final SimpleStringProperty state;
-	private final SimpleStringProperty country;
-	private final SimpleStringProperty city;
+	private final SimpleStringProperty name;
+	private final SimpleStringProperty latitude;
+	private final SimpleStringProperty longitude;
 
-	public CityBean(int id, String state, String country, String city)
+	public CityBean(int id, String latitude, String longitude, String city)
 	{
 		super(id);
-		this.state = new SimpleStringProperty(state);
-		this.country = new SimpleStringProperty(country);
-		this.city = new SimpleStringProperty(city);
+		this.name = new SimpleStringProperty(latitude);
+		this.latitude = new SimpleStringProperty(longitude);
+		this.longitude = new SimpleStringProperty(city);
 	}
 
 	public static CityBean fromEntity(City city)
 	{
-		return new CityBean(city.getId(), city.getState(), city.getCountry(), city.getCity());
+		return new CityBean(city.getId(), city.getLatitude(), city.getLongitude(), city.getName());
 	}
 
 	public City toEntity()
 	{
-		return new City(getId(), getState(), getCountry(), getCity());
+		return new City(getId(), getLatitude(), getLongitude(), getName());
 	}
 	
 
-	public String getState() {
-		return state.get();
+	public String getLatitude() {
+		return latitude.get();
 	}
 
-	public String getCountry() {
-		return country.get();
+	public String getLongitude() {
+		return longitude.get();
 	}
 
-	public String getCity() {
-		return city.get();
+	public String getName() {
+		return name.get();
 	}
 
-	public void setState(String state)
+	public void setLatitude(String latitude)
 	{
-		this.state.set(state);
+		this.latitude.set(latitude);
 	}
 	
-	public void setCountry(String country)
+	public void setLongitude(String longitude)
 	{
-		this.country.set(country);
+		this.longitude.set(longitude);
 	}
 	
-	public void setCity(String city)
+	public void setName(String name)
 	{
-		this.city.set(city);
+		this.name.set(name);
 	}
 	
 

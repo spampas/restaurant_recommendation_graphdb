@@ -32,40 +32,31 @@ final class RestaurantTableView extends TableView<RestaurantBean>
 		TableColumn<RestaurantBean, String> nameColumn = new TableColumn<RestaurantBean, String>("Name");
 		nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 		nameColumn.setStyle(GUIConfig.getCSSTableColumnStyle(false));
-		nameColumn.setMinWidth(100);
-		nameColumn.setMaxWidth(100);
+		nameColumn.setMinWidth(150);
+		nameColumn.setMaxWidth(150);
 
 		TableColumn<RestaurantBean, Cuisine> typeColumn = new TableColumn<RestaurantBean, Cuisine>("Cuisine");
 		typeColumn.setCellValueFactory(new PropertyValueFactory<>("cuisine"));
 		typeColumn.setStyle(GUIConfig.getCSSTableColumnStyle());
-		typeColumn.setMinWidth(100);
-		typeColumn.setMaxWidth(100);
+		typeColumn.setMinWidth(150);
+		typeColumn.setMaxWidth(150);
+		
+		TableColumn<RestaurantBean, String> cityColumn = new TableColumn<RestaurantBean, String>("City");
+		cityColumn.setCellValueFactory(new PropertyValueFactory<>("city"));
+		cityColumn.setStyle(GUIConfig.getCSSTableColumnStyle());
+		cityColumn.setMinWidth(150);
+		cityColumn.setMaxWidth(150);
+
 
 		TableColumn<RestaurantBean, Price> priceColumn = new TableColumn<RestaurantBean, Price>("Price");
 		priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
 		priceColumn.setStyle(GUIConfig.getCSSTableColumnStyle());
-		priceColumn.setMinWidth(100);
-		priceColumn.setMaxWidth(100);
+		priceColumn.setMinWidth(150);
+		priceColumn.setMaxWidth(150);
 		
-		TableColumn<RestaurantBean, String> stateColumn = new TableColumn<RestaurantBean, String>("State");
-		stateColumn.setCellValueFactory(new PropertyValueFactory<>("state"));
-		stateColumn.setStyle(GUIConfig.getCSSTableColumnStyle());
-		stateColumn.setMinWidth(100);
-		stateColumn.setMaxWidth(100);
-		
-		TableColumn<RestaurantBean, String> countryColumn = new TableColumn<RestaurantBean, String>("Country");
-		countryColumn.setCellValueFactory(new PropertyValueFactory<>("country"));
-		countryColumn.setStyle(GUIConfig.getCSSTableColumnStyle());
-		countryColumn.setMinWidth(100);
-		countryColumn.setMaxWidth(100);
 
-		TableColumn<RestaurantBean, String> cityColumn = new TableColumn<RestaurantBean, String>("City");
-		cityColumn.setCellValueFactory(new PropertyValueFactory<>("city"));
-		cityColumn.setStyle(GUIConfig.getCSSTableColumnStyle());
-		cityColumn.setMinWidth(100);
-		cityColumn.setMaxWidth(100);
 
-		getColumns().addAll(nameColumn, typeColumn, priceColumn, cityColumn, countryColumn, stateColumn );
+		getColumns().addAll(nameColumn, typeColumn, priceColumn, cityColumn);
 		setItems(restaurantList);
 
 	}

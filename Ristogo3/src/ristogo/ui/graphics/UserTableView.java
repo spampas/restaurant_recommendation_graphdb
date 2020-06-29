@@ -35,29 +35,17 @@ public class UserTableView extends TableView<UserBean>{
 		TableColumn<UserBean, String> nameColumn = new TableColumn<UserBean, String>("Name");
 		nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 		nameColumn.setStyle(GUIConfig.getCSSTableColumnStyle(false));
-		nameColumn.setMinWidth(150);
-		nameColumn.setMaxWidth(150);
-
-		TableColumn<UserBean, String> stateColumn = new TableColumn<UserBean, String>("State");
-		stateColumn.setCellValueFactory(new PropertyValueFactory<>("state"));
-		stateColumn.setStyle(GUIConfig.getCSSTableColumnStyle());
-		stateColumn.setMinWidth(150);
-		stateColumn.setMaxWidth(100);
-		
-		TableColumn<UserBean, String> countryColumn = new TableColumn<UserBean, String>("Country");
-		countryColumn.setCellValueFactory(new PropertyValueFactory<>("country"));
-		countryColumn.setStyle(GUIConfig.getCSSTableColumnStyle());
-		countryColumn.setMinWidth(150);
-		countryColumn.setMaxWidth(100);
+		nameColumn.setMinWidth(300);
+		nameColumn.setMaxWidth(300);
 
 		TableColumn<UserBean, String> cityColumn = new TableColumn<UserBean, String>("City");
 		cityColumn.setCellValueFactory(new PropertyValueFactory<>("city"));
 		cityColumn.setStyle(GUIConfig.getCSSTableColumnStyle());
-		cityColumn.setMinWidth(150);
-		cityColumn.setMaxWidth(100);
+		cityColumn.setMinWidth(300);
+		cityColumn.setMaxWidth(300);
 
 
-		getColumns().addAll(nameColumn, cityColumn, countryColumn,  stateColumn);
+		getColumns().addAll(nameColumn, cityColumn);
 		setItems(userList);
 
 	}
