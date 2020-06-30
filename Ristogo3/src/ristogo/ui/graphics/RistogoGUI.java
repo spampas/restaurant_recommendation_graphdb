@@ -193,8 +193,9 @@ public final class RistogoGUI extends Application
 		subtitleCuisine.setTextFill(GUIConfig.getFgColor());
 		
 		AdminCuisineViewer cuisineTable = new AdminCuisineViewer();
+		AdminUserViewer userTable = new AdminUserViewer();
 		
-		leftMenu.getChildren().addAll(cuisineTable);
+		leftMenu.getChildren().addAll(cuisineTable, userTable);
 		leftPart.getChildren().addAll(subtitleCuisine, leftMenu);
 		leftPart.setAlignment(Pos.CENTER);
 		
@@ -216,15 +217,13 @@ public final class RistogoGUI extends Application
 		
 		adminInterface.setStyle(GUIConfig.getCSSFormBoxStyle());
 
-		leftMenu.setStyle(GUIConfig.getCSSInterfacePartStyle());
-		leftMenu.setStyle(GUIConfig.getCSSFormBoxStyle());
 		rightMenu.setStyle(GUIConfig.getCSSInterfacePartStyle());
 		rightMenu.setStyle(GUIConfig.getCSSFormBoxStyle());
-		leftMenu.setPrefSize(500, 600);
-		rightMenu.setPrefSize(500, 600);
-		leftPart.setPrefSize(500, 600);
-		rightPart.setPrefSize(500, 600);
-		menu.setPrefSize(1000, 600);	
+		leftMenu.setPrefSize(500, 700);
+		rightMenu.setPrefSize(500, 700);
+		leftPart.setPrefSize(500, 700);
+		rightPart.setPrefSize(500, 700);
+		menu.setPrefSize(1000, 700);	
 	
 		return adminInterface;
 	}

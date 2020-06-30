@@ -58,7 +58,7 @@ public class UserViewer extends VBox {
 		this.getChildren().addAll(userTableTitle, findBox, userTable, cuisinesLabel, cuisinesField);
 
 		
-		//userTable.refreshRestaurants();
+		//userTable.refreshUsers();
 
 	
 		userTable.setOnMouseClicked((event) -> {

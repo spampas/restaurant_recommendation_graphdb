@@ -64,6 +64,8 @@ public class AdminCuisineViewer extends VBox {
 		findBox.getChildren().addAll(findField, find);
 		
 		this.getChildren().addAll(cuisineTableTitle, cuisineBox, cuisineTable, findBox);
+		this.setStyle(GUIConfig.getCSSInterfacePartStyle());
+		this.setStyle(GUIConfig.getCSSFormBoxStyle());
 	
 		cuisineTable.setOnMouseClicked((event) -> {
 			Cuisine cuisine = cuisineTable.getSelectedEntity();
