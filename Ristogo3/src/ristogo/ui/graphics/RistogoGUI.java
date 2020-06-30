@@ -308,7 +308,7 @@ public final class RistogoGUI extends Application
 		
 		VBox leftPart = new VBox(10);
 		VBox leftMenu = new VBox(10);
-		Label subtitleCuisine = new Label("Cuisines Settings");
+		Label subtitleCuisine = new Label("Choose you favourite Cuisines and/or change your City!");
 		subtitleCuisine.setFont(GUIConfig.getTitleFont());
 		subtitleCuisine.setTextFill(GUIConfig.getFgColor());
 		
