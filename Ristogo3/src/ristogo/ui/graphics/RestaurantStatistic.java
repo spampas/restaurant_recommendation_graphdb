@@ -30,34 +30,38 @@ public class RestaurantStatistic extends VBox {
 		title.setStyle(GUIConfig.getCSSFormTitleStyle());
 		
 		likeLabel.setText("Likes for your restaurant: ");
-		likeLabel.setFont(GUIConfig.getFormTitleFont());
+		likeLabel.setFont(GUIConfig.getTitleFont());
 		likeLabel.setTextFill(GUIConfig.getFgColor());
-		likeLabel.setStyle(GUIConfig.getCSSFormTitleStyle());
 		
 		cityLabel.setText("Rank of the restaurants in your city: ");
-		cityLabel.setFont(GUIConfig.getFormTitleFont());
+		cityLabel.setFont(GUIConfig.getTitleFont());
 		cityLabel.setTextFill(GUIConfig.getFgColor());
-		cityLabel.setStyle(GUIConfig.getCSSFormTitleStyle());
 		
 		cuisineLabel.setText("Rank of restaurants with your cuisine: ");
-		cuisineLabel.setFont(GUIConfig.getFormTitleFont());
+		cuisineLabel.setFont(GUIConfig.getTitleFont());
 		cuisineLabel.setTextFill(GUIConfig.getFgColor());
-		cuisineLabel.setStyle(GUIConfig.getCSSFormTitleStyle());
 		
 		rankLabel.setText("Rank of restaurants in your city and with your cuisine: ");
-		rankLabel.setFont(GUIConfig.getFormTitleFont());
+		rankLabel.setFont(GUIConfig.getTitleFont());
 		rankLabel.setTextFill(GUIConfig.getFgColor());
-		rankLabel.setStyle(GUIConfig.getCSSFormTitleStyle());
 		
+		//TODO: Caricare valore dal db
+		likeField.setEditable(false);
 		likeField.setMinSize(50, 30);
 		likeField.setMaxSize(50, 30);
 		
+		//TODO: Caricare valore dal db
+		cityField.setEditable(false);
 		cityField.setMinSize(50, 30);
 		cityField.setMaxSize(50, 30);
 		
+		//TODO: Caricare valore dal db
+		cuisineField.setEditable(false);
 		cuisineField.setMinSize(50, 30);
 		cuisineField.setMaxSize(50, 30);
 		
+		//TODO: Caricare valore dal db
+		rankField.setEditable(false);
 		rankField.setMinSize(50, 30);
 		rankField.setMaxSize(50, 30);
 		
