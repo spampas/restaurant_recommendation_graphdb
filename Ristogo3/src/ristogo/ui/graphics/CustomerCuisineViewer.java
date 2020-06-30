@@ -3,6 +3,7 @@ package ristogo.ui.graphics;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -11,19 +12,18 @@ import ristogo.common.entities.Cuisine;
 import ristogo.ui.graphics.config.GUIConfig;
 import ristogo.ui.graphics.controls.FormLabel;
 
-public class CuisineViewer extends VBox {
+public class CustomerCuisineViewer extends VBox {
 	
 	private final Label cuisineTableTitle = new Label();
-	private final FormLabel cuisineLabel = new FormLabel ("New Cuisine");
-	private final TextField cuisineField = new TextField();
+	private final FormLabel cuisineLabel = new FormLabel ("Select a Cuisine");
+	private final ChoiceBox<Cuisine> cuisineChoice = new ChoiceBox<Cuisine>();
 	private final Button operationButton = new Button();
-	private final Button flushButton = new Button();
-	private final CuisineTableView cuisineTable = new CuisineTableView(); //TODO: Inserire la table view corretta
+	private final CuisineTableView cuisineTable = new CuisineTableView();
 	
 	private final TextField findField = new TextField();
 	private final Button find = new Button();
 	
-	public CuisineViewer () {
+	public CustomerCuisineViewer () {
 		
 		super(20);
 		
@@ -32,24 +32,13 @@ public class CuisineViewer extends VBox {
 		cuisineTableTitle.setTextFill(GUIConfig.getFgColor());
 		cuisineTableTitle.setStyle(GUIConfig.getCSSFormTitleStyle());
 		
-		cuisineField.setPromptText("insert a name of a cuisine");
-		cuisineField.setMinSize(200, 30);
-		cuisineField.setMaxSize(200, 30);
-		
 		operationButton.setText("Add");
 		operationButton.setFont(GUIConfig.getButtonFont());
 		operationButton.setTextFill(GUIConfig.getInvertedFgColor());
 		operationButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
-		
-		flushButton.setText("Flush");
-		flushButton.setFont(GUIConfig.getButtonFont());
-		flushButton.setTextFill(GUIConfig.getInvertedFgColor());
-		flushButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
-		
-
 
 		HBox cuisineBox = new HBox(30);
-		cuisineBox.getChildren().addAll(cuisineLabel,cuisineField, operationButton, flushButton);
+		cuisineBox.getChildren().addAll(cuisineLabel, cuisineChoice, operationButton);
 		
 		findField.setPromptText("search Cuisines");
 		findField.setMinSize(200, 30);
@@ -72,26 +61,20 @@ public class CuisineViewer extends VBox {
 			operationButton.setText("Remove");
 		});
 		
-		cuisineField.setOnMouseClicked((event) -> {
+		cuisineChoice.setOnMouseClicked((event) -> {
 			operationButton.setText("Add");
 		});
 
 		operationButton.setOnAction(this::handleOperationButtonAction);
-		flushButton.setOnAction(this::handleFlushButtonAction);
 	}
 	
 	
 	private void handleOperationButtonAction(ActionEvent event)
 	{
-		String name = cuisineField.getText();
+		Cuisine name = cuisineChoice.getValue();
 		if (name == null)
 			return;
 		//TODO: gestire azioni
-	}
-	
-	private void handleFlushButtonAction(ActionEvent event)
-	{
-		cuisineField.setText("");
 	}
 	
 	public void changeConfigurationCuisineViewer(int config) {

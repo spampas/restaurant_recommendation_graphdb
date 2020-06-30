@@ -192,7 +192,7 @@ public final class RistogoGUI extends Application
 		subtitleCuisine.setFont(GUIConfig.getTitleFont());
 		subtitleCuisine.setTextFill(GUIConfig.getFgColor());
 		
-		CuisineViewer cuisineTable = new CuisineViewer();
+		AdminCuisineViewer cuisineTable = new AdminCuisineViewer();
 		
 		leftMenu.getChildren().addAll(cuisineTable);
 		leftPart.getChildren().addAll(subtitleCuisine, leftMenu);
@@ -312,7 +312,7 @@ public final class RistogoGUI extends Application
 		subtitleCuisine.setFont(GUIConfig.getTitleFont());
 		subtitleCuisine.setTextFill(GUIConfig.getFgColor());
 		
-		CuisineViewer cuisineTable = new CuisineViewer();
+		CustomerCuisineViewer cuisineTable = new CustomerCuisineViewer();
 		
 		leftMenu.getChildren().addAll(cuisineTable);
 		leftPart.getChildren().addAll(subtitleCuisine, leftMenu);
