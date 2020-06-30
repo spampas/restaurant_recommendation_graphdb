@@ -26,17 +26,17 @@ public class Restaurant extends Entity
 	 */
 	protected Price price;
 	/**
-	 * The state where the restaurant is.
-	 */
-	protected String state;
-	/**
-	 * The region where the restaurant is.
-	 */
-	protected String country;
-	/**
 	 * The city where the restaurant is.
 	 */
 	protected String city;
+	/**
+	 * The latitude of the city.
+	 */
+	protected Double latitude;
+	/**
+	 * The longitude of the city.
+	 */
+	protected Double longitude;
 	/**
 	 * A description of the restaurant.
 	 */
@@ -64,7 +64,7 @@ public class Restaurant extends Entity
 	 */
 	public Restaurant(String ownerName)
 	{
-		this(0, ownerName + "'s Restaurant", ownerName, null, null, null, null, null, null);
+		this(0, ownerName + "'s Restaurant", ownerName, null, null, null, 0.0, 0.0, null);
 	}
 
 	/**
@@ -72,15 +72,14 @@ public class Restaurant extends Entity
 	 * @param id Restaurant's id.
 	 * @param name Restaurant's name.
 	 * @param ownerName username of the owner of the restaurant.
-	 * @param genre Restaurant's genre.
+	 * @param cuisine Restaurant's cuisine.
 	 * @param price Restaurant's price.
 	 * @param city Restaurant's city.
-	 * @param address Restaurant's address.
+	 * @param latitude City's latitude.
+	 * @param longitude City's longitude.
 	 * @param description Restaurant's description.
-	 * @param seats Restaurant's total number of seats.
-	 * @param openingHours Restaurant's opening hours.
 	 */
-	public Restaurant(int id, String name, String ownerName, Cuisine cuisine, Price price, String state, String country, String city,  String description)
+	public Restaurant(int id, String name, String ownerName, Cuisine cuisine, Price price, String city, Double latitude, Double longitude, String description)
 	{
 
 		super(id);
@@ -88,8 +87,8 @@ public class Restaurant extends Entity
 		this.ownerName = ownerName;
 		this.cuisine = cuisine;
 		this.price = price;
-		this.state = state;
-		this.country = country;
+		this.latitude = latitude;
+		this.longitude = longitude;
 		this.city = city;
 		this.description = description;
 	}
@@ -166,38 +165,38 @@ public class Restaurant extends Entity
 		this.price = price;
 	}
 	/**
-	 * Gets the state.
-	 * @return The state.
+	 * Gets the latitude.
+	 * @return The latitude.
 	 */
-	public String getState()
+	public Double getLatitude()
 	{
-		return state;
+		return latitude;
 	}
 
 	/**
-	 * Sets the state.
-	 * @param state The state.
+	 * Sets the latitude.
+	 * @param latitude The latitude.
 	 */
-	public void setState(String state)
+	public void setLatitude(Double latitude)
 	{
-		this.state = state;
+		this.latitude = latitude;
 	}
 	/**
-	 * Gets the country.
-	 * @return The country.
+	 * Gets the longitude.
+	 * @return The longitude.
 	 */
-	public String getCountry()
+	public Double getLongitude()
 	{
-		return country;
+		return longitude;
 	}
 
 	/**
-	 * Sets the country.
-	 * @param country The country.
+	 * Sets the longitude.
+	 * @param longitude The longitude.
 	 */
-	public void setCountry(String country)
+	public void setLongitude(Double longitude)
 	{
-		this.country = country;
+		this.longitude = longitude;
 	}
 	/**
 	 * Gets the city.
@@ -245,9 +244,9 @@ public class Restaurant extends Entity
 			"Owner: " + getOwnerName() + "\n" +
 			"Genre: " + fieldToString(getCuisine()) + "\n" +
 			"Price: " + fieldToString(getPrice()) + "\n" +
-			"State: " + fieldToString(getState()) + "\n" +
-			"Country: " + fieldToString(getCountry()) + "\n" +
 			"City: " + fieldToString(getCity()) + "\n" +
+			"Latitude: " + fieldToString(getLatitude()) + "\n" +
+			"Longitude: " + fieldToString(getLongitude()) + "\n" +
 			"Description: " + fieldToString(getDescription()) + "\n";
 	}
 

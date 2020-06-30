@@ -5,8 +5,8 @@ public class City extends Entity{
 	private static final long serialVersionUID = 3048031564043965549L;
 	
 	protected String name;
-	protected String latitude;
-	protected String longitude;
+	protected Double latitude;
+	protected Double longitude;
 
 	
 	public City()
@@ -30,7 +30,7 @@ public class City extends Entity{
 	 * @param latitude The latitude where the city is located.
 	 * @param latitude The longitude where the city is located.
 	 */
-	public City(int id, String name, String latitude, String longitude)
+	public City(int id, String name, Double latitude, Double longitude)
 	{
 		super(id);
 		this.name = name;
@@ -45,7 +45,7 @@ public class City extends Entity{
 	 * @param longitudeName The name of the longitude.
 	 * @param cityName The name of the city.
 	 */
-	public City(String name, String latitude, String longitude)
+	public City(String name, Double latitude, Double longitude)
 	{
 		this(0, name, latitude, longitude);
 	}
@@ -55,7 +55,7 @@ public class City extends Entity{
 	 * Gets the latitude.
 	 * @return The latitude.
 	 */
-	public String getLatitude()
+	public Double getLatitude()
 	{
 		return this.latitude;
 	}
@@ -64,7 +64,7 @@ public class City extends Entity{
 	 * Sets the latitude.
 	 * @param latitude The latitude.
 	 */
-	public void setLatitude(String latitude)
+	public void setLatitude(Double latitude)
 	{
 		this.latitude = latitude;
 	}
@@ -72,7 +72,7 @@ public class City extends Entity{
 	 * Gets the longitude.
 	 * @return The longitude.
 	 */
-	public String getLongitude()
+	public Double getLongitude()
 	{
 		return longitude;
 	}
@@ -81,7 +81,7 @@ public class City extends Entity{
 	 * Sets the longitude.
 	 * @param longitude The longitude.
 	 */
-	public void setLongitude(String longitude)
+	public void setLongitude(Double longitude)
 	{
 		this.longitude = longitude;
 	}

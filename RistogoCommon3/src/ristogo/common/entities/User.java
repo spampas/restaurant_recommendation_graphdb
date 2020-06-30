@@ -17,11 +17,11 @@ public abstract class User extends Entity
 	
 	protected String password;
 	
-	protected String state;
-	
-	protected String country;
-	
 	protected String city;
+	
+	protected Double latitude;
+	
+	protected Double longitude;
 	
 
 	/**
@@ -58,23 +58,26 @@ public abstract class User extends Entity
 	 */
 	public User(String username, String password)
 	{
-		this(0, username, password, null, null, null);
+		this(0, username, password, null, 0.0, 0.0);
 	}
 
 	/**
-	 * Creates an User, with the specified id, username and password.
+	 * Creates an User, with the specified id, username, password and location.
 	 * @param id Id of the user.
 	 * @param username Username of the user.
 	 * @param password Plain pasword of the user.
+	 * @param city The city where the user live.
+	 * @param latitude Latitude of the city.
+	 * @param longitude Longitude of the city.
 	 */
-	public User(int id, String username, String password, String state, String country, String city)
+	public User(int id, String username, String password, String city, Double latitude, Double longitude)
 	{
 		super(id);
 		setUsername(username);
 		if (password != null)
 			setPassword(password);
-		this.state = state;
-		this.country = country;
+		this.latitude = latitude;
+		this.longitude = longitude;
 		this.city = city;
 	}
 		
@@ -131,37 +134,6 @@ public abstract class User extends Entity
 		return this.password;
 	}
 	
-	/**
-	 * Returns the state of the User.
-	 * @return String The state.
-	 */
-	public String getState() {
-		return state;
-	}
-	
-	/**
-	 * Sets the state of the user.
-	 * @param state The state.
-	 */
-	public void setState(String state) {
-		this.state = state;
-	}
-	
-	/**
-	 * Returns the country of the User.
-	 * @return String The country.
-	 */
-	public String getCountry() {
-		return country;
-	}
-	
-	/**
-	 * Sets the country of the user.
-	 * @param country The country.
-	 */
-	public void setCountry(String country) {
-		this.country = country;
-	}
 	
 	/**
 	 * Returns the city of the User.
@@ -178,6 +150,39 @@ public abstract class User extends Entity
 	public void setCity(String city) {
 		this.city = city;
 	}
+	
+	/**
+	 * Returns the city's latitude.
+	 * @return Double The latitude.
+	 */
+	public Double getLatitude() {
+		return latitude;
+	}
+	
+	/**
+	 * Sets the city's latitude.
+	 * @param latitude The latitude.
+	 */
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+	
+	/**
+	 * Returns the city's longitude.
+	 * @return Double The longitude.
+	 */
+	public Double getLongitude() {
+		return longitude;
+	}
+	
+	/**
+	 * Sets the city's longitude.
+	 * @param longitude The longitude.
+	 */
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+	
 	
 	protected final static String hashPassword(String password)
 	{

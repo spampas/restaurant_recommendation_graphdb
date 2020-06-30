@@ -289,7 +289,7 @@ public final class RistogoGUI extends Application
 	
 	private VBox buildPreferencesInterface()
 	{
-		VBox preferenceInterface = new VBox(10);
+		VBox preferenceInterface = new VBox(21);
 		
 		HBox titleBox = new HBox(10);
 		GridPane title = generateTitle();
