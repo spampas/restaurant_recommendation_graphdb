@@ -27,25 +27,25 @@ public class CityTableView extends TableView<CityBean>{
 		setMaxWidth(600);
 		setMaxHeight(GUIConfig.getMaxRowDisplayable() * getFixedCellSize());
 
-		TableColumn<CityBean, String> stateColumn = new TableColumn<CityBean, String>("Name");
-		stateColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-		stateColumn.setStyle(GUIConfig.getCSSTableColumnStyle(false));
-		stateColumn.setMinWidth(200);
-		stateColumn.setMaxWidth(200);
+		TableColumn<CityBean, String> nameColumn = new TableColumn<CityBean, String>("Name");
+		nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+		nameColumn.setStyle(GUIConfig.getCSSTableColumnStyle(false));
+		nameColumn.setMinWidth(200);
+		nameColumn.setMaxWidth(200);
 
-		TableColumn<CityBean, String> countryColumn = new TableColumn<CityBean, String>("Latitude");
-		countryColumn.setCellValueFactory(new PropertyValueFactory<>("latitude"));
-		countryColumn.setStyle(GUIConfig.getCSSTableColumnStyle(false));
-		countryColumn.setMinWidth(200);
-		countryColumn.setMaxWidth(200);
+		TableColumn<CityBean, Double> latitudeColumn = new TableColumn<CityBean, Double>("Latitude");
+		latitudeColumn.setCellValueFactory(new PropertyValueFactory<>("latitude"));
+		latitudeColumn.setStyle(GUIConfig.getCSSTableColumnStyle(false));
+		latitudeColumn.setMinWidth(200);
+		latitudeColumn.setMaxWidth(200);
 		
-		TableColumn<CityBean, String> cityColumn = new TableColumn<CityBean, String>("Longitude");
-		cityColumn.setCellValueFactory(new PropertyValueFactory<>("longitude"));
-		cityColumn.setStyle(GUIConfig.getCSSTableColumnStyle(false));
-		cityColumn.setMinWidth(200);
-		cityColumn.setMaxWidth(200);
+		TableColumn<CityBean, Double> longitudeColumn = new TableColumn<CityBean, Double>("Longitude");
+		longitudeColumn.setCellValueFactory(new PropertyValueFactory<>("longitude"));
+		longitudeColumn.setStyle(GUIConfig.getCSSTableColumnStyle(false));
+		longitudeColumn.setMinWidth(200);
+		longitudeColumn.setMaxWidth(200);
 		
-		getColumns().addAll(stateColumn, countryColumn, cityColumn);
+		getColumns().addAll(nameColumn, latitudeColumn, longitudeColumn);
 		setItems(cityList);
 
 	}
