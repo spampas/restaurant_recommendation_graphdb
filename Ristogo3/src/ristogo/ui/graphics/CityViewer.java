@@ -17,7 +17,7 @@ public class CityViewer extends VBox {
 	private final Button operationButton = new Button();
 	private final Button flushButton = new Button();
 	private final CityForm cityForm = new CityForm();
-	private final CityTableView cityTable = new CityTableView(); //TODO: Inserire la table view corretta
+	private final CityTableView cityTable = new CityTableView();
 	
 	private final TextField findField = new TextField();
 	private final Button find = new Button();

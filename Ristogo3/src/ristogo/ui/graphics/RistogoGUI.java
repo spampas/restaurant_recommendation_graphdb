@@ -285,6 +285,77 @@ public final class RistogoGUI extends Application
 		
 	}
 	
+	private VBox buildPreferencesInterface()
+	{
+		VBox preferenceInterface = new VBox(10);
+		
+		HBox titleBox = new HBox(10);
+		GridPane title = generateTitle();
+		Button returnButton = new Button("Return to the main page");
+		returnButton.setTextFill(GUIConfig.getInvertedFgColor());
+		returnButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
+		
+		returnButton.setOnMouseClicked((event) -> {
+			applicationInterface = buildCustomerInterface();
+			Scene newScene = new Scene(new Group(applicationInterface));
+			stage.setScene(newScene);
+			
+		});
+		
+		titleBox.getChildren().addAll(title, returnButton);
+		
+		VBox leftPart = new VBox(10);
+		VBox leftMenu = new VBox(10);
+		Label subtitleCuisine = new Label("Cuisines Settings");
+		subtitleCuisine.setFont(GUIConfig.getTitleFont());
+		subtitleCuisine.setTextFill(GUIConfig.getFgColor());
+		
+		CuisineViewer cuisineTable = new CuisineViewer();
+		
+		leftMenu.getChildren().addAll(cuisineTable);
+		leftPart.getChildren().addAll(subtitleCuisine, leftMenu);
+		leftPart.setAlignment(Pos.CENTER);
+		
+		VBox rightPart = new VBox(10);
+		VBox rightMenu = new VBox(10);
+		Label subtitleCity = new Label("Cities Settings");
+		subtitleCity.setFont(GUIConfig.getTitleFont());
+		subtitleCity.setTextFill(GUIConfig.getFgColor());
+		
+		CityForm cityForm = new CityForm();
+		
+		Button addButton = new Button("Add");
+		Button flushButton = new Button("flush");
+		
+		addButton.setFont(GUIConfig.getButtonFont());
+		addButton.setTextFill(GUIConfig.getInvertedFgColor());
+		addButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
+		
+		flushButton.setFont(GUIConfig.getButtonFont());
+		flushButton.setTextFill(GUIConfig.getInvertedFgColor());
+		flushButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
+		
+		rightMenu.getChildren().addAll(cityForm, addButton, flushButton);
+		rightPart.getChildren().addAll(subtitleCity, rightMenu);
+		rightPart.setAlignment(Pos.CENTER);
+		
+		preferenceInterface.getChildren().addAll(titleBox, leftPart, rightPart);
+		
+		preferenceInterface.setStyle(GUIConfig.getCSSFormBoxStyle());
+
+		leftMenu.setStyle(GUIConfig.getCSSInterfacePartStyle());
+		leftMenu.setStyle(GUIConfig.getCSSFormBoxStyle());
+		rightMenu.setStyle(GUIConfig.getCSSInterfacePartStyle());
+		rightMenu.setStyle(GUIConfig.getCSSFormBoxStyle());
+		leftMenu.setPrefSize(500, 600);
+		rightMenu.setPrefSize(500, 600);
+		leftPart.setPrefSize(500, 600);
+		rightPart.setPrefSize(500, 600);
+		preferenceInterface.setPrefSize(1000, 600);	
+	
+		return preferenceInterface;
+	}
+	
 	
 	private GridPane generateTitle() {
 		
@@ -308,7 +379,6 @@ public final class RistogoGUI extends Application
 		return grid;
 		
 	}
-	
 	
 
 	private GridPane generateCustomerTitle()
@@ -350,19 +420,19 @@ public final class RistogoGUI extends Application
 	HBox generateOptionMenu () {
 		
 		HBox optionMenu = new HBox(10);
-		FormButton option = new FormButton("Options");
+		FormButton preferences = new FormButton("Your Preferences");
 		FormButton owner = new FormButton("My Restaurants");
 		FormButton admin = new FormButton("Admin Settings");
 		
 		if(loggedUser.isAdmin()) {
-			optionMenu.getChildren().addAll(admin,option);
+			optionMenu.getChildren().addAll(admin, preferences);
 		}
 		else {
 			if(loggedUser.isOwner()) {
-				optionMenu.getChildren().addAll(owner,option);
+				optionMenu.getChildren().addAll(owner, preferences);
 			}
 			else {
-				optionMenu.getChildren().addAll(option);
+				optionMenu.getChildren().addAll(preferences);
 			}
 		}
 		
@@ -380,6 +450,12 @@ public final class RistogoGUI extends Application
 			
 		});
 		
+		preferences.setOnMouseClicked((event) -> {
+			applicationInterface = buildPreferencesInterface();
+			Scene newScene = new Scene(new Group(applicationInterface));
+			stage.setScene(newScene);
+			
+		});
 		
 		return optionMenu;
 		
