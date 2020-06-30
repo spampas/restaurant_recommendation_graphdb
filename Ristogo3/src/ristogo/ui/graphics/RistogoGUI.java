@@ -19,6 +19,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ristogo.common.entities.City;
 import ristogo.common.entities.Customer;
 import ristogo.common.entities.Owner;
 import ristogo.common.entities.Restaurant;
@@ -27,6 +28,7 @@ import ristogo.common.net.ResponseMessage;
 import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
 import ristogo.ui.graphics.controls.FormButton;
+import ristogo.ui.graphics.controls.FormLabel;
 
 public final class RistogoGUI extends Application
 {
@@ -322,20 +324,15 @@ public final class RistogoGUI extends Application
 		subtitleCity.setFont(GUIConfig.getTitleFont());
 		subtitleCity.setTextFill(GUIConfig.getFgColor());
 		
-		CityForm cityForm = new CityForm();
+		FormLabel cityLabel = new FormLabel("Select the new city name");
+		ChoiceBox<City> cityChoice = new ChoiceBox<City>();
+		Button commitButton = new Button("Commit");
 		
-		Button addButton = new Button("Add");
-		Button flushButton = new Button("flush");
+		commitButton.setFont(GUIConfig.getButtonFont());
+		commitButton.setTextFill(GUIConfig.getInvertedFgColor());
+		commitButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
 		
-		addButton.setFont(GUIConfig.getButtonFont());
-		addButton.setTextFill(GUIConfig.getInvertedFgColor());
-		addButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
-		
-		flushButton.setFont(GUIConfig.getButtonFont());
-		flushButton.setTextFill(GUIConfig.getInvertedFgColor());
-		flushButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
-		
-		rightMenu.getChildren().addAll(cityForm, addButton, flushButton);
+		rightMenu.getChildren().addAll(cityLabel, cityChoice, commitButton);
 		rightPart.getChildren().addAll(subtitleCity, rightMenu);
 		rightPart.setAlignment(Pos.CENTER);
 		
