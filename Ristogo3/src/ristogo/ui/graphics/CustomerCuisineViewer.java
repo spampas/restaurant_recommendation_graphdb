@@ -49,7 +49,6 @@ public class CustomerCuisineViewer extends VBox {
 		find.setTextFill(GUIConfig.getInvertedFgColor());
 		find.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
 		HBox findBox = new HBox(10);
-		findBox.setAlignment(Pos.CENTER);
 		findBox.getChildren().addAll(findField, find);
 		
 		this.getChildren().addAll(cuisineTableTitle, cuisineBox, cuisineTable, findBox);

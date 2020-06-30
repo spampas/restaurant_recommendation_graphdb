@@ -306,25 +306,21 @@ public final class RistogoGUI extends Application
 		
 		titleBox.getChildren().addAll(title, returnButton);
 		
-		VBox leftPart = new VBox(10);
-		VBox leftMenu = new VBox(10);
+		VBox cuisineMenu = new VBox(10);
 		Label subtitleCuisine = new Label("Choose you favourite Cuisines and/or change your City!");
 		subtitleCuisine.setFont(GUIConfig.getTitleFont());
 		subtitleCuisine.setTextFill(GUIConfig.getFgColor());
 		
 		CustomerCuisineViewer cuisineTable = new CustomerCuisineViewer();
 		
-		leftMenu.getChildren().addAll(cuisineTable);
-		leftPart.getChildren().addAll(subtitleCuisine, leftMenu);
-		leftPart.setAlignment(Pos.CENTER);
+		cuisineMenu.getChildren().addAll(cuisineTable);
 		
-		VBox rightPart = new VBox(10);
-		VBox rightMenu = new VBox(10);
-		Label subtitleCity = new Label("Cities Settings");
-		subtitleCity.setFont(GUIConfig.getTitleFont());
-		subtitleCity.setTextFill(GUIConfig.getFgColor());
 		
-		FormLabel cityLabel = new FormLabel("Select the new city name");
+		Label cityLabel = new Label("Select your new city");
+		cityLabel.setFont(GUIConfig.getFormTitleFont());
+		cityLabel.setTextFill(GUIConfig.getFgColor());
+		cityLabel.setStyle(GUIConfig.getCSSFormTitleStyle());
+		
 		ChoiceBox<City> cityChoice = new ChoiceBox<City>();
 		Button commitButton = new Button("Commit");
 		
@@ -332,23 +328,15 @@ public final class RistogoGUI extends Application
 		commitButton.setTextFill(GUIConfig.getInvertedFgColor());
 		commitButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
 		
-		rightMenu.getChildren().addAll(cityLabel, cityChoice, commitButton);
-		rightPart.getChildren().addAll(subtitleCity, rightMenu);
-		rightPart.setAlignment(Pos.CENTER);
-		
-		preferenceInterface.getChildren().addAll(titleBox, leftPart, rightPart);
+
+		preferenceInterface.getChildren().addAll(titleBox, subtitleCuisine, cityLabel, cityChoice, commitButton, cuisineMenu);
 		
 		preferenceInterface.setStyle(GUIConfig.getCSSFormBoxStyle());
 
-		leftMenu.setStyle(GUIConfig.getCSSInterfacePartStyle());
-		leftMenu.setStyle(GUIConfig.getCSSFormBoxStyle());
-		rightMenu.setStyle(GUIConfig.getCSSInterfacePartStyle());
-		rightMenu.setStyle(GUIConfig.getCSSFormBoxStyle());
-		leftMenu.setPrefSize(500, 600);
-		rightMenu.setPrefSize(500, 600);
-		leftPart.setPrefSize(500, 600);
-		rightPart.setPrefSize(500, 600);
-		preferenceInterface.setPrefSize(1000, 600);	
+		cuisineMenu.setStyle(GUIConfig.getCSSInterfacePartStyle());
+		cuisineMenu.setStyle(GUIConfig.getCSSFormBoxStyle());
+		
+		preferenceInterface.setPrefSize(600, 600);	
 	
 		return preferenceInterface;
 	}
