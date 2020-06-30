@@ -78,6 +78,8 @@ public class RestaurantStatistic extends VBox {
 		grid.add(rankField, 1, 3);
 		
 		getChildren().addAll(title, grid);
+		setStyle(GUIConfig.getCSSInterfacePartStyle());
+		setStyle(GUIConfig.getCSSFormBoxStyle());
 		
 	}
 
