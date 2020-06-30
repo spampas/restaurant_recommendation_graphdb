@@ -30,19 +30,16 @@ public class RestaurantStatistic extends VBox {
 		title.setStyle(GUIConfig.getCSSFormTitleStyle());
 		
 		likeLabel.setText("Likes for your restaurant: ");
-		likeLabel.setFont(GUIConfig.getTitleFont());
 		likeLabel.setTextFill(GUIConfig.getFgColor());
 		
 		cityLabel.setText("Rank of the restaurants in your city: ");
-		cityLabel.setFont(GUIConfig.getTitleFont());
 		cityLabel.setTextFill(GUIConfig.getFgColor());
 		
 		cuisineLabel.setText("Rank of restaurants with your cuisine: ");
-		cuisineLabel.setFont(GUIConfig.getTitleFont());
+
 		cuisineLabel.setTextFill(GUIConfig.getFgColor());
 		
 		rankLabel.setText("Rank of restaurants in your city and with your cuisine: ");
-		rankLabel.setFont(GUIConfig.getTitleFont());
 		rankLabel.setTextFill(GUIConfig.getFgColor());
 		
 		//TODO: Caricare valore dal db
