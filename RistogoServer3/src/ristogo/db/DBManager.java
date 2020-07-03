@@ -17,7 +17,7 @@ import ristogo.common.entities.User;
 public class DBManager implements AutoCloseable {
 	private Driver driver;
 	private static String uri = "neo4j://localhost:7687";
-	private static String user = "ristogo";
+	private static String user = "neo4j";
 	private static String password = "ristogo";
 	private static DBManager instance = null; 
 	private DBManager(String uri, String user,String password) {
@@ -85,14 +85,14 @@ public class DBManager implements AutoCloseable {
 	}
 	
 	public static Result addCity(Transaction tx, City city) {
-		return tx.run("MERGE (:City {name: $name, latitude: $latitude, longitude: $longitude})",
+		return tx.run("CREATE (:City {name: $name, latitude: $latitude, longitude: $longitude})",
 				Values.parameters("name", city.getName(), 
 						"latitude",city.getLatitude(), 
 						"longitude", city.getLongitude()));
 	}
 	
 	public static Result addCuisine(Transaction tx, Cuisine cuisine) {
-		return tx.run("MERGE (:Cuisine {name: $name})", Values.parameters("name", cuisine.getName()));
+		return tx.run("CREATE (:Cuisine {name: $name})", Values.parameters("name", cuisine.getName()));
 	}
 	
 	
@@ -109,48 +109,48 @@ public class DBManager implements AutoCloseable {
 	public static Result like(Transaction tx, User user, Cuisine cuisine) {
 		return tx.run("MATCH (user:User {username: $username} )"
 				+ "MATCH(cuisine:Cuisine {name: $name})"
-				+ "MERGE (user)-[:LIKE]->(cuisine)", 
+				+ "CREATE (user)-[:LIKE]->(cuisine)", 
 				Values.parameters("username", user.getUsername(),"name",cuisine.getName()));
 	}
 	
 	public static Result like(Transaction tx, User user, Restaurant restaurant) {
 		return tx.run("MATCH (user:User {username: $username} )"
 				+ "MATCH(restaurant:Restaurant {name: $name})"
-				+ "MERGE (user)-[:LIKE]->(restaurant)", 
+				+ "CREATE (user)-[:LIKE]->(restaurant)", 
 				Values.parameters("username", user.getUsername(),"name",restaurant.getName()));
 	}
 	
 	public static Result serve(Transaction tx, Restaurant restaurant, Cuisine cuisine) {
 		return tx.run("MATCH (cuisine:Cuisine {name: $cuisine_name} )"
-				+ "MATCH(restaurant:Restaurant {name: $restaurant_name})"
-				+ "MERGE (restaurant)-[:SERVE]->(cuisine)", 
+				+ "MATCH (restaurant:Restaurant {name: $restaurant_name})"
+				+ "CREATE (restaurant)-[:SERVE]->(cuisine)", 
 				Values.parameters("cuisine_name", restaurant.getName(),"restaurant_name",restaurant.getName()));
 	}
 	
 	public static Result own(Transaction tx, User user, Restaurant restaurant) {
 		return tx.run("MATCH (user:User {username: $username} )"
 				+ "MATCH(restaurant:Restaurant {name: $restaurant_name})"
-				+ "MERGE (user)-[:OWN]->(restaurant)", 
+				+ "CREATE (user)-[:OWN]->(restaurant)", 
 				Values.parameters("username", user.getUsername(),"restaurant_name",restaurant.getName()));
 	}
 	
 	public static Result locate(Transaction tx, City city, User user) {
 		return tx.run("MATCH (user:User {username: $username} )"
 				+ "MATCH(city:City {name: $city_name})"
-				+ "MERGE (user)-[:LIVE]->(city)", 
+				+ "CREATE (user)-[:LIVE]->(city)", 
 				Values.parameters("city_name", city.getName(),"username",user.getUsername()));
 	}
 	
 	public static Result locate(Transaction tx, City city, Restaurant restaurant) {
 		return tx.run("MATCH (restaurant:Restaurant {name: $name} )"
 				+ "MATCH(city:City {name: $city_name})"
-				+ "MERGE (restaurant)-[:LOCATED]->(city)", 
+				+ "CREATE (restaurant)-[:LOCATED]->(city)", 
 				Values.parameters("city_name", city.getName(),"name", restaurant.getName()));
 	}
 	public static Result follow(Transaction tx, User follower, User followee) {
 		return tx.run("MATCH (follower:User {username: $follower})"
 				+ "MATCH (followee:User {username: $followee})"
-				+ "MERGE (follower)-[:FOLLOW]->(followee)", 
+				+ "CREATE (follower)-[:FOLLOW]->(followee)", 
 				Values.parameters("follower", follower.getUsername(),"followee", followee.getUsername()));
 	
 	}
