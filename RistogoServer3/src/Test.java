@@ -13,14 +13,19 @@ public class Test {
 	public static void main(String[] args)
 	{
 		try (Session session = DBManager.getInstance().getSession()){
+			Customer u = new Customer("Nico", "nicolapass");
 			Restaurant r = new Restaurant();
+			Cuisine c = new Cuisine("Pizza");
+			
 			r.setCuisine(new Cuisine("Pizza"));
 			r.setName("Pizzeria da Pino");
 			r.setDescription("Pizza buonissima. prezzi anche");
 			r.setPrice(Price.ECONOMIC);
-			session.writeTransaction( tx -> DBManager.delete(tx, r) );
-			session.writeTransaction( tx -> DBManager.addRestaurant(tx,r));
-			session.writeTransaction( tx -> DBManager.serve(tx,r,new Cuisine("Pizza")));
+			
+			session.writeTransaction(tx -> DBManager.dislike(tx,u,c));
+			session.writeTransaction(tx -> DBManager.dislike(tx, u, r));
+			session.writeTransaction(tx -> DBManager.unserve(tx, r, c));
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

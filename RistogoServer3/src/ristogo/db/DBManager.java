@@ -124,7 +124,7 @@ public class DBManager implements AutoCloseable {
 		return tx.run("MATCH (cuisine:Cuisine {name: $cuisine_name} )"
 				+ "MATCH (restaurant:Restaurant {name: $restaurant_name})"
 				+ "CREATE (restaurant)-[:SERVE]->(cuisine)", 
-				Values.parameters("cuisine_name", restaurant.getName(),"restaurant_name",restaurant.getName()));
+				Values.parameters("cuisine_name", cuisine.getName(),"restaurant_name",restaurant.getName()));
 	}
 	
 	public static Result own(Transaction tx, User user, Restaurant restaurant) {
@@ -242,7 +242,7 @@ public class DBManager implements AutoCloseable {
 	public static Result recommendFriends(Transaction tx, City city, City yourCity, Cuisine cuisine) {
 		String cuisine_pref = "(cuisine:Cuisine {name: $cuisine })<-[:LIKES]-";
 		String city_pref = "-[:LIVE]->(city:city {name: $city})";
-		
+		String city_distance = "WITH (city:City{name: $your_city})";
 		return tx.run("MATCH "+ (cuisine != null ? cuisine_pref : "")+"(user:User)"+city!=null ? city_pref : "");
 	}
 	
