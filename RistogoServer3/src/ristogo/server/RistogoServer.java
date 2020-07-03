@@ -56,7 +56,7 @@ public class RistogoServer
 			Logger.getLogger(RistogoServer.class.getName()).log(Level.SEVERE, null, ex);
 		} finally {
 			Logger.getLogger(RistogoServer.class.getName()).info("Terminating...");
-			EntityManager.closeFactory();
+			DBManager.closeFactory();
 			if (pool != null)
 				pool.shutdown();
 			Logger.getLogger(RistogoServer.class.getName()).exiting(RistogoServer.class.getName(), "startServer");

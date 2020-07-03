@@ -76,10 +76,19 @@ public class ResponseMessage extends Message
 	 */
 	public boolean isValid(ActionRequest actionRequest)
 	{
+		// TODO: Gestire azioni
 		if (!isSuccess())
 			return getEntityCount() == 0;
 		switch(actionRequest)
 		{
+		case LOGIN:
+			return getEntityCount() == 1 && getEntity() instanceof User;
+		case LOGOUT:
+		case REGISTER_USER:
+		case REGISTER_RESTAURANT:
+		case LIST_USERS:
+		case FOLLOW_USER:
+		case UNFOLLOW_USER:
 		case GET_OWN_RESTAURANT:
 		case EDIT_RESTAURANT:
 			return getEntityCount() == 1 && getEntity() instanceof Restaurant;
@@ -89,12 +98,17 @@ public class ResponseMessage extends Message
 					if (!(entity instanceof Restaurant))
 						return false;
 			return true;
-		case REGISTER:
-		case LOGIN:
-			return getEntityCount() == 1 && getEntity() instanceof User;
-		case LOGOUT:
 		case DELETE_RESTAURANT:
 			return getEntityCount() == 0;
+		case PUT_LIKE_RESTAURANT:
+		case REMOVE_LIKE_RESTAURANT:
+		case GET_STATISTIC_RESTAURANT:
+		case LIST_CUISINES:
+		case ADD_CUISINE:
+		case DELETE_CUISINE:
+		case LIST_CITIES:
+		case ADD_CITY:
+		case DELETE_CITY:
 		default:
 			return false;
 		}
