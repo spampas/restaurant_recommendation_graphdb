@@ -6,7 +6,8 @@ public enum ActionRequest implements Serializable
 {
 	LOGIN,
 	LOGOUT,
-	REGISTER,
+	REGISTER_USER,
+	REGISTER_RESTAURANT,
 	LIST_USERS,
 	FOLLOW_USER,
 	UNFOLLOW_USER,
