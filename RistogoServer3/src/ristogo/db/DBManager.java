@@ -214,7 +214,57 @@ public class DBManager implements AutoCloseable {
 	}
 	
 	//TODO LISTS
+	//Find friends, find favourite restaurants, list users, list restaurants, list cuisine, list cities
+	public static Result getRestaurants(Transaction tx) {
+		return tx.run("MATCH (restaurant: Restaurant)"
+				+ "RETURN restaurant");
+	}
+	
+	public static Result getFavouriteRestaurants( Transaction tx, User user) {
+		return tx.run("MATCH (user:User {username: $username}) -[:LIKE]-> (restaurant:Restaurant)"
+				+ "RETURN restaurant",Values.parameters("username", user.getUsername()));
+	}
+	public static Result getUsers(Transaction tx) {
+		return tx.run("MATCH (user: User)"
+				+ "RETURN user");
+	}
+	public static Result getFriends(Transaction tx, User user) {
+		return tx.run("MATCH (user:User {username: $username}) -[:FOLLOW]-> (followee:user)"
+				+ "RETURN followee",Values.parameters("username", user.getUsername()));
+	}
+	public static Result getCuisine(Transaction tx) {
+		return tx.run("MATCH (cuisine: Cuisine)"
+				+ "RETURN cuisine");
+	}
+	
 	//TODO SUGGESTIONS
+	
+	public static Result recommendFriends(Transaction tx, City city, City yourCity, Cuisine cuisine) {
+		String cuisine_pref = "(cuisine:Cuisine {name: $cuisine })<-[:LIKES]-";
+		String city_pref = "-[:LIVE]->(city:city {name: $city})";
+		
+		return tx.run("MATCH "+ (cuisine != null ? cuisine_pref : "")+"(user:User)"+city!=null ? city_pref : "");
+	}
+	
+	public static Result distance(Transaction tx, City city, City your_city) {
+		return tx.run("MATCH (user)-[:LIVE]->(city:City), (your_city:City {name: $your_city}) WHERE distance(city,your_city)");
+	}
+//	public static Result recommendRestaurant(boolean friendOfFriend, Cuisine cuisine, City city, double distance, Price price ) {
+//		
+//	}
+//	
+//	//TODO RANKING
+//	
+//	public static Result rankCity(Restaurant restaurant) {
+//		
+//	}
+//	public static Result rankCuisine(Restaurant restaurant) {
+//		
+//	}
+//	public static Result rank(Restaurant restaurant) {
+//		
+//	}
+//	
 	
 	
 }
