@@ -44,7 +44,7 @@ public class LoginMenu extends Menu
 			resMsg = protocol.registerUser(new Customer(username, password));
 			break;
 		case OWNER:
-			resMsg = protocol.registerUser(new Owner(username, password), new Restaurant(username));
+			resMsg = protocol.registerRestaurant(new Owner(username, password), new Restaurant(username));
 			break;
 		default:
 			Console.println("Invalid user type selected. Please try again.");

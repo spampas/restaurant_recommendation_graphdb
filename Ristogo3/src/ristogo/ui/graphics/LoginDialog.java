@@ -125,7 +125,7 @@ final class LoginDialog extends Dialog<User>
 		String password = passwordField.getText();
 		if (registering) {
 			if (typeSelector.getValue().equals("Owner"))
-				resMsg = protocol.registerUser(new Owner(username, password), new Restaurant(username));
+				resMsg = protocol.registerRestaurant(new Owner(username, password), new Restaurant(username));
 			else
 				resMsg = protocol.registerUser(new Customer(username, password));
 			

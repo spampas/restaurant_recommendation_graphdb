@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.persistence.PersistenceException;
-
 import ristogo.common.entities.Entity;
 import ristogo.common.entities.Restaurant;
 import ristogo.common.entities.User;
@@ -20,6 +18,7 @@ import ristogo.common.entities.enums.UserType;
 import ristogo.common.net.Message;
 import ristogo.common.net.RequestMessage;
 import ristogo.common.net.ResponseMessage;
+import ristogo.db.DBManager;
 import ristogo.server.annotations.RequestHandlerMethod;
 
 
@@ -28,7 +27,7 @@ public class RequestHandler extends Thread
 	private Socket socket;
 	private DataInputStream inputStream;
 	private DataOutputStream outputStream;
-	private User_ loggedUser;
+	private User loggedUser;
 
 
 	RequestHandler(Socket clientSocket)
@@ -83,15 +82,9 @@ public class RequestHandler extends Thread
 				throw new NoSuchMethodException();
 			boolean requiresAdmin = handler.getAnnotation(RequestHandlerMethod.class).value();
 			boolean requiresLogin = requiresAdmin ? true : handler.getAnnotation(RequestHandlerMethod.class).requiresLogin();
-			String receivedAuthToken = reqMsg.getAuthToken();
 			if (!requiresLogin)
 				return (ResponseMessage)handler.invoke(this, reqMsg);
-			if (receivedAuthToken == null)
-				return new ResponseMessage("NO-AUTH: user not authenticated.");
-			authToken = (new AuthTokenManager()).find(receivedAuthToken).next();
-			if (authToken == null)
-				return new ResponseMessage("NO-AUTH: can not find auth token.");
-			if (requiresAdmin && !authToken.isAdmin())
+			if (requiresAdmin)
 				return new ResponseMessage("This action requires admin privileges.");
 			return (ResponseMessage)handler.invoke(this, reqMsg);
 		} catch (NoSuchMethodException e) {
@@ -110,11 +103,11 @@ public class RequestHandler extends Thread
 		User user = (User)reqMsg.getEntity();
 		if (!user.hasValidUsername() || !user.hasValidPassword())
 			return new ResponseMessage("Invalid username or password.");
-		User_ savedUser = userManager.getUserByUsername(user.getUsername());
-		if (savedUser == null || !user.checkPasswordHash(savedUser.getPassword()))
+		User savedUser = DBManager.getUserByUsername(user.getUsername());
+		if (savedUser == null || !user.checkPasswordHash(savedUser.getPasswordHash()))
 			return new ResponseMessage("Invalid username or password.");
 		loggedUser = savedUser;
-		return new ResponseMessage(loggedUser.toCommonEntity((restaurantManager.getRestaurantByOwner(loggedUser) == null) ? UserType.CUSTOMER : UserType.OWNER));
+		return new ResponseMessage(loggedUser.toCommonEntity((DBManager.getRestaurantByOwner(loggedUser) == null) ? UserType.CUSTOMER : UserType.OWNER));
 	}
 
 	private ResponseMessage handleLogout(RequestMessage reqMsg)
@@ -136,39 +129,39 @@ public class RequestHandler extends Thread
 			return new ResponseMessage("Username must be at least 3 characters long and no more than 32 characters long.");
 		if (!user.hasValidPassword())
 			new ResponseMessage("Invalid password.");
-		User_ savedUser = new User_();
+		User savedUser = new User();
 		try {
-			EntityManager.beginTransaction();
+			DBManager.beginTransaction();
 			savedUser.merge(user);
-			userManager.persist(savedUser);
+			DBManager.persist(savedUser);
 			if (restaurant != null) {
-				Restaurant_ savedRestaurant = new Restaurant_();
+				Restaurant savedRestaurant = new Restaurant();
 				if (!savedRestaurant.merge(restaurant)) {
-					EntityManager.rollbackTransaction();
+					DBManager.rollbackTransaction();
 					return new ResponseMessage("Some restaurant's fields are invalid.");
 				}
 				savedRestaurant.setOwner(savedUser);
-				restaurantManager.persist(savedRestaurant);
+				DBManager.persist(savedRestaurant);
 			}
-			EntityManager.commitTransaction();
+			DBManager.commitTransaction();
 		} catch (PersistenceException ex) {
 			return new ResponseMessage("Username already in use.");
 		}
-		userManager.refresh(savedUser);
+		DBManager.refresh(savedUser);
 		return new ResponseMessage(savedUser.toCommonEntity((restaurant == null) ? UserType.CUSTOMER : UserType.OWNER));
 	}
 
 	private ResponseMessage handleGetOwnRestaurant(RequestMessage reqMsg)
 	{
-		Restaurant_ restaurant = restaurantManager.getRestaurantByOwner(loggedUser);
+		Restaurant restaurant = DBManager.getRestaurantByOwner(loggedUser);
 		if (restaurant == null)
 			return new ResponseMessage("You do not have any restaurant.");
 		return new ResponseMessage(restaurant.toCommonEntity());
 	}
 
-	private boolean hasRestaurant(User_ user, int restaurantId)
+	private boolean hasRestaurant(User user, int restaurantId)
 	{
-		Restaurant_ restaurant = restaurantManager.getRestaurantByOwner(user);
+		Restaurant restaurant = DBManager.getRestaurantByOwner(user);
 		if (restaurant == null)
 			return false;
 		return restaurant.getOwner().getId() == user.getId();
@@ -180,31 +173,31 @@ public class RequestHandler extends Thread
 		Restaurant restaurant = (Restaurant)reqMsg.getEntity();
 		if (!hasRestaurant(loggedUser, restaurant.getId()))
 			return new ResponseMessage("You can only edit restaurants that you own.");
-		Restaurant_ restaurant_ = restaurantManager.get(restaurant.getId());
+		Restaurant restaurant_ = DBManager.get(restaurant.getId());
 		if (!restaurant_.merge(restaurant))
 			return new ResponseMessage("Some restaurant's fields are invalid.");
 		restaurant_.setOwner(loggedUser);
 		try {
-			restaurantManager.update(restaurant_);
+			DBManager.update(restaurant_);
 		} catch (PersistenceException ex) {
 			return new ResponseMessage("Error while saving the restaurant to the database.");
 		}
-		restaurantManager.refresh(restaurant_);
+		DBManager.refresh(restaurant_);
 		return new ResponseMessage(restaurant_.toCommonEntity());
 	}
 	
 
 	private ResponseMessage handleListRestaurants(RequestMessage reqMsg)
 	{
-		List<Restaurant_> restaurants;
+		List<Restaurant> restaurants;
 		if (reqMsg.getEntityCount() > 0) {
 			Restaurant restaurant = (Restaurant)reqMsg.getEntity();
-			restaurants = restaurantManager.getRestaurantsByCity(restaurant.getCity());
+			restaurants = DBManager.getRestaurantsByCity(restaurant.getCity());
 		} else {
-			restaurants = restaurantManager.getAll();
+			restaurants = DBManager.getAll();
 		}
 		ResponseMessage resMsg = new ResponseMessage();
-		for (Restaurant_ restaurant: restaurants)
+		for (Restaurant restaurant: restaurants)
 			resMsg.addEntity(restaurant.toCommonEntity());
 		return resMsg;
 	}
@@ -215,15 +208,15 @@ public class RequestHandler extends Thread
 		Restaurant restaurant = (Restaurant)reqMsg.getEntity();
 		if (!hasRestaurant(loggedUser, restaurant.getId()))
 			return new ResponseMessage("You can only delete restaurants that you own.");
-		Restaurant_ restaurant_ = restaurantManager.get(restaurant.getId());
+		Restaurant restaurant_ = DBManager.get(restaurant.getId());
 		if (restaurant_ == null)
 			return new ResponseMessage("Can not find the specified restaurant.");
 		try {
-			restaurantManager.delete(restaurant.getId());
+			DBManager.delete(restaurant.getId());
 		} catch (PersistenceException ex) {
 			return new ResponseMessage("Error while deleting the restaurant from the database.");
 		}
-		userManager.refresh(restaurant_.getOwner());
+		DBManager.refresh(restaurant_.getOwner());
 		return new ResponseMessage();
 	}
 
