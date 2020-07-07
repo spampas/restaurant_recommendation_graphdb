@@ -3,7 +3,7 @@ package ristogo.common.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import ristogo.common.entities.enums.Cuisine;
+import ristogo.common.entities.Cuisine;
 import ristogo.common.entities.enums.Price;
 
 public class Restaurant extends Entity
