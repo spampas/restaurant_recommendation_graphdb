@@ -102,7 +102,7 @@ public class UserRecommendationDialog extends Dialog<User> {
 
 	private void filterOkButtonAction(ActionEvent event)
 	{
-		filter = new Customer("aaaa", "bbbb");
+		User filter = new Customer("aaaa", "bbbb");
 		//TODO construct the object to return to main interface
 	}
 	

@@ -83,6 +83,11 @@ public class Protocol implements AutoCloseable
 	{
 		return sendRequest(ActionRequest.LIST_USERS, user);
 	}
+	
+	public ResponseMessage getFriends(User user)
+	{
+		return sendRequest(ActionRequest.LIST_FRIENDS, user);
+	}
 
 	public ResponseMessage followUser(User user)
 	{
@@ -102,6 +107,11 @@ public class Protocol implements AutoCloseable
 	public ResponseMessage getRestaurants(Restaurant restaurant)
 	{
 		return sendRequest(ActionRequest.LIST_RESTAURANTS, restaurant);
+	}
+	
+	public ResponseMessage getRestaurants(User user)
+	{
+		return sendRequest(ActionRequest.LIST_RESTAURANTS, user);
 	}
 	
 	public ResponseMessage putLikeRestaurant(Restaurant restaurant)

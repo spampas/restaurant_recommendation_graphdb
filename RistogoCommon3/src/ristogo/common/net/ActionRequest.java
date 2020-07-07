@@ -9,6 +9,7 @@ public enum ActionRequest implements Serializable
 	REGISTER_USER,
 	REGISTER_RESTAURANT,
 	LIST_USERS,
+	LIST_FRIENDS,
 	FOLLOW_USER,
 	UNFOLLOW_USER,
 	LIST_RESTAURANTS,

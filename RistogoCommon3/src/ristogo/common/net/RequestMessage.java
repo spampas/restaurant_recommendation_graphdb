@@ -61,6 +61,7 @@ public class RequestMessage extends Message
 		case REGISTER_USER:
 		case REGISTER_RESTAURANT:
 		case LIST_USERS:
+		case LIST_FRIENDS:
 		case FOLLOW_USER:
 		case UNFOLLOW_USER:
 		case EDIT_RESTAURANT:

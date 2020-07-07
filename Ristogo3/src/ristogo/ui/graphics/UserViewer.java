@@ -7,7 +7,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import ristogo.common.entities.Customer;
 import ristogo.common.entities.User;
+import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
 import ristogo.ui.graphics.controls.FormLabel;
 
@@ -53,14 +55,11 @@ public class UserViewer extends VBox {
 
 		HBox findBox = new HBox(10);
 		findBox.getChildren().addAll(findField, find, followButton);
-		
-		
+				
 		this.getChildren().addAll(userTableTitle, findBox, userTable, cuisinesLabel, cuisinesField);
-
 		
 		//userTable.refreshUsers();
 
-	
 		userTable.setOnMouseClicked((event) -> {
 			User user = userTable.getSelectedEntity();
 			if (user == null)
@@ -73,18 +72,28 @@ public class UserViewer extends VBox {
 		followButton.setOnAction(this::handleLikeButtonAction);
 	}
 	
-	
 	private void handleFindButtonAction(ActionEvent event)
 	{
 		String name = findField.getText();
 		if (name == null)
-			return;
-		//userTable.refreshRestaurants(name);
+			Protocol.getInstance().getUsers();
+		else
+		{
+			User selectedUser = new Customer(name);
+			Protocol.getInstance().getUsers(selectedUser);
+		}
 	}
 	
 	private void handleLikeButtonAction(ActionEvent event)
 	{
-		//TODO
+		User selectedUser = userTable.getSelectedEntity();
+		if(selectedUser == null)
+			return;
+		if(followButton.getText().equals("Follow"))
+			Protocol.getInstance().followUser(selectedUser);
+		else
+			Protocol.getInstance().unfollowUser(selectedUser);
+		//userTable.refreshUsers(name);
 	}
 	
 	public void changeConfigurationRestaurantViewer(int config) {

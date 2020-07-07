@@ -124,6 +124,7 @@ public final class RistogoGUI extends Application
 		buttonFormLeft.getMyButton().setOnMouseClicked((event) -> {
 			userTable.getFollowButton().setText("Unfollow");
 			userTable.getUserTableTitle().setText("List of Users that you follow");
+			Protocol.getInstance().getFriends(loggedUser);
 		});
 	
 		buttonFormLeft.getFindButton().setOnMouseClicked((event) -> {
@@ -140,11 +141,13 @@ public final class RistogoGUI extends Application
 				data -> { loggedUser = data; },
 				() -> { }
 			);
+			
 		});
 		
 		buttonFormRight.getMyButton().setOnMouseClicked((event) -> {
 				restaurantTable.getLikeButton().setText("Remove Like");
 				restaurantTable.getRestaurantTableTitle().setText("List of Restaurants that you like");
+				Protocol.getInstance().getRestaurants(loggedUser);
 		});
 		
 		buttonFormRight.getFindButton().setOnMouseClicked((event) -> {

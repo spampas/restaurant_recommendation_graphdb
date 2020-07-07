@@ -8,6 +8,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import ristogo.common.entities.Restaurant;
+import ristogo.common.entities.User;
+import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
 
 public class RestaurantViewer extends VBox {
@@ -99,13 +101,24 @@ public class RestaurantViewer extends VBox {
 	{
 		String name = findField.getText();
 		if (name == null)
-			return;
-		//restaurantsTable.refreshRestaurants(name);
+			Protocol.getInstance().getRestaurants();
+		else
+		{
+			Restaurant selectedRestaurant = new Restaurant(name);
+			Protocol.getInstance().getRestaurants(selectedRestaurant);
+		}
 	}
 	
 	private void handleLikeButtonAction(ActionEvent event)
 	{
-		//TODO
+		Restaurant selectedRestaurant = restaurantsTable.getSelectedEntity();
+		if(selectedRestaurant == null)
+			return;
+		if(likeButton.getText().equals("Like"))
+			Protocol.getInstance().putLikeRestaurant(selectedRestaurant);
+		else
+			Protocol.getInstance().removeLikeRestaurant(selectedRestaurant);
+		//restaurantTable.refreshRestaurants(name);
 	}
 	
 	public void changeConfigurationRestaurantViewer(int config) {

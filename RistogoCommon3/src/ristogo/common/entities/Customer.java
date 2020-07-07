@@ -27,6 +27,11 @@ public class Customer extends User
 		setPassword(password);
 	}
 	
+	public Customer(String name)
+	{
+		super(name);
+	}
+	
 	public Customer(String username, String password, String city, Double latitude, Double longitude)
 	{
 		super(username);
