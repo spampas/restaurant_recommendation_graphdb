@@ -99,6 +99,11 @@ public class Protocol implements AutoCloseable
 		return sendRequest(ActionRequest.UNFOLLOW_USER, user);
 	}
 	
+	public ResponseMessage deleteUser(User user)
+	{
+		return sendRequest(ActionRequest.DELETE_USER, user);
+	}
+	
 	public ResponseMessage getRestaurants()
 	{
 		return sendRequest(ActionRequest.LIST_RESTAURANTS);
@@ -165,6 +170,16 @@ public class Protocol implements AutoCloseable
 	public ResponseMessage deleteCuisine(Cuisine cuisine)
 	{
 		return sendRequest(ActionRequest.DELETE_CUISINE, cuisine);
+	}
+	
+	public ResponseMessage putLikeCuisine(Cuisine cuisine)
+	{
+		return sendRequest(ActionRequest.PUT_LIKE_CUISINE, cuisine);
+	}
+	
+	public ResponseMessage removeLikeCuisine(Cuisine cuisine)
+	{
+		return sendRequest(ActionRequest.REMOVE_LIKE_CUISINE, cuisine);
 	}
 	
 	public ResponseMessage getCities()

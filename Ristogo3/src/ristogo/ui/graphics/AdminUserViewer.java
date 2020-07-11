@@ -10,17 +10,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import ristogo.common.entities.Cuisine;
 import ristogo.common.entities.User;
+import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
 import ristogo.ui.graphics.controls.FormLabel;
 
 public class AdminUserViewer extends VBox {
 	
 	private final Label userTableTitle = new Label();
-	private final TextField userField = new TextField();
 	private final Button removeButton = new Button();
 	private final Button flushButton = new Button();
 	private final UserTableView userTable = new UserTableView();
-	
 	private final TextField findField = new TextField();
 	private final Button find = new Button();
 	
@@ -33,10 +32,6 @@ public class AdminUserViewer extends VBox {
 		userTableTitle.setTextFill(GUIConfig.getFgColor());
 		userTableTitle.setStyle(GUIConfig.getCSSFormTitleStyle());
 		
-		userField.setPromptText("insert a name of a user");
-		userField.setMinSize(200, 30);
-		userField.setMaxSize(200, 30);
-		
 		removeButton.setText("Remove");
 		removeButton.setFont(GUIConfig.getButtonFont());
 		removeButton.setTextFill(GUIConfig.getInvertedFgColor());
@@ -48,12 +43,10 @@ public class AdminUserViewer extends VBox {
 		flushButton.setTextFill(GUIConfig.getInvertedFgColor());
 		flushButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
 		
-
-
 		HBox cuisineBox = new HBox(30);
-		cuisineBox.getChildren().addAll(userTableTitle,userField, removeButton, flushButton);
+		cuisineBox.getChildren().addAll(userTableTitle, removeButton, flushButton);
 		
-		findField.setPromptText("search Cuisines");
+		findField.setPromptText("search Users");
 		findField.setMinSize(200, 30);
 		findField.setMaxSize(200, 30);
 		
@@ -69,6 +62,8 @@ public class AdminUserViewer extends VBox {
 		this.setStyle(GUIConfig.getCSSInterfacePartStyle());
 		this.setStyle(GUIConfig.getCSSFormBoxStyle());
 	
+		userTable.loadUser();
+		
 		userTable.setOnMouseClicked((event) -> {
 			User user = userTable.getSelectedEntity();
 			if (user == null)
@@ -76,24 +71,34 @@ public class AdminUserViewer extends VBox {
 			removeButton.setDisable(false);;
 		});
 		
-
-
 		removeButton.setOnAction(this::handleOperationButtonAction);
 		flushButton.setOnAction(this::handleFlushButtonAction);
+		find.setOnAction(this::handleFindButtonAction);
 	}
 	
 	
 	private void handleOperationButtonAction(ActionEvent event)
 	{
-		String name = userField.getText();
-		if (name == null)
+		User user = userTable.getSelectedEntity();
+		if(user == null)
 			return;
-		//TODO: gestire azioni
+		Protocol.getInstance().deleteUser(user);
+		removeButton.setDisable(true);	
+		userTable.loadUser();
+	}
+	
+	private void handleFindButtonAction(ActionEvent event)
+	{
+		String name = findField.getText();
+		if (name == null)
+			userTable.loadUser();
+		else
+			userTable.loadUser(name);
 	}
 	
 	private void handleFlushButtonAction(ActionEvent event)
 	{
-		userField.setText("");
+		findField.setText("");
 	}
 	
 	public UserTableView getTable()
