@@ -97,7 +97,7 @@ public final class RistogoGUI extends Application
 		subtitleRestaurant.setFont(GUIConfig.getTitleFont());
 		subtitleRestaurant.setTextFill(GUIConfig.getFgColor());
 		ButtonForm buttonFormRight = new ButtonForm("friend");
-		RestaurantViewer restaurantTable = new RestaurantViewer();
+		RestaurantViewer restaurantTable = new RestaurantViewer(loggedUser);
 		
 		rightMenu.getChildren().addAll(buttonFormRight,restaurantTable);
 		rightPart.getChildren().addAll(subtitleRestaurant, rightMenu);
@@ -265,7 +265,7 @@ public final class RistogoGUI extends Application
 		leftPart.getChildren().addAll(restaurantBox, restaurantForm);
 		
 		
-		RestaurantViewer restaurantTable = new RestaurantViewer(true);
+		RestaurantViewer restaurantTable = new RestaurantViewer(loggedUser, true);
 		
 		RestaurantStatistic statistic = new RestaurantStatistic();
 		

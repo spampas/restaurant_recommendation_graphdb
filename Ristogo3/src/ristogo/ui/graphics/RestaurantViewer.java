@@ -25,12 +25,14 @@ public class RestaurantViewer extends VBox {
 	
 	private HBox findBox = new HBox(10);
 	
-
+	private User loggedUser;
 	private Restaurant restaurant;
 	
-	public RestaurantViewer () {
+	public RestaurantViewer (User loggedUser) {
 		
 		super(10);
+		
+		this.loggedUser = loggedUser;
 		
 		restaurantTableTitle.setText("List of Restaurants");
 		restaurantTableTitle.setFont(GUIConfig.getFormTitleFont());
@@ -52,12 +54,9 @@ public class RestaurantViewer extends VBox {
 		likeButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
 		likeButton.setDisable(true);
 
-		
 		findBox.getChildren().addAll(findField, find, likeButton);
 		
-
-		
-		//restaurantsTable.refreshRestaurants();
+		restaurantsTable.loadRestaurants(loggedUser);
 
 		descriptionLabel.setText("Description: ");
 		descriptionLabel.setFont(GUIConfig.getBoldVeryTinyTextFont());
@@ -88,8 +87,8 @@ public class RestaurantViewer extends VBox {
 		likeButton.setOnAction(this::handleLikeButtonAction);
 	}
 	
-	public RestaurantViewer (boolean isRestaurantInterface) {
-		this();
+	public RestaurantViewer (User loggedUser, boolean isRestaurantInterface) {
+		this(loggedUser);
 		if(isRestaurantInterface) {
 			findBox.getChildren().remove(2);
 			this.getChildren().remove(3);
@@ -115,7 +114,7 @@ public class RestaurantViewer extends VBox {
 			Protocol.getInstance().putLikeRestaurant(selectedRestaurant);
 		else
 			Protocol.getInstance().removeLikeRestaurant(selectedRestaurant);
-		//restaurantTable.refreshRestaurants(name);
+		restaurantsTable.loadRestaurants(loggedUser);
 	}
 	
 	public void changeConfigurationRestaurantViewer(int config) {
@@ -125,13 +124,13 @@ public class RestaurantViewer extends VBox {
 		case 0:
 			likeButton.setText("Remove Like");
 			likeButton.setVisible(false);
-			//TODO: refresh-table
+			restaurantsTable.loadRestaurants(loggedUser);
 			break;
 		case 1:
 		case 2:
 			likeButton.setText("Put Like");
 			likeButton.setVisible(false);
-			//TODO: refresh-table
+			restaurantsTable.loadRestaurants(loggedUser);
 		default:
 			break;
 		}
