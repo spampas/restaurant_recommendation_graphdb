@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import ristogo.common.entities.Customer;
 import ristogo.common.entities.Entity;
 import ristogo.common.entities.Restaurant;
 import ristogo.common.entities.User;
@@ -55,21 +56,32 @@ public class UserTableView extends TableView<UserBean>{
 		return userBean == null ? null : userBean.toEntity();
 	}
 
-	void refreshRestaurants()
+	void loadFriends(User loggedUser)
 	{
-		refreshRestaurants(null);
+		userList.clear();
+		ResponseMessage resMsg = Protocol.getInstance().getFriends(loggedUser);
+		if (resMsg.isSuccess())
+			for (Entity entity : resMsg.getEntities())
+				userList.add(UserBean.fromEntity((User)entity));
+		else
+			new ErrorBox("Error", "An error has occured while fetching the list of users.", resMsg.getErrorMsg()).showAndWait();
 	}
+	
+	void loadUser()
+	{
+		loadUser(null);
+	}
+	
 
-	void refreshRestaurants(String findCity)
+	void loadUser(String findFriend)
 	{
 		userList.clear();
 		ResponseMessage resMsg;
-		if(findCity == null || findCity.isBlank()) {
+		if(findFriend == null || findFriend.isBlank()) {
 			resMsg = Protocol.getInstance().getRestaurants();
 		} else {
-			Restaurant restaurant = new Restaurant();
-			restaurant.setCity(findCity);
-			resMsg = Protocol.getInstance().getRestaurants(restaurant);
+			User user = new Customer(findFriend);
+			resMsg = Protocol.getInstance().getUsers(user);
 		}
 		if (resMsg.isSuccess())
 			for (Entity entity : resMsg.getEntities())
