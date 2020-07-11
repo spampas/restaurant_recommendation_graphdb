@@ -64,6 +64,7 @@ public class RequestMessage extends Message
 		case LIST_FRIENDS:
 		case FOLLOW_USER:
 		case UNFOLLOW_USER:
+		case DELETE_USER:
 		case EDIT_RESTAURANT:
 		case DELETE_RESTAURANT:
 			return getEntityCount() == 1 && getEntity() instanceof Restaurant;
@@ -77,6 +78,8 @@ public class RequestMessage extends Message
 		case LIST_CUISINES:
 		case ADD_CUISINE:
 		case DELETE_CUISINE:
+		case PUT_LIKE_CUISINE:
+		case REMOVE_LIKE_CUISINE:
 		case LIST_CITIES:
 		case ADD_CITY:
 		case DELETE_CITY:
