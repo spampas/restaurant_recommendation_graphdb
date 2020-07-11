@@ -96,7 +96,9 @@ public class AdminUserViewer extends VBox {
 		userField.setText("");
 	}
 	
-
-	
+	public UserTableView getTable()
+	{
+		return userTable;
+	}
 
 }

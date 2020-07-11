@@ -101,12 +101,9 @@ public class RestaurantViewer extends VBox {
 	{
 		String name = findField.getText();
 		if (name == null)
-			Protocol.getInstance().getRestaurants();
+			restaurantsTable.refreshRestaurants();
 		else
-		{
-			Restaurant selectedRestaurant = new Restaurant(name);
-			Protocol.getInstance().getRestaurants(selectedRestaurant);
-		}
+			restaurantsTable.refreshRestaurants(name);
 	}
 	
 	private void handleLikeButtonAction(ActionEvent event)
@@ -147,5 +144,10 @@ public class RestaurantViewer extends VBox {
 
 	public Label getRestaurantTableTitle() {
 		return restaurantTableTitle;
+	}
+	
+	public RestaurantTableView getTable()
+	{
+		return restaurantsTable;
 	}
 }

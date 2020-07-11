@@ -8,6 +8,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import ristogo.common.entities.Cuisine;
 import ristogo.common.entities.Entity;
 import ristogo.common.entities.Restaurant;
+import ristogo.common.entities.User;
 import ristogo.common.entities.enums.Price;
 import ristogo.common.net.ResponseMessage;
 import ristogo.net.Protocol;
@@ -67,6 +68,20 @@ final class RestaurantTableView extends TableView<RestaurantBean>
 		return restaurantBean == null ? null : restaurantBean.toEntity();
 	}
 
+	void loadRestaurants (User loggedUser)
+	{
+		restaurantList.clear();
+		if(loggedUser == null) 
+			return;
+		
+		ResponseMessage resMsg = Protocol.getInstance().getRestaurants(loggedUser);
+		if (resMsg.isSuccess())
+			for (Entity entity : resMsg.getEntities())
+				restaurantList.add(RestaurantBean.fromEntity((Restaurant)entity));
+		else
+			new ErrorBox("Error", "An error has occured while fetching the list of restaurants.", resMsg.getErrorMsg()).showAndWait();
+	}
+	
 	void refreshRestaurants()
 	{
 		refreshRestaurants(null);

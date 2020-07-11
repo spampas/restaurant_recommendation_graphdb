@@ -93,5 +93,9 @@ public class CustomerCuisineViewer extends VBox {
 		}
 	}
 	
+	public CuisineTableView getTable()
+	{
+		return cuisineTable;
+	}
 
 }
