@@ -149,12 +149,13 @@ public final class RistogoGUI extends Application
 		buttonFormRight.getMyButton().setOnMouseClicked((event) -> {
 				restaurantTable.getLikeButton().setText("Remove Like");
 				restaurantTable.getRestaurantTableTitle().setText("List of Restaurants that you like");
-				Protocol.getInstance().getRestaurants(loggedUser);
+				restaurantTable.getTable().loadRestaurants(loggedUser);
 		});
 		
 		buttonFormRight.getFindButton().setOnMouseClicked((event) -> {
 			restaurantTable.getLikeButton().setText("Put Like");
 			restaurantTable.getRestaurantTableTitle().setText("List of Restaurants");
+			restaurantTable.getTable().refreshRestaurants();
 		});
 		
 		buttonFormRight.getRecommendedButton().setOnMouseClicked((event) -> {
