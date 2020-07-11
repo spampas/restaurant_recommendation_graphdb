@@ -121,7 +121,7 @@ public class RequestHandler extends Thread
 	}
 
 	@RequestHandlerMethod(requiresLogin=false)
-	private ResponseMessage handleRegister(RequestMessage reqMsg)
+	private ResponseMessage handleRegisterUser(RequestMessage reqMsg)
 	{
 		User user = reqMsg.getEntity(User.class);
 		Restaurant restaurant = reqMsg.getEntity(Restaurant.class);
@@ -220,5 +220,105 @@ public class RequestHandler extends Thread
 		return new ResponseMessage();
 	}
 
-	
+	@RequestHandlerMethod(requiresOwnership=true)
+	private ResponseMessage handleRegisterRestaurant(RequestMessage reqMsg)
+	{
+		return null;
+	}
+
+	@RequestHandlerMethod
+	private ResponseMessage handleListUsers(RequestMessage reqMsg)
+	{
+		return null;
+	}
+
+	@RequestHandlerMethod
+	private ResponseMessage handleListFriends(RequestMessage reqMsg)
+	{
+		return null;
+	}
+
+	@RequestHandlerMethod
+	private ResponseMessage handleFollowUser(RequestMessage reqMsg)
+	{
+		return null;
+	}
+
+	@RequestHandlerMethod
+	private ResponseMessage handleUnfollowUser(RequestMessage reqMsg)
+	{
+		return null;
+	}
+
+	@RequestHandlerMethod(true)
+	private ResponseMessage handleDeleteUser(RequestMessage reqMsg)
+	{
+		return null;
+	}
+
+	@RequestHandlerMethod
+	private ResponseMessage handlePutLikeRestaurant(RequestMessage reqMsg)
+	{
+		return null;
+	}
+
+	@RequestHandlerMethod
+	private ResponseMessage handleRemoveLikeRestaurant(RequestMessage reqMsg)
+	{
+		return null;
+	}
+
+	@RequestHandlerMethod
+	private ResponseMessage handleGetStatisticRestaurant(RequestMessage reqMsg)
+	{
+		return null;
+	}
+
+	@RequestHandlerMethod
+	private ResponseMessage handleListCuisines(RequestMessage reqMsg)
+	{
+		return null;
+	}
+
+	@RequestHandlerMethod(true)
+	private ResponseMessage handleAddCuisine(RequestMessage reqMsg)
+	{
+		return null;
+	}
+
+	@RequestHandlerMethod(true)
+	private ResponseMessage handleDeleteCuisine(RequestMessage reqMsg)
+	{
+		return null;
+	}
+
+	@RequestHandlerMethod
+	private ResponseMessage handlePutLikeCuisine(RequestMessage reqMsg)
+	{
+		return null;
+	}
+
+	@RequestHandlerMethod
+	private ResponseMessage handleRemoveLikeCuisine(RequestMessage reqMsg)
+	{
+		return null;
+	}
+
+	@RequestHandlerMethod
+	private ResponseMessage handleListCities(RequestMessage reqMsg)
+	{
+		return null;
+	}
+
+	@RequestHandlerMethod(true)
+	private ResponseMessage handleAddCity(RequestMessage reqMsg)
+	{
+		return null;
+	}
+
+	@RequestHandlerMethod(true)
+	private ResponseMessage handleDeleteCity(RequestMessage reqMsg)
+	{
+		return null;
+	}
 }
