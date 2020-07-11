@@ -11,5 +11,6 @@ import java.lang.annotation.Target;
 public @interface RequestHandlerMethod
 {
 	public boolean value() default false;
+	public boolean requiresOwnership() default false;
 	public boolean requiresLogin() default true;
 }

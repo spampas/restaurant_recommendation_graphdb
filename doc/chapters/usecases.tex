@@ -1,1 +1,71 @@
 \chapter{Use cases}\label{ch:usecases}
+
+The following use cases are defined (all use cases, except Login, requires
+the user to be logged in):
+
+\begin{figure}[p]
+	\includegraphics[width=\textwidth]{usecases}
+	\caption{Use cases UML diagram.}\label{fig:usecases}
+\end{figure}
+
+\begin{description}
+	\item[Login/Logout] A user can login in the application using its
+		credentials (username, password). When logged in, he can logout
+		from the application at any time;
+	\item[Register] The first time a user uses the application he/she will
+		be asked to register himself/herself, providing an username, a
+		password, and the city where he/she lives, and specifying which
+		type of user he/she is (customer or restaurant owner).
+	\item[Browse Restaurant] See the list of all restaurants saved in the
+		application;
+	\item[Find Restaurant] Search restaurants from the list, searching by
+		name or selecting by recommendations parameters;
+	\item[View Restaurant] See all the information about a restaurant;
+	\item[Put/Remove like Restaurant] a customer can put or remove likes to
+		restaurants;
+	\item[View Statistics] (owner) View the statistics of the restaurant, as
+		the  restaurant’s likes and  how  restaurant is ranked in the
+		city where it is located;
+	\item[Add Restaurant] (owner) Add a new restaurant, providing name,
+		cuisine that it serves, price range, city where is located and
+		description;
+	\item[Delete Restaurant] (owner) Delete a restaurant among those it
+		owns;
+	\item[Edit Restaurant] (owner) Modify the details of a restaurant.
+
+	\item[Browse User] See the list of all users saved in the application;
+	\item[Find User] Search users from the list, searching by name or
+		selecting by recommendations parameters;
+	\item[View User] See all the information about a user;
+	\item[Follow User] A customer can start to follow another customer;
+	\item[Unfollow User] A customer can stop to follow another customer;
+	\item[Browse City] See the list of all cities saved in the application;
+	\item[Find City] Search cities from the list, searching by name;
+	\item[View City] See all the information about a city;
+	\item[Add City] (admin) Add a new city, providing name, latitude and
+		longitude where it is located;
+	\item[Delete City] (admin) Delete a city among those available in the
+		application;
+	\item[Change User City] A user can change his/her city where he/she
+		lives;
+
+	\item[Browse Cuisine] See the list of all cuisines saved in the
+		application;
+	\item[Find Cuisine] Search cuisines from the list, searching by name;
+	\item[View Cuisine] See all the information about a cuisine;
+	\item[Put/Remove like to Cuisine] a customer can put or remove likes to
+		cuisines;
+	\item[Add Cuisine] (admin) Add a new cuisine, providing its name;
+	\item[Delete Cuisine] (admin) Delete a cuisine among those available in
+		the application;
+\end{description}
+
+The \textit{User Recommendation Parameters} allow to select users not followed
+by the customer by filtering them by the city in which they live (or by the
+distance from the city where the customer lives) and the types of cuisine they
+like.
+
+The \textit{Restaurant Recommendation Parameters} allow to select restaurants
+that the customer does not known by number of friends' likes, by the city in
+which they are located (or by the distance from the city where the customer
+lives), by the cuisine they offer and by the price

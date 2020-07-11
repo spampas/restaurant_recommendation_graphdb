@@ -1,5 +1,6 @@
 package ristogo.common.net;
 
+import java.io.DataInputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,21 +10,12 @@ import ristogo.common.entities.Owner;
 import ristogo.common.entities.Restaurant;
 import ristogo.common.entities.User;
 
-/**
- * Represents a request message, sent from the client to the server.
- */
 public class RequestMessage extends Message
 {
 	private static final long serialVersionUID = 6989601732466426604L;
 
 	protected final ActionRequest action;
 
-	/**
-	 * Creates a new request message, with optional entities attached.
-	 * @param action The type of action requested.
-	 * @param entities The list of entities to attach.
-	 */
-	
 	public RequestMessage(ActionRequest action, List<Entity> entities)
 	{
 		super(entities);
@@ -35,20 +27,16 @@ public class RequestMessage extends Message
 		this(action, Arrays.asList(entities));
 	}
 
-
-	/**
-	 * Returns the type of action requested.
-	 * @return The type of action.
-	 */
 	public ActionRequest getAction()
 	{
 		return action;
 	}
 
-	/**
-	 * Checks whether this message is valid (properly formed).
-	 * @return True if valid; False otherwise.
-	 */
+	public static RequestMessage receive(DataInputStream input)
+	{
+		return (RequestMessage)Message.receive(input);
+	}
+
 	public boolean isValid()
 	{
 		//TODO: Gestire azioni
