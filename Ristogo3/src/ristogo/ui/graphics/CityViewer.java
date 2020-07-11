@@ -101,7 +101,11 @@ public class CityViewer extends VBox {
 				}
 			}
 		}else {
-			cityTable.loadCities(findField.getText());
+			City city  = cityTable.getSelectedEntity();
+			ResponseMessage resMsg = Protocol.getInstance().deleteCity(city);
+			if(!resMsg.isSuccess()) {
+				new ErrorBox("Error", "An error has occured while fetching the list of users.", resMsg.getErrorMsg()).showAndWait();
+			}
 		}
 	}
 	
