@@ -3,8 +3,8 @@ package ristogo.ui.menus.forms;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
+import ristogo.common.entities.Cuisine;
 import ristogo.common.entities.Restaurant;
-import ristogo.common.entities.enums.Cuisine;
 import ristogo.common.entities.enums.Price;
 
 public class RestaurantForm extends TextForm
@@ -23,7 +23,7 @@ public class RestaurantForm extends TextForm
 		LinkedHashSet<FormField> fields = new LinkedHashSet<FormField>();
 		fields.add(new FormField("Name", restaurant.getName(), (s) -> { return s != null && s.length() < 46; }));
 		if (restaurant.getCuisine() != null)
-			fields.add(new ChoiceFormField<Cuisine>("Cuisine", restaurant.getCuisine(), Cuisine.class));
+			fields.add(new ChoiceFormField<String>("Cuisine", restaurant.getCuisine().toString(), String.class));
 		else
 			fields.add(new ChoiceFormField<Cuisine>("Cuisine", Cuisine.class));
 		if (restaurant.getPrice() != null)

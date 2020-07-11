@@ -8,7 +8,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import ristogo.common.entities.Entity;
 import ristogo.common.entities.Restaurant;
 import ristogo.common.entities.User;
-import ristogo.common.entities.enums.Cuisine;
 import ristogo.common.entities.enums.Price;
 import ristogo.common.net.ResponseMessage;
 import ristogo.net.Protocol;

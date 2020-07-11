@@ -3,8 +3,8 @@ package ristogo.ui.graphics.beans;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import ristogo.common.entities.Cuisine;
 import ristogo.common.entities.Restaurant;
-import ristogo.common.entities.enums.Cuisine;
 import ristogo.common.entities.enums.Price;
 
 public class RestaurantBean extends EntityBean
