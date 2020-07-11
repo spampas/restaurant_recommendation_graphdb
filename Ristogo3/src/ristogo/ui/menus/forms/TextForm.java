@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 
 import ristogo.common.entities.User;
-import ristogo.ui.Console;
 
 public abstract class TextForm
 {
@@ -28,8 +27,6 @@ public abstract class TextForm
 	public HashMap<Integer, String> show()
 	{
 		if (!prompt.isBlank())
-			Console.println(prompt + ":");
-		Console.newLine();
 		fields = createFields();
 		HashMap<Integer, String> hm = new HashMap<Integer, String>();
 		int i = 0;
@@ -44,7 +41,6 @@ public abstract class TextForm
 	protected boolean validateUsername(String username)
 	{
 		if (!User.validateUsername(username)) {
-			Console.println("Invalid username.");
 			return false;
 		}
 		return true;
@@ -53,7 +49,6 @@ public abstract class TextForm
 	protected boolean validatePassword(String password)
 	{
 		if (!User.validatePassword(password)) {
-			Console.println("Invalid password.");
 			return false;
 		}
 		return true;
@@ -66,7 +61,6 @@ public abstract class TextForm
 			if (converted <= 0)
 				return false;
 		} catch (NumberFormatException ex) {
-			Console.println("Invalid number.");
 			return false;
 		}
 		return true;
@@ -77,11 +71,9 @@ public abstract class TextForm
 		try {
 			LocalDate converted = LocalDate.parse(date);
 			if (converted.compareTo(LocalDate.now()) < 0) {
-				Console.println("Invalid date. Must be a date placed in future.");
 				return false;
 			}
 		} catch (DateTimeParseException ex) {
-			Console.println("Invalid date (use format YYYY-MM-DD).");
 			return false;
 		}
 		return true;

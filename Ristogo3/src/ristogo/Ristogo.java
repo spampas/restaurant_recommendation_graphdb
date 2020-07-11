@@ -15,9 +15,6 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import ristogo.config.Configuration;
-import ristogo.ui.Console;
-import ristogo.ui.menus.LoginMenu;
-
 public class Ristogo
 {
 	public static void main(String[] args)
@@ -40,22 +37,8 @@ public class Ristogo
 		if (cmd == null || !cmd.hasOption("log-level"))
 			setLogLevel(config.getLogLevel());
 
-		switch (config.getInterfaceMode()) {
-		case FORCE_CLI:
-			Logger.getLogger(Ristogo.class.getName()).config("Forcing CLI by config option");
-			launchCLI(args);
-		case FORCE_GUI:
-			Logger.getLogger(Ristogo.class.getName()).config("Forcing GUI by config option.");
-			launchGUI(args);
-		case AUTO:
-			if (Console.exists()) {
-				Logger.getLogger(Ristogo.class.getName()).config("Console found. Starting in CLI mode.");
-				launchCLI(args);
-			} else {
-				Logger.getLogger(Ristogo.class.getName()).config("Console NOT found. Starting in GUI mode.");
-				launchGUI(args);
-			}
-		}
+		launchGUI(args);
+
 	}
 
 	private static Options createOptions()
@@ -76,7 +59,7 @@ public class Ristogo
 	{
 		if (cmd.hasOption("help")) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("ristogo [-h | --help] [-c | --cli] [-g | --gui] [-l <LEVEL> | --log-level <LEVEL>]",
+			formatter.printHelp("ristogo [-h | --help] [-l <LEVEL> | --log-level <LEVEL>]",
 				"", options, "\nLOG LEVELS:\n" +
 				"ALL: print all logs.\n" +
 				"FINEST: print all tracing logs.\n" +
@@ -101,26 +84,14 @@ public class Ristogo
 			}
 			setLogLevel(logLevel);
 		}
-		if (cmd.hasOption("cli")) {
-			Logger.getLogger(Ristogo.class.getName()).config("Forcing CLI by command line argument.");
-			launchCLI(cmd.getArgs());
-		}
+	
 		if (cmd.hasOption("gui")) {
 			Logger.getLogger(Ristogo.class.getName()).config("Forcing GUI by command line argument.");
 			launchGUI(cmd.getArgs());
 		}
 	}
 
-	private static void launchCLI(String[] args)
-	{
-		Logger.getLogger(Ristogo.class.getName()).entering(Ristogo.class.getName(), "launchCLI", args);
-		Console.println("WELCOME TO RISTOGO!");
 
-		new LoginMenu().show();
-
-		Logger.getLogger(Ristogo.class.getName()).exiting(Ristogo.class.getName(), "launchCLI", args);
-		close();
-	}
 
 	private static void launchGUI(String[] args)
 	{
@@ -133,7 +104,6 @@ public class Ristogo
 	private static void close()
 	{
 		Logger.getLogger(Ristogo.class.getName()).fine("Exiting...");
-		Console.close();
 		System.exit(0);
 	}
 

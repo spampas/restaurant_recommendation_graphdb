@@ -2,8 +2,6 @@ package ristogo.ui.menus.forms;
 
 import java.util.function.Predicate;
 
-import ristogo.ui.Console;
-
 public class FormField
 {
 	protected String name;
@@ -72,14 +70,8 @@ public class FormField
 	public void show()
 	{
 		while (true) {
-			if (inputHidden)
-				setValue(Console.askPassword(this.toString()));
-			else
-				setValue(Console.askString(this.toString()));
 			if (isValid())
 				return;
-			if (this.validator == null)
-				Console.println("Invalid value.");
 		}
 	}
 

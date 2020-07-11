@@ -3,7 +3,6 @@ package ristogo.ui.menus.forms;
 import java.util.LinkedHashSet;
 
 import ristogo.common.entities.enums.UserType;
-import ristogo.ui.Console;
 
 public class RegisterForm extends TextForm
 {
@@ -30,7 +29,6 @@ public class RegisterForm extends TextForm
 		FormField confirm = new FormField("CONFIRM PASSWORD", true);
 		confirm.show();
 		if (!confirm.getValue().equals(password)) {
-			Console.println("Passwords do not match!");
 			return false;
 		}
 		return true;
