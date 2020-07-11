@@ -79,7 +79,7 @@ public class CustomerCuisineViewer extends VBox {
 		}
 		else {
 			Cuisine cuisine = cuisineTable.getSelectedEntity();
-			Protocol.getInstance().remoteLikeCuisine(cuisine);
+			ResponseMessage resMsg = Protocol.getInstance().removeLikeCuisine(cuisine);
 			if(!resMsg.isSuccess()) {
 				
 			}

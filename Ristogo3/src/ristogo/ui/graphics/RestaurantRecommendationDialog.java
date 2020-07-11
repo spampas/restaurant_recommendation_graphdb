@@ -31,8 +31,7 @@ import ristogo.net.Protocol;
 import ristogo.ui.graphics.beans.UserBean;
 import ristogo.ui.graphics.config.GUIConfig;
 import ristogo.ui.graphics.controls.DialogLabel;
-import ristogo.ui.graphics.controls.DialogTextField;
-import ristogo.ui.menus.forms.FormField;
+import ristogo.ui.graphics.controls.DialogTextField;;
 
 public class RestaurantRecommendationDialog extends Dialog<Restaurant> {
 

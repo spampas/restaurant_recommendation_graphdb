@@ -30,7 +30,6 @@ public class Configuration implements Serializable
 
 	private String serverIp;
 	private int serverPort;
-	private InterfaceMode interfaceMode;
 	private String fontName;
 	private int fontSize;
 	private String bgColorName;
@@ -52,10 +51,6 @@ public class Configuration implements Serializable
 		if (serverPort == 0) {
 			serverPort = 8888;
 			Logger.getLogger(Configuration.class.getName()).config("serverPort not set. Using default value: " + serverPort + ".");
-		}
-		if (interfaceMode == null) {
-			interfaceMode = InterfaceMode.AUTO;
-			Logger.getLogger(Configuration.class.getName()).config("interfaceMode not set. Using default value: " + interfaceMode + ".");
 		}
 		if (fontName == null || fontName.isBlank()) {
 			fontName = "Open Sans";
@@ -140,10 +135,6 @@ public class Configuration implements Serializable
 		return serverPort;
 	}
 
-	public InterfaceMode getInterfaceMode()
-	{
-		return interfaceMode;
-	}
 
 	public String getFontName()
 	{
