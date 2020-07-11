@@ -44,7 +44,7 @@ public class AdminUserViewer extends VBox {
 		flushButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
 		
 		HBox cuisineBox = new HBox(30);
-		cuisineBox.getChildren().addAll(userTableTitle, removeButton, flushButton);
+		cuisineBox.getChildren().addAll(userTableTitle, removeButton);
 		
 		findField.setPromptText("search Users");
 		findField.setMinSize(200, 30);
@@ -56,7 +56,7 @@ public class AdminUserViewer extends VBox {
 		find.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
 		HBox findBox = new HBox(10);
 		findBox.setAlignment(Pos.CENTER);
-		findBox.getChildren().addAll(findField, find);
+		findBox.getChildren().addAll(findField, find, flushButton);
 		
 		this.getChildren().addAll(userTableTitle, cuisineBox, userTable, findBox);
 		this.setStyle(GUIConfig.getCSSInterfacePartStyle());
