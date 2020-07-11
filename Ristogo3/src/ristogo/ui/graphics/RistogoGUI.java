@@ -124,12 +124,14 @@ public final class RistogoGUI extends Application
 		buttonFormLeft.getMyButton().setOnMouseClicked((event) -> {
 			userTable.getFollowButton().setText("Unfollow");
 			userTable.getUserTableTitle().setText("List of Users that you follow");
-			Protocol.getInstance().getFriends(loggedUser);
+			userTable.getTable().loadFriends(loggedUser);
+			
 		});
 	
 		buttonFormLeft.getFindButton().setOnMouseClicked((event) -> {
 			userTable.getFollowButton().setText("Follow");
 			userTable.getUserTableTitle().setText("List of Users");
+			userTable.getTable().loadUser();
 		});
 		
 		buttonFormLeft.getRecommendedButton().setOnMouseClicked((event) -> {

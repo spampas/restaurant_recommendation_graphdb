@@ -10,17 +10,19 @@ public class UserBean extends EntityBean
 {
 	private final SimpleStringProperty username;
 	private final SimpleBooleanProperty owner;
+	private final SimpleStringProperty city;
 
-	public UserBean(int id, String username, boolean owner)
+	public UserBean(int id, String username, boolean owner, String city)
 	{
 		super(id);
 		this.username = new SimpleStringProperty(username);
 		this.owner = new SimpleBooleanProperty(owner);
+		this.city = new SimpleStringProperty(city);
 	}
 
 	public static UserBean fromEntity(User user)
 	{
-		return new UserBean(user.getId(), user.getUsername(), user.isOwner());
+		return new UserBean(user.getId(), user.getUsername(), user.isOwner(), user.getCity());
 	}
 
 	public User toEntity()
@@ -32,10 +34,14 @@ public class UserBean extends EntityBean
 	{
 		return username.get();
 	}
-
-	public boolean isOwner()
-	{
+	
+	public boolean isOwner() {
 		return owner.get();
+	}
+
+	public String getCity()
+	{
+		return city.get();
 	}
 
 	public void setUsername(String username)
@@ -43,8 +49,15 @@ public class UserBean extends EntityBean
 		this.username.set(username);
 	}
 
-	public void setRestaurateur(boolean owner)
+	public void setRestaurateur(String city)
 	{
+		this.city.set(city);
+	}
+	
+	public void setOwner(boolean owner) {
 		this.owner.set(owner);
 	}
+
+
+	
 }

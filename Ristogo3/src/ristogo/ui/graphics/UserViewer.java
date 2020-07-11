@@ -76,11 +76,10 @@ public class UserViewer extends VBox {
 	{
 		String name = findField.getText();
 		if (name == null)
-			Protocol.getInstance().getUsers();
+			userTable.loadUser();
 		else
 		{
-			User selectedUser = new Customer(name);
-			Protocol.getInstance().getUsers(selectedUser);
+			userTable.loadUser(name);
 		}
 	}
 	
@@ -123,6 +122,10 @@ public class UserViewer extends VBox {
 
 	public Label getUserTableTitle() {
 		return userTableTitle;
+	}
+	
+	public UserTableView getTable() {
+		return userTable;
 	}
 
 	
