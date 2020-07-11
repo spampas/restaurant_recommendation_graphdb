@@ -114,5 +114,8 @@ public class CityViewer extends VBox {
 		}
 	}
 	
-
+	public CityTableView getTable()
+	{
+		return cityTable;
+	}
 }

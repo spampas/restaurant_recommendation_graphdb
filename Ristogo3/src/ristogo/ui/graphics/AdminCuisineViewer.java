@@ -113,5 +113,9 @@ public class AdminCuisineViewer extends VBox {
 		}
 	}
 	
+	public CuisineTableView getTable()
+	{
+		return cuisineTable;
+	}
 
 }

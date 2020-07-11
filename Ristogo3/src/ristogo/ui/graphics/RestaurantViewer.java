@@ -148,4 +148,9 @@ public class RestaurantViewer extends VBox {
 	public Label getRestaurantTableTitle() {
 		return restaurantTableTitle;
 	}
+	
+	public RestaurantTableView getTable()
+	{
+		return restaurantsTable;
+	}
 }
