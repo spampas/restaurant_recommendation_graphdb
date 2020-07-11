@@ -82,7 +82,7 @@ public final class RistogoGUI extends Application
 		subtitleUser.setFont(GUIConfig.getTitleFont());
 		subtitleUser.setTextFill(GUIConfig.getFgColor());
 		ButtonForm buttonFormLeft = new ButtonForm("restaurant");
-		UserViewer userTable = new UserViewer();
+		UserViewer userTable = new UserViewer(loggedUser);
 		
 		HBox optionMenu = generateOptionMenu();
 		optionMenu.setAlignment(Pos.CENTER);

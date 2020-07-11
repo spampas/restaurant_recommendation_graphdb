@@ -23,9 +23,9 @@ public class UserViewer extends VBox {
 	private final FormLabel cuisinesLabel = new FormLabel("Cusisines that selected user likes:");
 	private final TextArea cuisinesField = new TextArea();
 	
-	private User user;
+	private User loggedUser;
 	
-	public UserViewer () {
+	public UserViewer (User loggedUser) {
 		
 		super(10);
 		
@@ -58,7 +58,7 @@ public class UserViewer extends VBox {
 				
 		this.getChildren().addAll(userTableTitle, findBox, userTable, cuisinesLabel, cuisinesField);
 		
-		userTable.loadUser();
+		userTable.loadFriends(loggedUser);
 
 		userTable.setOnMouseClicked((event) -> {
 			User user = userTable.getSelectedEntity();
@@ -92,23 +92,23 @@ public class UserViewer extends VBox {
 			Protocol.getInstance().followUser(selectedUser);
 		else
 			Protocol.getInstance().unfollowUser(selectedUser);
-		//userTable.refreshUsers(name);
+		userTable.loadFriends(loggedUser);
 	}
 	
-	public void changeConfigurationRestaurantViewer(int config) {
+	public void changeConfigurationUserViewer(int config) {
 		
 		switch(config) {
 		
 		case 0:
 			followButton.setText("UnFollow");
 			followButton.setVisible(false);
-			//TODO: refresh-table
+			userTable.loadFriends(loggedUser);
 			break;
 		case 1:
 		case 2:
 			followButton.setText("Follow");
 			followButton.setVisible(false);
-			//TODO: refresh-table
+			userTable.loadFriends(loggedUser);
 		default:
 			break;
 		}
@@ -118,7 +118,6 @@ public class UserViewer extends VBox {
 	public Button getFollowButton() {
 		return followButton;
 	}
-
 
 	public Label getUserTableTitle() {
 		return userTableTitle;

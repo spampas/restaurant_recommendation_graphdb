@@ -47,7 +47,6 @@ public class AdminCuisineViewer extends VBox {
 		flushButton.setStyle(GUIConfig.getInvertedCSSButtonBgColor());
 		
 
-
 		HBox cuisineBox = new HBox(30);
 		cuisineBox.getChildren().addAll(cuisineLabel,cuisineField, operationButton, flushButton);
 		
@@ -62,6 +61,8 @@ public class AdminCuisineViewer extends VBox {
 		HBox findBox = new HBox(10);
 		findBox.setAlignment(Pos.CENTER);
 		findBox.getChildren().addAll(findField, find);
+		
+		cuisineTable.loadCuisines();
 		
 		this.getChildren().addAll(cuisineTableTitle, cuisineBox, cuisineTable, findBox);
 		this.setStyle(GUIConfig.getCSSInterfacePartStyle());
