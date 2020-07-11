@@ -1,5 +1,8 @@
 package ristogo.ui.graphics;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,8 +21,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import ristogo.common.entities.City;
 import ristogo.common.entities.Cuisine;
 import ristogo.common.entities.Customer;
+import ristogo.common.entities.Entity;
 import ristogo.common.entities.Owner;
 import ristogo.common.entities.Restaurant;
 import ristogo.common.entities.User;
@@ -40,7 +45,7 @@ public class UserRecommendationDialog extends Dialog<User> {
 	private final DialogLabel errorLabel = new DialogLabel("Fill out the form.");
 	private final ChoiceBox<String> citySelector = new ChoiceBox<String>();
 	private final TextField distanceField = new TextField();
-	private final ChoiceBox<Cuisine> cuisineSelector = new ChoiceBox<Cuisine>();
+	private final ChoiceBox<String> cuisineSelector = new ChoiceBox<String>();
 	private User filter;
 
 	UserRecommendationDialog()
@@ -64,9 +69,9 @@ public class UserRecommendationDialog extends Dialog<User> {
 		errorLabel.setStyle("-fx-background-color: red;");
 		errorLabel.setVisible(false);
 		
-		cuisineSelector.getItems().addAll(/*//TODO Load cuisine from DB*/);
+		cuisineSelector.getItems().addAll(loadCuisines());
 		
-		citySelector.getItems().addAll(/*//TODO Load cities from DB*/);
+		citySelector.getItems().addAll(loadCities());
 		
 		citySelector.setValue(RistogoGUI.loggedUser.getCity());
 		distanceField.setPromptText("Distance(Km)");
@@ -98,6 +103,40 @@ public class UserRecommendationDialog extends Dialog<User> {
 				return filter;
 			return null;
 		});
+	}
+	
+	List<String> loadCities(){
+		
+		List<String> result = new ArrayList<String>();
+		
+		ResponseMessage resMsg = Protocol.getInstance().getCities();
+		if(resMsg.isSuccess()) {
+			for (Entity entity : resMsg.getEntities())
+				result.add(((City)entity).getName());
+			
+			return result;
+		}
+		else {
+			new ErrorBox("Error", "An error has occured while fetching the list of users.", resMsg.getErrorMsg()).showAndWait();
+			return null;
+		}
+	}
+	
+	List<String> loadCuisines(){
+		
+		List<String> result = new ArrayList<String>();
+		
+		ResponseMessage resMsg = Protocol.getInstance().getCuisines();
+		if(resMsg.isSuccess()) {
+			for (Entity entity : resMsg.getEntities())
+				result.add(((Cuisine)entity).getName());
+			
+			return result;
+		}
+		else {
+			new ErrorBox("Error", "An error has occured while fetching the list of users.", resMsg.getErrorMsg()).showAndWait();
+			return null;
+		}
 	}
 
 	private void filterOkButtonAction(ActionEvent event)

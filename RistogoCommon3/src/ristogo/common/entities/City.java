@@ -22,7 +22,7 @@ public class City extends Entity{
 	{
 		super(id);
 	}
-
+	
 	/**
 	 * Creates the city.
 	 * @param id City's id.
@@ -48,6 +48,16 @@ public class City extends Entity{
 	public City(String name, Double latitude, Double longitude)
 	{
 		this(0, name, latitude, longitude);
+	}
+	
+	
+	
+	/**
+	 * Creates the city.
+	 * @param cityName The name of the city.
+	 */
+	public City(String cityName) {
+		this(0,cityName, null, null);
 	}
 	
 	

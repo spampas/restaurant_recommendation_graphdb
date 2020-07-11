@@ -7,6 +7,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import ristogo.common.entities.City;
 import ristogo.common.entities.Cuisine;
+import ristogo.common.entities.Customer;
+import ristogo.common.entities.Entity;
+import ristogo.common.entities.User;
+import ristogo.common.net.ResponseMessage;
+import ristogo.net.Protocol;
 import ristogo.ui.graphics.beans.*;
 import ristogo.ui.graphics.config.GUIConfig;
 
@@ -55,5 +60,29 @@ public class CityTableView extends TableView<CityBean>{
 		CityBean cityBean = getSelectionModel().getSelectedItem();
 		return cityBean == null ? null : cityBean.toEntity();
 	}
+	
+	void loadCities()
+	{
+		loadCities(null);
+	}
+	
+
+	void loadCities(String findCity)
+	{
+		cityList.clear();
+		ResponseMessage resMsg;
+		if(findCity == null || findCity.isBlank()) {
+			resMsg = Protocol.getInstance().getRestaurants();
+		} else {
+			City city = new City(findCity);
+			resMsg = Protocol.getInstance().getCities(city);
+		}
+		if (resMsg.isSuccess())
+			for (Entity entity : resMsg.getEntities())
+				cityList.add(CityBean.fromEntity((City)entity));
+		else
+			new ErrorBox("Error", "An error has occured while fetching the list of users.", resMsg.getErrorMsg()).showAndWait();
+	}
+
 
 }
