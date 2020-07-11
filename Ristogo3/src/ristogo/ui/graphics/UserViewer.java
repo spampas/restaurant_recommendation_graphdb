@@ -94,25 +94,6 @@ public class UserViewer extends VBox {
 			Protocol.getInstance().unfollowUser(selectedUser);
 		userTable.loadFriends(loggedUser);
 	}
-	
-	public void changeConfigurationUserViewer(int config) {
-		
-		switch(config) {
-		
-		case 0:
-			followButton.setText("UnFollow");
-			followButton.setVisible(false);
-			userTable.loadFriends(loggedUser);
-			break;
-		case 1:
-		case 2:
-			followButton.setText("Follow");
-			followButton.setVisible(false);
-			userTable.loadFriends(loggedUser);
-		default:
-			break;
-		}
-	}
 
 
 	public Button getFollowButton() {
