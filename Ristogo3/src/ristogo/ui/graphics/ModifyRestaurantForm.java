@@ -10,8 +10,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import ristogo.common.entities.Cuisine;
 import ristogo.common.entities.Restaurant;
-import ristogo.common.entities.enums.Cuisine;
 import ristogo.common.entities.enums.Price;
 import ristogo.common.net.ResponseMessage;
 import ristogo.net.Protocol;
@@ -56,7 +56,7 @@ final class ModifyRestaurantForm extends VBox
 		errorLabel.setStyle("-fx-background-color:   red;");
 		errorLabel.setVisible(false);
 
-		cuisineField.getItems().addAll(Cuisine.values());
+		cuisineField.getItems().addAll(/*Load from DB*/);
 		priceField.getItems().addAll(Price.values());
 		citySelector.getItems().addAll(/*Load from DB*/);
 		descriptionField.setWrapText(true);

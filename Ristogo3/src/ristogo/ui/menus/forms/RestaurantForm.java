@@ -3,6 +3,7 @@ package ristogo.ui.menus.forms;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
+import javafx.scene.control.ChoiceBox;
 import ristogo.common.entities.Cuisine;
 import ristogo.common.entities.Restaurant;
 import ristogo.common.entities.enums.Price;
@@ -23,9 +24,7 @@ public class RestaurantForm extends TextForm
 		LinkedHashSet<FormField> fields = new LinkedHashSet<FormField>();
 		fields.add(new FormField("Name", restaurant.getName(), (s) -> { return s != null && s.length() < 46; }));
 		if (restaurant.getCuisine() != null)
-			fields.add(new ChoiceFormField<String>("Cuisine", restaurant.getCuisine().toString(), String.class));
-		else
-			fields.add(new ChoiceFormField<Cuisine>("Cuisine", Cuisine.class));
+			//TODO add list of available cuisine
 		if (restaurant.getPrice() != null)
 			fields.add(new ChoiceFormField<Price>("Price", restaurant.getPrice(), Price.class));
 		else
@@ -41,7 +40,7 @@ public class RestaurantForm extends TextForm
 	{
 		HashMap<Integer, String> response = super.show();
 		restaurant.setName(response.get(0));
-		restaurant.setCuisine(Cuisine.valueOf(response.get(1)));
+		restaurant.setCuisine(new Cuisine(response.get(1)));
 		restaurant.setPrice(Price.valueOf(response.get(2)));
 		restaurant.setCity(response.get(3));
 		restaurant.setDescription(response.get(4));
