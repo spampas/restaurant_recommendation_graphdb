@@ -36,8 +36,6 @@ public class Customer extends User
 	{
 		super(username);
 		setPassword(password);
-		setLatitude(latitude);
-		setLongitude(longitude);
-		setCity(city);
+		setCity(new City(city, latitude, longitude));
 	}
 }

@@ -73,7 +73,7 @@ public class UserRecommendationDialog extends Dialog<User> {
 		
 		citySelector.getItems().addAll(loadCities());
 		
-		citySelector.setValue(RistogoGUI.loggedUser.getCity());
+		citySelector.setValue(RistogoGUI.loggedUser.getCity().getName());
 		distanceField.setPromptText("Distance(Km)");
 		
 		GridPane grid = new GridPane();

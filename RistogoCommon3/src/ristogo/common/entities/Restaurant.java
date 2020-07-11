@@ -28,17 +28,9 @@ public class Restaurant extends Entity
 	/**
 	 * The city where the restaurant is.
 	 */
-	protected String city;
+	protected City city;
 	/**
 	 * The latitude of the city.
-	 */
-	protected Double latitude;
-	/**
-	 * The longitude of the city.
-	 */
-	protected Double longitude;
-	/**
-	 * A description of the restaurant.
 	 */
 	protected String description;
 	
@@ -87,9 +79,7 @@ public class Restaurant extends Entity
 		this.ownerName = ownerName;
 		this.cuisine = cuisine;
 		this.price = price;
-		this.latitude = latitude;
-		this.longitude = longitude;
-		this.city = city;
+		this.city = new City(city, latitude, longitude);
 		this.description = description;
 	}
 
@@ -164,45 +154,7 @@ public class Restaurant extends Entity
 	{
 		this.price = price;
 	}
-	/**
-	 * Gets the latitude.
-	 * @return The latitude.
-	 */
-	public Double getLatitude()
-	{
-		return latitude;
-	}
-
-	/**
-	 * Sets the latitude.
-	 * @param latitude The latitude.
-	 */
-	public void setLatitude(Double latitude)
-	{
-		this.latitude = latitude;
-	}
-	/**
-	 * Gets the longitude.
-	 * @return The longitude.
-	 */
-	public Double getLongitude()
-	{
-		return longitude;
-	}
-
-	/**
-	 * Sets the longitude.
-	 * @param longitude The longitude.
-	 */
-	public void setLongitude(Double longitude)
-	{
-		this.longitude = longitude;
-	}
-	/**
-	 * Gets the city.
-	 * @return The city.
-	 */
-	public String getCity()
+		public City getCity()
 	{
 		return city;
 	}
@@ -211,7 +163,7 @@ public class Restaurant extends Entity
 	 * Sets the city.
 	 * @param city The city.
 	 */
-	public void setCity(String city)
+	public void setCity(City city)
 	{
 		this.city = city;
 	}
@@ -245,8 +197,6 @@ public class Restaurant extends Entity
 			"Genre: " + fieldToString(getCuisine()) + "\n" +
 			"Price: " + fieldToString(getPrice()) + "\n" +
 			"City: " + fieldToString(getCity()) + "\n" +
-			"Latitude: " + fieldToString(getLatitude()) + "\n" +
-			"Longitude: " + fieldToString(getLongitude()) + "\n" +
 			"Description: " + fieldToString(getDescription()) + "\n";
 	}
 

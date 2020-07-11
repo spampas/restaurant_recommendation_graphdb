@@ -1,0 +1,11 @@
+DROP DATABASE ristogo IF EXISTS DUMP DATA
+
+CREATE DATABASE ristogo
+USE ristogo
+CREATE CONSTRAINT username_unq
+ON (n:User)
+ASSERT n.username IS UNIQUE
+
+CREATE CONSTRAINT cuisine_unq
+ON (n:Cuisine)
+ASSERT n.name IS UNIQUE

@@ -6,7 +6,8 @@ package ristogo.common.entities;
 public class Owner extends User
 {
 	private static final long serialVersionUID = 2737707758495190002L;
-
+	private Restaurant restaurant;
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -31,8 +32,16 @@ public class Owner extends User
 	{
 		super(username);
 		setPassword(password);
-		setLatitude(latitude);
-		setLongitude(longitude);
-		setCity(city);
+		setCity(new City(city,latitude,longitude));
+	}
+
+	public Restaurant getRestaurant()
+	{
+		return restaurant;
+	}
+
+	public void setRestaurant(Restaurant restaurant)
+	{
+		this.restaurant = restaurant;
 	}
 }

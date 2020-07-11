@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import ristogo.common.entities.City;
 import ristogo.common.entities.Cuisine;
 import ristogo.common.entities.Restaurant;
 import ristogo.common.entities.enums.Price;
@@ -109,7 +110,7 @@ final class ModifyRestaurantForm extends VBox
 		restaurant.setName(nameField.getText());
 		restaurant.setCuisine(cuisineField.getValue());
 		restaurant.setPrice(priceField.getValue());
-		restaurant.setCity(citySelector.getValue());
+		restaurant.setCity(new City(citySelector.getValue(), null, null));
 		restaurant.setDescription(descriptionField.getText());
 
 		ResponseMessage resMsg = Protocol.getInstance().editRestaurant(restaurant);
@@ -147,7 +148,7 @@ final class ModifyRestaurantForm extends VBox
 		nameField.setText(restaurant.getName());
 		cuisineField.setValue(restaurant.getCuisine());
 		priceField.setValue(restaurant.getPrice());
-		citySelector.setValue(restaurant.getCity());
+		citySelector.setValue(restaurant.getCity().getName());
 		descriptionField.setText(restaurant.getDescription());
 	}
 }

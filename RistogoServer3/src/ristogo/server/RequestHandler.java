@@ -18,7 +18,7 @@ import ristogo.common.entities.enums.UserType;
 import ristogo.common.net.Message;
 import ristogo.common.net.RequestMessage;
 import ristogo.common.net.ResponseMessage;
-import ristogo.db.DBManager;
+import ristogo.db.QueryExecutor;
 import ristogo.server.annotations.RequestHandlerMethod;
 
 
@@ -106,7 +106,7 @@ public class RequestHandler extends Thread
 		User user = (User)reqMsg.getEntity();
 		if (!user.hasValidUsername() || !user.hasValidPassword())
 			return new ResponseMessage("Invalid username or password.");
-		User savedUser = DBManager.getUserByUsername(user.getUsername());
+		User savedUser = QueryExecutor.getUserByUsername(user.getUsername());
 		if (savedUser == null || !user.checkPasswordHash(savedUser.getPasswordHash()))
 			return new ResponseMessage("Invalid username or password.");
 		loggedUser = savedUser;
@@ -130,21 +130,24 @@ public class RequestHandler extends Thread
 		if (!user.hasValidPassword())
 			new ResponseMessage("Invalid password.");
 		User savedUser = null;
+		if(restaurant) {
+			
+		}
 		/*try {
-			DBManager.addUser(tx, user)
-			DBManager.beginTransaction();
+			QueryExecutor.addUser(tx, user)
+			QueryExecutor.beginTransaction();
 			savedUser.merge(user);
-			DBManager.persist(savedUser);
+			QueryExecutor.persist(savedUser);
 			if (restaurant != null) {
 				Restaurant savedRestaurant = new Restaurant();
 				if (!savedRestaurant.merge(restaurant)) {
-					DBManager.rollbackTransaction();
+					QueryExecutor.rollbackTransaction();
 					return new ResponseMessage("Some restaurant's fields are invalid.");
 				}
 				savedRestaurant.setOwner(savedUser);
-				DBManager.persist(savedRestaurant);
+				QueryExecutor.persist(savedRestaurant);
 			}
-			DBManager.commitTransaction();
+			QueryExecutor.commitTransaction();
 		} catch (PersistenceException ex) {
 			return new ResponseMessage("Username already in use.");
 		}*/
@@ -154,7 +157,7 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod(requiresOwnership=true)
 	private ResponseMessage handleGetOwnRestaurant(RequestMessage reqMsg)
 	{
-		Restaurant restaurant = DBManager.getRestaurantByOwner(loggedUser);
+		Restaurant restaurant = QueryExecutor.getRestaurantByOwner(loggedUser);
 		if (restaurant == null)
 			return new ResponseMessage("You do not have any restaurant.");
 		return new ResponseMessage(restaurant);
@@ -162,7 +165,7 @@ public class RequestHandler extends Thread
 
 	private boolean hasRestaurant(User user, int restaurantId)
 	{
-		Restaurant restaurant = DBManager.getRestaurantByOwner(user);
+		Restaurant restaurant = QueryExecutor.getRestaurantByOwner(user);
 		if (restaurant == null)
 			return false;
 		return restaurant.getOwner().getId() == user.getId();
@@ -174,12 +177,12 @@ public class RequestHandler extends Thread
 		Restaurant restaurant = reqMsg.getEntity(Restaurant.class);
 		if (!hasRestaurant(loggedUser, restaurant.getId()))
 			return new ResponseMessage("You can only edit restaurants that you own.");
-		Restaurant savedRestaurant = DBManager.getRestaurant(restaurant.getId());
+		Restaurant savedRestaurant = QueryExecutor.getRestaurant(restaurant.getId());
 		/*if (!restaurant_.merge(restaurant))
 			return new ResponseMessage("Some restaurant's fields are invalid.");*/
 		/*savedRestaurant.setOwner(loggedUser);
 		try {
-			DBManager.update(savedRestaurant);
+			QueryExecutor.update(savedRestaurant);
 		} catch (PersistenceException ex) {
 			return new ResponseMessage("Error while saving the restaurant to the database.");
 		}*/
@@ -192,9 +195,9 @@ public class RequestHandler extends Thread
 		List<Restaurant> restaurants;
 		if (reqMsg.getEntityCount() > 0) {
 			Restaurant restaurant = reqMsg.getEntity(Restaurant.class);
-			restaurants = DBManager.getRestaurantsByCity(restaurant.getCity());
+			restaurants = QueryExecutor.getRestaurantsByCity(restaurant.getCity());
 		} else {
-			restaurants = DBManager.getAllRestaurants();
+			restaurants = QueryExecutor.getAllRestaurants();
 		}
 		ResponseMessage resMsg = new ResponseMessage();
 		for (Restaurant restaurant: restaurants)
@@ -209,11 +212,11 @@ public class RequestHandler extends Thread
 		Restaurant restaurant = reqMsg.getEntity(Restaurant.class);
 		if (!hasRestaurant(loggedUser, restaurant.getId()))
 			return new ResponseMessage("You can only delete restaurants that you own.");
-		Restaurant savedRestaurant = DBManager.getRestaurant(restaurant.getId());
+		Restaurant savedRestaurant = QueryExecutor.getRestaurant(restaurant.getId());
 		if (savedRestaurant == null)
 			return new ResponseMessage("Can not find the specified restaurant.");
 		/*try {
-			DBManager.deleteRestaurant(restaurant.getId());
+			QueryExecutor.deleteRestaurant(restaurant.getId());
 		} catch (PersistenceException ex) {
 			return new ResponseMessage("Error while deleting the restaurant from the database.");
 		}*/

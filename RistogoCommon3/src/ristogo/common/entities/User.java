@@ -17,13 +17,8 @@ public abstract class User extends Entity
 	
 	protected String password;
 	
-	protected String city;
+	protected City city;
 	
-	protected Double latitude;
-	
-	protected Double longitude;
-	
-
 	/**
 	 * Creates an User.
 	 */
@@ -76,9 +71,7 @@ public abstract class User extends Entity
 		setUsername(username);
 		if (password != null)
 			setPassword(password);
-		this.latitude = latitude;
-		this.longitude = longitude;
-		this.city = city;
+		this.city = new City(city,latitude,longitude);
 	}
 		
 	/**
@@ -139,7 +132,7 @@ public abstract class User extends Entity
 	 * Returns the city of the User.
 	 * @return String The city.
 	 */
-	public String getCity() {
+	public City getCity() {
 		return city;
 	}
 	
@@ -147,42 +140,11 @@ public abstract class User extends Entity
 	 * Sets the city of the user.
 	 * @param city The city.
 	 */
-	public void setCity(String city) {
+	public void setCity(City city) {
 		this.city = city;
 	}
 	
-	/**
-	 * Returns the city's latitude.
-	 * @return Double The latitude.
-	 */
-	public Double getLatitude() {
-		return latitude;
-	}
-	
-	/**
-	 * Sets the city's latitude.
-	 * @param latitude The latitude.
-	 */
-	public void setLatitude(Double latitude) {
-		this.latitude = latitude;
-	}
-	
-	/**
-	 * Returns the city's longitude.
-	 * @return Double The longitude.
-	 */
-	public Double getLongitude() {
-		return longitude;
-	}
-	
-	/**
-	 * Sets the city's longitude.
-	 * @param longitude The longitude.
-	 */
-	public void setLongitude(Double longitude) {
-		this.longitude = longitude;
-	}
-	
+
 	
 	protected final static String hashPassword(String password)
 	{
