@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import ristogo.common.entities.Cuisine;
+import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
 import ristogo.ui.graphics.controls.FormLabel;
 
@@ -19,7 +20,6 @@ public class AdminCuisineViewer extends VBox {
 	private final Button operationButton = new Button();
 	private final Button flushButton = new Button();
 	private final CuisineTableView cuisineTable = new CuisineTableView();
-	
 	private final TextField findField = new TextField();
 	private final Button find = new Button();
 	
@@ -80,20 +80,44 @@ public class AdminCuisineViewer extends VBox {
 
 		operationButton.setOnAction(this::handleOperationButtonAction);
 		flushButton.setOnAction(this::handleFlushButtonAction);
+		find.setOnAction(this::handleFindButtonAction);
 	}
 	
 	
 	private void handleOperationButtonAction(ActionEvent event)
 	{
 		String name = cuisineField.getText();
-		if (name == null)
-			return;
-		//TODO: gestire azioni
+		if(operationButton.getText().equals("Add"))
+		{
+			if (name == null)
+				return;
+			Cuisine cuisine = new Cuisine(name);
+			Protocol.getInstance().addCuisine(cuisine);
+			cuisineTable.loadCuisines();
+		}		
+		
+		else
+		{
+			Cuisine cuisine = cuisineTable.getSelectedEntity();
+			if (cuisine == null)
+				return;
+			Protocol.getInstance().deleteCuisine(cuisine);
+			cuisineTable.loadCuisines();
+		}
 	}
 	
 	private void handleFlushButtonAction(ActionEvent event)
 	{
 		cuisineField.setText("");
+	}
+	
+	private void handleFindButtonAction(ActionEvent event)
+	{
+		String name = findField.getText();
+		if (name == null)
+			cuisineTable.findCuisine();
+		else
+			cuisineTable.findCuisine(name);
 	}
 	
 	public void changeConfigurationCuisineViewer(int config) {
@@ -102,12 +126,12 @@ public class AdminCuisineViewer extends VBox {
 		
 		case 0:
 			operationButton.setText("Add");
-			//TODO: refresh-table
+			cuisineTable.loadCuisines();
 			break;
 		case 1:
 		case 2:
 			operationButton.setText("Remove");
-			//TODO: refresh-table
+			cuisineTable.loadCuisines();
 		default:
 			break;
 		}

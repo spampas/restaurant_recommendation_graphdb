@@ -149,6 +149,11 @@ public class Protocol implements AutoCloseable
 		return sendRequest(ActionRequest.LIST_CUISINES);
 	}
 	
+	public ResponseMessage getCuisines(Cuisine cuisine)
+	{
+		return sendRequest(ActionRequest.LIST_CUISINES, cuisine);
+	}
+	
 	public ResponseMessage addCuisine(Cuisine cuisine)
 	{
 		ResponseMessage resMsg = sendRequest(ActionRequest.ADD_CUISINE, cuisine);

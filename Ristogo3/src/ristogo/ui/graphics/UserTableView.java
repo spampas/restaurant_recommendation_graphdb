@@ -78,7 +78,7 @@ public class UserTableView extends TableView<UserBean>{
 		userList.clear();
 		ResponseMessage resMsg;
 		if(findFriend == null || findFriend.isBlank()) {
-			resMsg = Protocol.getInstance().getRestaurants();
+			resMsg = Protocol.getInstance().getUsers();
 		} else {
 			User user = new Customer(findFriend);
 			resMsg = Protocol.getInstance().getUsers(user);
