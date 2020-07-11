@@ -1,5 +1,8 @@
 package ristogo.ui.graphics;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -16,7 +19,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import ristogo.common.entities.City;
 import ristogo.common.entities.Customer;
+import ristogo.common.entities.Entity;
 import ristogo.common.entities.Owner;
 import ristogo.common.entities.Restaurant;
 import ristogo.common.entities.User;
@@ -72,7 +77,7 @@ final class LoginDialog extends Dialog<User>
 		typeSelector.getItems().addAll("Customer", "Owner");
 		typeSelector.setValue("Customer");
 		
-		citySelector.getItems().addAll(/*TODO request TO DB*/);
+		citySelector.getItems().addAll(loadCities());
 		
 		DialogLabel usernameLabel = new DialogLabel("Username: ");
 		DialogLabel passwordLabel = new DialogLabel("Password: ");
@@ -115,6 +120,23 @@ final class LoginDialog extends Dialog<User>
 				return loggedUser;
 			return null;
 		});
+	}
+	
+	List<String> loadCities(){
+		
+		List<String> result = new ArrayList<String>();
+		
+		ResponseMessage resMsg = Protocol.getInstance().getCities();
+		if(resMsg.isSuccess()) {
+			for (Entity entity : resMsg.getEntities())
+				result.add(((City)entity).getName());
+			
+			return result;
+		}
+		else {
+			new ErrorBox("Error", "An error has occured while fetching the list of users.", resMsg.getErrorMsg()).showAndWait();
+			return null;
+		}
 	}
 
 	private void filterOkButtonAction(ActionEvent event)

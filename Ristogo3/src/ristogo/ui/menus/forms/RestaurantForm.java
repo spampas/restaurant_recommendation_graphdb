@@ -1,12 +1,17 @@
 package ristogo.ui.menus.forms;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 import javafx.scene.control.ChoiceBox;
 import ristogo.common.entities.Cuisine;
+import ristogo.common.entities.Entity;
 import ristogo.common.entities.Restaurant;
 import ristogo.common.entities.enums.Price;
+import ristogo.common.net.ResponseMessage;
+import ristogo.net.Protocol;
 
 public class RestaurantForm extends TextForm
 {
