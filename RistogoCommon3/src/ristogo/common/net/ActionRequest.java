@@ -25,7 +25,7 @@ public enum ActionRequest implements Serializable
 	LIST_CITIES,
 	ADD_CITY,
 	DELETE_CITY;
-	
+
 	public String toCamelCaseString()
 	{
 		char[] name = this.name().toLowerCase().toCharArray();

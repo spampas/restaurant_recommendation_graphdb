@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([lsmsd2-doc], [1.0.0], [https://github.com/nferrante1/lsmsd2])
+AC_INIT([lsmsd3-doc], [1.0.0], [https://github.com/nferrante1/lsmsd3])
 AC_CONFIG_SRCDIR([design.tex])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
