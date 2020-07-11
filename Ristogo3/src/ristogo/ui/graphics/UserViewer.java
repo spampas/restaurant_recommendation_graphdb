@@ -58,7 +58,7 @@ public class UserViewer extends VBox {
 				
 		this.getChildren().addAll(userTableTitle, findBox, userTable, cuisinesLabel, cuisinesField);
 		
-		//userTable.refreshUsers();
+		userTable.loadUser();
 
 		userTable.setOnMouseClicked((event) -> {
 			User user = userTable.getSelectedEntity();
