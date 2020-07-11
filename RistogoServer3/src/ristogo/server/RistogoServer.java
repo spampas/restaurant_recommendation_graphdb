@@ -45,10 +45,10 @@ public class RistogoServer
 	private static void startServer()
 	{
 		Logger.getLogger(RistogoServer.class.getName()).entering(RistogoServer.class.getName(), "startServer");
-		ClientPool pool = null;
+		RequestHandlerPool pool = null;
 		try {
 			Logger.getLogger(RistogoServer.class.getName()).info("Starting server...");
-			pool = new ClientPool(port);
+			pool = new RequestHandlerPool(port);
 			Thread thread = new Thread(pool);
 			thread.start();
 			thread.join();
