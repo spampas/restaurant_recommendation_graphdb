@@ -1,5 +1,8 @@
 package ristogo.ui.graphics;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -16,11 +19,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import ristogo.common.entities.City;
 import ristogo.common.entities.Cuisine;
 import ristogo.common.entities.Customer;
+import ristogo.common.entities.Entity;
 import ristogo.common.entities.Restaurant;
 import ristogo.common.entities.User;
 import ristogo.common.entities.enums.Price;
+import ristogo.common.net.ResponseMessage;
+import ristogo.net.Protocol;
+import ristogo.ui.graphics.beans.UserBean;
 import ristogo.ui.graphics.config.GUIConfig;
 import ristogo.ui.graphics.controls.DialogLabel;
 import ristogo.ui.graphics.controls.DialogTextField;
@@ -38,7 +46,7 @@ public class RestaurantRecommendationDialog extends Dialog<Restaurant> {
 	private final ChoiceBox<String> likeFilterSelector = new ChoiceBox<String>();
 	private final TextField distanceField = new TextField();
 	private final ChoiceBox<String> citySelector = new ChoiceBox<String>();
-	private final ChoiceBox<Cuisine> cuisineSelector = new ChoiceBox<Cuisine>();
+	private final ChoiceBox<String> cuisineSelector = new ChoiceBox<String>();
 	private final ChoiceBox<Price> priceFilterSelector = new ChoiceBox<Price>();
 	private Restaurant filter;
 
@@ -64,10 +72,10 @@ public class RestaurantRecommendationDialog extends Dialog<Restaurant> {
 		errorLabel.setVisible(false);
 		
 		likeFilterSelector.getItems().addAll("Friends", "Friends of Friends");
-		cuisineSelector.getItems().addAll(/* TODO load cuisine from DB */);
+		cuisineSelector.getItems().addAll(loadCuisines());
 		priceFilterSelector.getItems().addAll(Price.ECONOMIC, Price.LOW, Price.MIDDLE, Price.HIGH, Price.LUXURY);
 		
-		citySelector.getItems().addAll(/*//TODO Load cities from DB*/);
+		citySelector.getItems().addAll(loadCities());
 		
 		citySelector.setValue(RistogoGUI.loggedUser.getCity());
 		distanceField.setPromptText("Distance(Km)");
@@ -103,6 +111,40 @@ public class RestaurantRecommendationDialog extends Dialog<Restaurant> {
 				return filter;
 			return null;
 		});
+	}
+	
+	List<String> loadCities(){
+		
+		List<String> result = new ArrayList<String>();
+		
+		ResponseMessage resMsg = Protocol.getInstance().getCities();
+		if(resMsg.isSuccess()) {
+			for (Entity entity : resMsg.getEntities())
+				result.add(((City)entity).getName());
+			
+			return result;
+		}
+		else {
+			new ErrorBox("Error", "An error has occured while fetching the list of users.", resMsg.getErrorMsg()).showAndWait();
+			return null;
+		}
+	}
+	
+	List<String> loadCuisines(){
+		
+		List<String> result = new ArrayList<String>();
+		
+		ResponseMessage resMsg = Protocol.getInstance().getCuisines();
+		if(resMsg.isSuccess()) {
+			for (Entity entity : resMsg.getEntities())
+				result.add(((Cuisine)entity).getName());
+			
+			return result;
+		}
+		else {
+			new ErrorBox("Error", "An error has occured while fetching the list of users.", resMsg.getErrorMsg()).showAndWait();
+			return null;
+		}
 	}
 
 	private void filterOkButtonAction(ActionEvent event)
