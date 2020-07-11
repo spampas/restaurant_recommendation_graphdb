@@ -9,6 +9,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import ristogo.common.entities.Cuisine;
+import ristogo.common.net.ResponseMessage;
+import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
 import ristogo.ui.graphics.controls.FormLabel;
 
@@ -54,9 +56,6 @@ public class CustomerCuisineViewer extends VBox {
 		this.getChildren().addAll(cuisineTableTitle, cuisineBox, cuisineTable, findBox);
 	
 		cuisineTable.setOnMouseClicked((event) -> {
-			Cuisine cuisine = cuisineTable.getSelectedEntity();
-			if (cuisine == null)
-				return;
 			operationButton.setText("Remove");
 		});
 		
@@ -70,28 +69,23 @@ public class CustomerCuisineViewer extends VBox {
 	
 	private void handleOperationButtonAction(ActionEvent event)
 	{
-		Cuisine name = cuisineChoice.getValue();
-		if (name == null)
-			return;
-		//TODO: gestire azioni
-	}
-	
-	public void changeConfigurationCuisineViewer(int config) {
-		
-		switch(config) {
-		
-		case 0:
-			operationButton.setText("Add");
-			//TODO: refresh-table
-			break;
-		case 1:
-		case 2:
-			operationButton.setText("Remove");
-			//TODO: refresh-table
-		default:
-			break;
+		if(operationButton.getText() == "Add") {
+			Cuisine name = cuisineChoice.getValue();
+			ResponseMessage resMsg = Protocol.getInstance().putLikeCuisine(name);
+			if(!resMsg.isSuccess()) {
+				
+			}
+			
+		}
+		else {
+			Cuisine cuisine = cuisineTable.getSelectedEntity();
+			Protocol.getInstance().remoteLikeCuisine(cuisine);
+			if(!resMsg.isSuccess()) {
+				
+			}
 		}
 	}
+	
 	
 	public CuisineTableView getTable()
 	{
