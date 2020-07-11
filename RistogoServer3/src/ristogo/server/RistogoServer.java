@@ -16,7 +16,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import ristogo.server.storage.EntityManager;
+import ristogo.db.DBManager;
 
 public class RistogoServer
 {
@@ -56,7 +56,7 @@ public class RistogoServer
 			Logger.getLogger(RistogoServer.class.getName()).log(Level.SEVERE, null, ex);
 		} finally {
 			Logger.getLogger(RistogoServer.class.getName()).info("Terminating...");
-			DBManager.closeFactory();
+			// TODO sostituire ??? DBManager.closeFactory();
 			if (pool != null)
 				pool.shutdown();
 			Logger.getLogger(RistogoServer.class.getName()).exiting(RistogoServer.class.getName(), "startServer");
@@ -163,7 +163,7 @@ public class RistogoServer
 			properties.setProperty("javax.persistence.jdbc.password", pass);
 		}
 		*/
-		EntityManager.init(properties);
+		// TODO sostituire ???? EntityManager.init(properties);
 		if (cmd.hasOption("port")) {
 			try {
 				port = Integer.parseInt(cmd.getOptionValue("port", "8888"));
