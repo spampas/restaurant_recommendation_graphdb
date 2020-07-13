@@ -115,11 +115,28 @@ public class User
 
 	public List<Restaurant> getLikedRestaurants()
 	{
+		if(likedRestaurants == null) {
+			Iterable<Restaurant> restaurants = DBManager.session().query(Restaurant.class,
+					"MATCH (user:User)-[:LIKE]->(restaurant:Restaurant)"
+					+ "WHERE user.username = $username"
+					+ "RETURN restaurant", Map.ofEntries(Map.entry("username", getUsername())));
+			likedRestaurants = new ArrayList<Restaurant>();
+			restaurants.forEach(likedRestaurants::add);
+		}
+
 		return likedRestaurants;
 	}
 
 	public List<Cuisine> getLikedCuisines()
 	{
+		if(likedCuisines == null) {
+			Iterable<Cuisine> cuisines = DBManager.session().query(Cuisine.class,
+					"MATCH (user:User)-[:LIKE]->(cuisine:Cuisine)"
+					+ "WHERE user.username = $username"
+					+ "RETURN restaurant", Map.ofEntries(Map.entry("username", getUsername())));
+			likedCuisines = new ArrayList<Cuisine>();
+			cuisines.forEach(likedCuisines::add);
+		}
 		return likedCuisines;
 	}
 
@@ -136,16 +153,19 @@ public class User
 
 	public void likeRestaurant(Restaurant restaurant)
 	{
-		if (likedRestaurants == null)
-			likedRestaurants = new ArrayList<Restaurant>();
-		likedRestaurants.add(restaurant);
+		getLikedRestaurants().add(restaurant);
+		restaurant.getUsersWhoLike().add(this);
+	}
+	
+	public void unlikeRestaurant(Restaurant restaurant) {
+		
+		if(getLikedRestaurants().contains(restaurant))
+			getLikedRestaurants().remove(restaurant);
 	}
 
 	public void likeCuisine(Cuisine cuisine)
 	{
-		if (likedCuisines == null)
-			likedCuisines = new ArrayList<Cuisine>();
-		likedCuisines.add(cuisine);
+		getLikedCuisines().add(cuisine);
 	}
 
 	public boolean checkPasswordHash(String passwordHash)
@@ -228,6 +248,42 @@ public class User
 			users.forEach(followedUsers::add);
 		}
 		return followedUsers;
+	}
+	
+	public List<User> getFollowedUsers(String regex)
+	{
+		String regexFilter = "";
+		if (regex == null)
+			return getFollowingUsers();
+		
+		regexFilter = "AND user2.username =~ $regex ";
+		Iterable<User> users = DBManager.session().query(User.class,
+			"MATCH (user1:User)-[:FOLLOWS]->(user2:User) " +
+			"WHERE user1.username = $username " + regexFilter +
+			"RETURN user2",
+			Map.ofEntries(Map.entry("username", username), Map.entry("regex", regex)));
+		List<User> following = new ArrayList<User>();
+		users.forEach(following::add);
+		return following;
+	}
+
+	public List<User> getFollowingUsers(String regex)
+	{
+		
+		String regexFilter = "";
+		if (regex == null)
+			return getFollowingUsers();
+		regexFilter = "AND user1.username =~ $regex ";
+		
+		Iterable<User> users = DBManager.session().query(User.class,
+			"MATCH (user1:User)-[:FOLLOWS]->(user2:User) " +
+			"WHERE user2.username = $username " + regexFilter +
+			"RETURN user1",
+			Map.ofEntries(Map.entry("username", username), Map.entry("regex", regex)));
+		List<User> followers = new ArrayList<User>();
+		users.forEach(followers::add);
+	
+		return followers;
 	}
 
 	public List<User> getFollowingUsers()

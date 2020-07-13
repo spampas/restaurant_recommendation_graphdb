@@ -383,15 +383,46 @@ public class RequestHandler extends Thread
 				new Pagination(pageFilter.getPage(), pageFilter.getPerPage()), 0);
 		List<UserInfo> infos = new ArrayList<UserInfo>();
 		users.forEach((User u) -> {
-			infos.add(new UserInfo(u.getUsername(), new CityInfo(u.getCity().getName()), u.isFollowedBy(loggedUser)));
+			if(!u.equals(loggedUser))	
+				infos.add(new UserInfo(u.getUsername(), new CityInfo(u.getCity().getName()), u.isFollowedBy(loggedUser)));
 		});
 		return new ResponseMessage(infos.toArray(new UserInfo[0]));
 	}
 
 	@RequestHandlerMethod
-	private ResponseMessage handleListFriends(RequestMessage reqMsg)
+	private ResponseMessage handleListFollowers(RequestMessage reqMsg)
 	{
-		return null;
+		StringFilter filter = reqMsg.getEntity(StringFilter.class);
+		PageFilter pageFilter = reqMsg.getEntity(PageFilter.class);
+		String regex = filter == null ? null : "(?i).*" + filter.getValue() + ".*";
+		Collection<User> users;
+		if (regex == null)
+			users = loggedUser.getFollowingUsers();
+		else
+			users = loggedUser.getFollowingUsers(regex);
+		List<UserInfo> infos = new ArrayList<UserInfo>();
+		users.forEach((User u) -> {
+			infos.add(new UserInfo(u.getUsername(), new CityInfo(u.getCity().getName()), true));
+		});
+		return new ResponseMessage(infos.toArray(new UserInfo[0]));
+	}
+	
+	@RequestHandlerMethod
+	private ResponseMessage handleListFollowing(RequestMessage reqMsg)
+	{
+		StringFilter filter = reqMsg.getEntity(StringFilter.class);
+		PageFilter pageFilter = reqMsg.getEntity(PageFilter.class);
+		String regex = filter == null ? null : "(?i).*" + filter.getValue() + ".*";
+		Collection<User> users;
+		if (regex == null)
+			users = loggedUser.getFollowedUsers();
+		else
+			users = loggedUser.getFollowedUsers(regex);
+		List<UserInfo> infos = new ArrayList<UserInfo>();
+		users.forEach((User u) -> {
+			infos.add(new UserInfo(u.getUsername(), new CityInfo(u.getCity().getName()), true));
+		});
+		return new ResponseMessage(infos.toArray(new UserInfo[0]));
 	}
 
 	@RequestHandlerMethod
@@ -412,6 +443,8 @@ public class RequestHandler extends Thread
 		DBManager.session().save(loggedUser);
 		return new ResponseMessage();
 	}
+	
+	
 
 	@RequestHandlerMethod
 	private ResponseMessage handleUnfollowUser(RequestMessage reqMsg)
@@ -435,19 +468,53 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod(true)
 	private ResponseMessage handleDeleteUser(RequestMessage reqMsg)
 	{
-		return null;
+		
+		UserInfo user = (UserInfo)reqMsg.getEntity();
+		
+		try {
+			User.validateUsername(user.getUsername());
+		} catch (IllegalArgumentException ex) {
+			return new ResponseMessage(ex.getMessage());
+		}
+		if(!loggedUser.isAdmin() || !loggedUser.getUsername().equals(user.getUsername()))
+			return new ResponseMessage("You don't have permissions to do this");
+		User removedUser = DBManager.session().load(User.class, user.getUsername(), 0);
+		DBManager.session().delete(removedUser);
+		if (removedUser == null)
+			return new ResponseMessage("No such user.");
+		return new ResponseMessage(new UserInfo(removedUser.getUsername()));
 	}
 
 	@RequestHandlerMethod
 	private ResponseMessage handlePutLikeRestaurant(RequestMessage reqMsg)
 	{
-		return null;
+		RestaurantInfo restaurant = reqMsg.getEntity(RestaurantInfo.class);
+		if(restaurant == null)
+			return new ResponseMessage("No restaurant specified");
+		
+		Restaurant toBeLikedRestaurant = DBManager.session().load(Restaurant.class, restaurant.getName(), 0);
+		if(loggedUser.getLikedRestaurants().contains(toBeLikedRestaurant))
+			return new ResponseMessage("You already like this restaurant");
+		loggedUser.likeRestaurant(toBeLikedRestaurant);
+		DBManager.session().save(loggedUser);
+		return new ResponseMessage(restaurant);
+		
 	}
 
 	@RequestHandlerMethod
 	private ResponseMessage handleRemoveLikeRestaurant(RequestMessage reqMsg)
 	{
-		return null;
+		RestaurantInfo restaurant = reqMsg.getEntity(RestaurantInfo.class);
+		if(restaurant == null)
+			return new ResponseMessage("No restaurant specified");
+		
+		Restaurant toBeUnlikedRestaurant = DBManager.session().load(Restaurant.class, restaurant.getName(), 0);
+		if(loggedUser.getLikedRestaurants().contains(toBeUnlikedRestaurant))
+			return new ResponseMessage("You already like this restaurant");
+		loggedUser.unlikeRestaurant(toBeUnlikedRestaurant);
+		DBManager.session().save(loggedUser);
+		return new ResponseMessage(restaurant);
+		
 	}
 
 	@RequestHandlerMethod
@@ -459,19 +526,55 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod
 	private ResponseMessage handleListCuisines(RequestMessage reqMsg)
 	{
-		return null;
+
+		StringFilter filter = reqMsg.getEntity(StringFilter.class);
+		PageFilter pageFilter = reqMsg.getEntity(PageFilter.class);
+		String regex = filter == null ? null : "(?i).*" + filter.getValue() + ".*";
+		Collection<Cuisine> cuisines;
+		if (filter == null)
+			cuisines = DBManager.session().loadAll(Cuisine.class,
+				new SortOrder().add("name"),
+				new Pagination(pageFilter.getPage(), pageFilter.getPerPage()), 1);
+		else
+			cuisines = DBManager.session().loadAll(Cuisine.class,
+				new Filter("name", ComparisonOperator.MATCHES, regex),
+				new SortOrder().add("name"),
+				new Pagination(pageFilter.getPage(), pageFilter.getPerPage()), 1);
+		List<CuisineInfo> infos = new ArrayList<CuisineInfo>();
+		cuisines.forEach((Cuisine c) -> {
+			infos.add(new CuisineInfo(
+				c.getName()			
+				));
+		});
+		return new ResponseMessage(infos.toArray(new CuisineInfo[0]));
 	}
 
 	@RequestHandlerMethod(true)
 	private ResponseMessage handleAddCuisine(RequestMessage reqMsg)
 	{
-		return null;
+		CuisineInfo cuisine = reqMsg.getEntity(CuisineInfo.class);
+		Cuisine savedCuisine = DBManager.session().load(Cuisine.class, cuisine.getName(), 0);
+		if(savedCuisine == null) {
+			savedCuisine = new Cuisine(cuisine.getName());
+			DBManager.session().save(savedCuisine);
+			return new ResponseMessage();
+		}
+		return new ResponseMessage("This cuisine is already present");
+			
 	}
 
 	@RequestHandlerMethod(true)
 	private ResponseMessage handleDeleteCuisine(RequestMessage reqMsg)
 	{
-		return null;
+		CuisineInfo cuisine = reqMsg.getEntity(CuisineInfo.class);
+		Cuisine savedCuisine = DBManager.session().load(Cuisine.class, ) 
+		savedCuisine = DBManager.session().delete(Cuisine.class, cuisine.getName(), 0);
+		if(savedCuisine == null) {
+			savedCuisine = new Cuisine(cuisine.getName());
+			DBManager.session().save(savedCuisine);
+			return new ResponseMessage();
+		}
+		return new ResponseMessage("This cuisine is already present");
 	}
 
 	@RequestHandlerMethod
