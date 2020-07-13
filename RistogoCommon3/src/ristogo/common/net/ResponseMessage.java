@@ -61,7 +61,17 @@ public class ResponseMessage extends Message
 		case REGISTER_USER:
 		case REGISTER_RESTAURANT:
 		case LIST_USERS:
+			if (getEntityCount() > 0)
+				for (Entity entity: getEntities())
+					if (!(entity instanceof User))
+						return false;
+			return true;
 		case LIST_FRIENDS:
+			if (getEntityCount() > 0)
+				for (Entity entity: getEntities())
+					if (!(entity instanceof User))
+						return false;
+			return true;
 		case FOLLOW_USER:
 		case UNFOLLOW_USER:
 		case GET_OWN_RESTAURANT:
@@ -79,9 +89,19 @@ public class ResponseMessage extends Message
 		case REMOVE_LIKE_RESTAURANT:
 		case GET_STATISTIC_RESTAURANT:
 		case LIST_CUISINES:
+			if (getEntityCount() > 0)
+				for (Entity entity: getEntities())
+					if (!(entity instanceof Cuisine))
+						return false;
+			return true;
 		case ADD_CUISINE:
 		case DELETE_CUISINE:
 		case LIST_CITIES:
+			if (getEntityCount() > 0)
+				for (Entity entity: getEntities())
+					if (!(entity instanceof City))
+						return false;
+			return true;
 		case ADD_CITY:
 		case DELETE_CITY:
 		default:

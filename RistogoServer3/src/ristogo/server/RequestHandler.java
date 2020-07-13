@@ -629,12 +629,26 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod(true)
 	private ResponseMessage handleAddCity(RequestMessage reqMsg)
 	{
-		return null;
+		CityInfo city = reqMsg.getEntity(CityInfo.class);
+		City savedCity = DBManager.session().load(City.class, city.getName(), 0);
+		if(savedCity == null) {
+			savedCity = new City(city.getName(), city.getLatitude(), city.getLongitude());
+			DBManager.session().save(savedCity);
+			return new ResponseMessage();
+		}
+		return new ResponseMessage("This city is already present");
 	}
 
 	@RequestHandlerMethod(true)
 	private ResponseMessage handleDeleteCity(RequestMessage reqMsg)
 	{
-		return null;
+		CityInfo city = reqMsg.getEntity(CityInfo.class);
+		Cuisine savedCity = DBManager.session().load(Cuisine.class, city.getName(), 0 );
+		if(savedCity == null)
+			return new ResponseMessage("No such City:  " + city.getName());
+		if (!loggedUser.isAdmin())
+			return new ResponseMessage("You can edit only restaurants that you own.");
+		DBManager.session().delete(savedCity);
+		return new ResponseMessage(city);
 	}
 }
