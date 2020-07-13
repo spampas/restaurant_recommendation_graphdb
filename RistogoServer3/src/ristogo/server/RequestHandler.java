@@ -579,13 +579,31 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod
 	private ResponseMessage handlePutLikeCuisine(RequestMessage reqMsg)
 	{
-		return null;
+		CuisineInfo cuisine = reqMsg.getEntity(CuisineInfo.class);
+		if(cuisine == null)
+			return new ResponseMessage("No restaurant specified");
+		
+		Cuisine toBeLikedCuisine = DBManager.session().load(Cuisine.class, cuisine.getName(), 0);
+		if(loggedUser.getLikedCuisines().contains(toBeLikedCuisine))
+			return new ResponseMessage("You already like this restaurant");
+		loggedUser.likeCuisine(toBeLikedCuisine);
+		DBManager.session().save(loggedUser);
+		return new ResponseMessage(cuisine);
 	}
 
 	@RequestHandlerMethod
 	private ResponseMessage handleRemoveLikeCuisine(RequestMessage reqMsg)
 	{
-		return null;
+		CuisineInfo cuisine = reqMsg.getEntity(CuisineInfo.class);
+		if(cuisine == null)
+			return new ResponseMessage("No cuisine specified");
+		
+		Cuisine toBeUnlikedCuisine = DBManager.session().load(Cuisine.class, cuisine.getName(), 0);
+		if(loggedUser.getLikedCuisines().contains(toBeUnlikedCuisine))
+			return new ResponseMessage("You already like this cuisine");
+		loggedUser.unlikeCuisine(toBeUnlikedCuisine);
+		DBManager.session().save(loggedUser);
+		return new ResponseMessage(cuisine);
 	}
 
 	@RequestHandlerMethod(requiresLogin=false)

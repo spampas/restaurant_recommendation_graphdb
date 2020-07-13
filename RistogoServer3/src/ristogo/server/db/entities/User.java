@@ -139,7 +139,13 @@ public class User
 		}
 		return likedCuisines;
 	}
-
+	
+	public void unlikeCuisine(Cuisine cuisine)
+	{
+		getLikedCuisines().remove(cuisine);
+		cuisine.getUsersWhoLike().remove(this);
+	}
+	
 	public void setUsername(String username)
 	{
 		validateUsername(username);
@@ -149,6 +155,7 @@ public class User
 	public void addRestaurant(Restaurant restaurant)
 	{
 		getOwnedRestaurants().add(restaurant);
+		restaurant.setOwner(this);
 	}
 
 	public void likeRestaurant(Restaurant restaurant)
@@ -166,6 +173,7 @@ public class User
 	public void likeCuisine(Cuisine cuisine)
 	{
 		getLikedCuisines().add(cuisine);
+		cuisine.addUserWhoLike(this);
 	}
 
 	public boolean checkPasswordHash(String passwordHash)
@@ -366,4 +374,6 @@ public class User
 		User u = (User)o;
 		return username.equals(u.username);
 	}
+
+	
 }
