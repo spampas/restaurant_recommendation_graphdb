@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 import org.neo4j.ogm.cypher.ComparisonOperator;
 import org.neo4j.ogm.cypher.Filter;
 import org.neo4j.ogm.cypher.query.Pagination;
@@ -21,6 +22,7 @@ import ristogo.common.net.RequestMessage;
 import ristogo.common.net.ResponseMessage;
 import ristogo.common.net.entities.CityInfo;
 import ristogo.common.net.entities.CuisineInfo;
+import ristogo.common.net.entities.Entity;
 import ristogo.common.net.entities.PageFilter;
 import ristogo.common.net.entities.RestaurantInfo;
 import ristogo.common.net.entities.StringFilter;
@@ -521,6 +523,68 @@ public class RequestHandler extends Thread
 	private ResponseMessage handleGetStatisticRestaurant(RequestMessage reqMsg)
 	{
 		return null;
+	}
+	
+	@RequestHandlerMethod
+	private ResponseMessage handleGetUser(RequestMessage reqMsg)
+	{
+		StringFilter filter = reqMsg.getEntity(StringFilter.class);
+		String username = filter == null ? null : filter.getValue();
+		if (username == null || !User.isValidUsername(username))
+			return new ResponseMessage("Invalid user.");
+		User user = DBManager.session().load(User.class, username, 0);
+		if (user == null)
+			return new ResponseMessage("Can not find the specified user.");
+		
+		if (!loggedUser.isFollowing(user))
+			return new ResponseMessage("You are not following this user.");
+		List<CuisineInfo> cuisineInfo = new ArrayList<CuisineInfo>(); 
+		user.getLikedCuisines().forEach((Cuisine cuisine) -> {
+			cuisineInfo.add(new CuisineInfo(cuisine.getName()));
+			
+		});
+		
+		/*
+		List<RestaurantInfo> restaurantInfo = new ArrayList<RestaurantInfo>();
+		user.getLikedRestaurants().forEach((Restaurant restaurant) -> {
+			restaurantInfo.add(new RestaurantInfo(restaurant.getName(), 
+					new CuisineInfo(restaurant.getCuisine().getName()), 
+					restaurant.getPrice(), 
+					new CityInfo(restaurant.getCity().getName(), restaurant.getCity().getLatitude(), restaurant.getCity().getLongitude()), 
+					restaurant.getDescription()));
+		});
+		*/
+		
+		UserInfo userInfo = new UserInfo(user.getUsername(), 
+				new CityInfo(user.getCity().getName(), 
+				user.getCity().getLatitude(), 
+				user.getCity().getLongitude()), 
+				loggedUser.isFollowing(user)); 
+		
+		List<Entity> entities = new ArrayList<Entity>();
+		
+		entities.add(userInfo);
+		cuisineInfo.forEach(entities::add);
+		return new ResponseMessage(entities);
+	}
+	
+	@RequestHandlerMethod
+	private ResponseMessage handleGetRestaurant(RequestMessage reqMsg)
+	{
+		StringFilter filter = reqMsg.getEntity(StringFilter.class);
+		String username = filter == null ? null : filter.getValue();
+		if (username == null || !User.isValidUsername(username))
+			return new ResponseMessage("Invalid user.");
+		User user = DBManager.session().load(User.class, username, 0);
+		if (user == null)
+			return new ResponseMessage("Can not find the specified user.");
+		if (user.equals(loggedUser))
+			return new ResponseMessage("You can not unfollow yourself.");
+		if (!loggedUser.isFollowing(user))
+			return new ResponseMessage("You are not following this user.");
+		loggedUser.unfollow(user);
+		DBManager.session().save(loggedUser);
+		return new ResponseMessage();
 	}
 
 	@RequestHandlerMethod
