@@ -47,10 +47,13 @@ public class RequestMessage extends Message
 		case REGISTER_USER:
 		case REGISTER_RESTAURANT:
 		case LIST_USERS:
+			return (getEntityCount() == 0) || (getEntityCount() == 1 && getEntity() instanceof User);
 		case LIST_FRIENDS:
+			return (getEntityCount() == 0) || (getEntityCount() == 1 && getEntity() instanceof User);
 		case FOLLOW_USER:
 		case UNFOLLOW_USER:
 		case DELETE_USER:
+			return getEntityCount() == 1 && getEntity() instanceof User;
 		case EDIT_RESTAURANT:
 		case DELETE_RESTAURANT:
 			return getEntityCount() == 1 && getEntity() instanceof Restaurant;
@@ -62,13 +65,17 @@ public class RequestMessage extends Message
 		case REMOVE_LIKE_RESTAURANT:
 		case GET_STATISTIC_RESTAURANT:
 		case LIST_CUISINES:
+			return (getEntityCount() == 0) || (getEntityCount() == 1 && getEntity() instanceof Cuisine);
 		case ADD_CUISINE:
 		case DELETE_CUISINE:
+			return getEntityCount() == 1 && getEntity() instanceof Cuisine;
 		case PUT_LIKE_CUISINE:
 		case REMOVE_LIKE_CUISINE:
 		case LIST_CITIES:
+			return (getEntityCount() == 0) || (getEntityCount() == 1 && getEntity() instanceof City);
 		case ADD_CITY:
 		case DELETE_CITY:
+			return getEntityCount() == 1 && getEntity() instanceof City;
 		default:
 			return false;
 		}*/
