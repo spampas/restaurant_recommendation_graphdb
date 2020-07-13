@@ -2,18 +2,23 @@ package ristogo.ui.graphics;
 
 import java.util.function.Consumer;
 
+import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import ristogo.common.net.entities.RestaurantInfo;
 import ristogo.common.net.entities.UserInfo;
+import ristogo.ui.graphics.beans.RestaurantBean;
 import ristogo.ui.graphics.config.GUIConfig;
 import ristogo.ui.graphics.controls.FormButton;
 
 public class RestaurantsPane extends BasePane
 {
+	protected EditRestaurantForm form;
+	protected EditRestaurantsPanel list;
 
 	public RestaurantsPane(Consumer<View> changeView, UserInfo loggedUser)
 	{
@@ -42,22 +47,33 @@ public class RestaurantsPane extends BasePane
 	@Override
 	protected Node createLeft()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		form = new EditRestaurantForm();
+		form.setOnCommit(this::handleFormAction);
+		form.setOnDelete(this::handleFormAction);
+		return form;
 	}
 
 	@Override
 	protected Node createCenter()
 	{
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	protected Node createRight()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		list = new EditRestaurantsPanel("Your restaurants", loggedUser, this::handleSelectRestaurant);
+		return list;
+	}
+
+	private void handleSelectRestaurant(RestaurantInfo restaurant)
+	{
+		form.setRestaurant(restaurant);
+	}
+
+	private void handleFormAction(ActionEvent event)
+	{
+		list.refresh();
 	}
 
 	@Override

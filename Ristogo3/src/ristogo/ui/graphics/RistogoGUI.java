@@ -34,7 +34,7 @@ public final class RistogoGUI extends Application
 	public static UserInfo loggedUser;
 	private static RestaurantInfo restaurant;
 
-	private static ModifyRestaurantForm restaurantForm;
+	private static EditRestaurantForm restaurantForm;
 
 	@Override
 	public void start(Stage primaryStage)

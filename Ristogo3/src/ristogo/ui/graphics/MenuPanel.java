@@ -32,6 +32,13 @@ public abstract class MenuPanel extends VBox
 		content.setStyle(GUIConfig.getCSSFormBoxStyle());
 		content.setMinSize(600, 600);
 		content.setMaxSize(900, 800);
+		getChildren().addAll(titleBox, content);
+		if (menus.size() == 0)
+			return;
+		if (menus.size() == 1) {
+			changeContent(menus.keySet().toArray(new String[0])[0]);
+			return;
+		}
 		String first = null;
 		for (String menuName: menus.keySet()) {
 			Hyperlink link = new Hyperlink();
@@ -48,7 +55,6 @@ public abstract class MenuPanel extends VBox
 			toolBar.getItems().add(link);
 		}
 		content.getChildren().add(toolBar);
-		getChildren().addAll(titleBox, content);
 		changeContent(first);
 	}
 
@@ -61,6 +67,8 @@ public abstract class MenuPanel extends VBox
 	{
 		content.reset();
 		this.content.getChildren().clear();
-		this.content.getChildren().addAll(toolBar, content);
+		if (menus.size() > 1)
+			this.content.getChildren().add(toolBar);
+		this.content.getChildren().add(content);
 	}
 }

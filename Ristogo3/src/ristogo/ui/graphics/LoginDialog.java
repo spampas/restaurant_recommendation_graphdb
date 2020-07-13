@@ -95,6 +95,7 @@ final class LoginDialog extends Dialog<UserInfo>
 		usernameField.textProperty().addListener(this::textChangeListener);
 		passwordField.textProperty().addListener(this::textChangeListener);
 		confirmField.textProperty().addListener(this::textChangeListener);
+		citySelector.textProperty().addListener(this::textChangeListener);
 
 		ButtonBar buttonBar = (ButtonBar)dialogPane.lookup(".button-bar");
 		buttonBar.getButtons().forEach(b -> b.setStyle(GUIConfig.getCSSDialogButtonStyle()));
@@ -138,7 +139,8 @@ final class LoginDialog extends Dialog<UserInfo>
 		String username = usernameField.getText();
 		String password = passwordField.getText();
 		String confirm = confirmField.getText();
-		if ((username == null || username.isEmpty()) && (password == null || password.isEmpty()))
+		String city = citySelector.getText();
+		if ((username == null || username.isEmpty()) && (password == null || password.isEmpty() && (city == null || city.isEmpty())))
 			return;
 		if (!username.matches("^[A-Za-z][A-Za-z0-9]{2,31}$"))
 			showError("Invalid username.");

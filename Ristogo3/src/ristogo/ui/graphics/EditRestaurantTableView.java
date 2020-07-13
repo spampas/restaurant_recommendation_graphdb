@@ -4,34 +4,24 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import ristogo.common.net.entities.CityInfo;
+import ristogo.common.net.ResponseMessage;
 import ristogo.common.net.entities.CuisineInfo;
-import ristogo.common.net.entities.Entity;
 import ristogo.common.net.entities.PageFilter;
 import ristogo.common.net.entities.RestaurantInfo;
 import ristogo.common.net.entities.StringFilter;
 import ristogo.common.net.entities.UserInfo;
 import ristogo.common.net.entities.enums.Price;
-import ristogo.common.net.ResponseMessage;
 import ristogo.net.Protocol;
 import ristogo.ui.graphics.beans.RestaurantBean;
+import ristogo.ui.graphics.beans.UserBean;
 import ristogo.ui.graphics.config.GUIConfig;
 import ristogo.ui.graphics.controls.RistogoTableView;
 
-final class RestaurantTableView extends RistogoTableView<RestaurantBean>
+public class EditRestaurantTableView extends RistogoTableView<RestaurantBean>
 {
-	protected boolean liked;
-
-	public RestaurantTableView(boolean liked)
-	{
-		super();
-		this.liked = liked;
-	}
+	private UserInfo loggedUser;
 
 	@Override
 	protected Collection<TableColumn<RestaurantBean, ?>> generateColumns()
@@ -82,15 +72,15 @@ final class RestaurantTableView extends RistogoTableView<RestaurantBean>
 	{
 		ResponseMessage resMsg;
 		if (filter == null)
-			if (liked)
-				resMsg = Protocol.getInstance().listLikedRestaurants(new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
-			else
-				resMsg = Protocol.getInstance().listRestaurants(new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
+			resMsg = Protocol.getInstance().listOwnRestaurants(new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
 		else
-			if (liked)
-				resMsg = Protocol.getInstance().listLikedRestaurants(new StringFilter(filter), new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
-			else
-				resMsg = Protocol.getInstance().listRestaurants(new StringFilter(filter), new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
+			resMsg = Protocol.getInstance().listOwnRestaurants(new StringFilter(filter), new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
 		return extractItemsFromMessage(resMsg);
 	}
+
+	public void setLoggedUser(UserInfo loggedUser)
+	{
+		this.loggedUser = loggedUser;
+	}
+
 }

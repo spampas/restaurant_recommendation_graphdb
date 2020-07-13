@@ -19,7 +19,7 @@ public class CitySelector extends AutocompleteTextField
 	private static List<String> loadCities(String filter)
 	{
 		List<String> result = new ArrayList<String>();
-		ResponseMessage resMsg = Protocol.getInstance().getCities(new StringFilter("(?i).*" + filter + ".*"));
+		ResponseMessage resMsg = Protocol.getInstance().listCities(new StringFilter(filter));
 		if(resMsg.isSuccess())
 			resMsg.getEntities(CityInfo.class).forEach((CityInfo c) -> { result.add(c.getName()); });
 		return result;

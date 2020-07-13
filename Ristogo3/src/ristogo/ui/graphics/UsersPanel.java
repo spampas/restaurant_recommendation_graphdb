@@ -1,13 +1,18 @@
 package ristogo.ui.graphics;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javafx.event.ActionEvent;
 import javafx.scene.input.MouseEvent;
 import ristogo.common.net.ResponseMessage;
+import ristogo.common.net.entities.CityInfo;
+import ristogo.common.net.entities.CuisineInfo;
+import ristogo.common.net.entities.RestaurantInfo;
 import ristogo.common.net.entities.StringFilter;
 import ristogo.net.Protocol;
+import ristogo.ui.graphics.beans.RestaurantBean;
 import ristogo.ui.graphics.beans.UserBean;
 
 public class UsersPanel extends MenuPanel
@@ -75,6 +80,16 @@ public class UsersPanel extends MenuPanel
 			table.setDetails("");
 			return;
 		}
+		ResponseMessage resMsg = Protocol.getInstance().getUser(new StringFilter(user.getUsername()));
+		if (!resMsg.isSuccess()) {
+			new ErrorBox("Error", "An error has occured while fetching the user details.", resMsg.getErrorMsg()).showAndWait();
+			return;
+		}
+		StringBuilder sb = new StringBuilder();
+		List<CuisineInfo> cuisines = resMsg.getEntities(CuisineInfo.class);
+		for (CuisineInfo cuisine: cuisines)
+			sb.append(cuisine.getName() + "\n");
+		table.setDetails(sb.toString());
 		table.setDeleteDisable(false);
 		table.setActionDisable(false);
 		table.setActionButtonText(user.isFollowing() ? "Unfollow" : "Follow");

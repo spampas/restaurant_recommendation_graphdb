@@ -104,4 +104,14 @@ public class RestaurantInfo extends Entity
 	{
 		this.description = description;
 	}
+
+	public void setLiked(boolean value)
+	{
+		this.liked = value;
+	}
+
+	public boolean isLiked()
+	{
+		return liked;
+	}
 }

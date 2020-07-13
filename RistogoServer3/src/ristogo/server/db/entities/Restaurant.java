@@ -124,7 +124,7 @@ public class Restaurant
 	{
 		String regexFilter = "";
 		if (nameRegex != null)
-			regexFilter = " AND r.name =~ $regex";
+			regexFilter = "AND r.name =~ $regex ";
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
 			"MATCH (u:User)-[:LIKES]->(r:Restaurant)<-[:OWNS]-(o:User) " +
 			"OPTIONAL MATCH (c:Cuisine)<-[:SERVES]-(r)-[:LOCATED]->(ci:City) " +

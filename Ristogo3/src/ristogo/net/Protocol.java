@@ -143,14 +143,29 @@ public class Protocol implements AutoCloseable
 		return sendRequest(ActionRequest.REMOVE_LIKE_RESTAURANT, restaurant);
 	}
 
-	public ResponseMessage listOwnRestaurants()
+	public ResponseMessage listOwnRestaurants(PageFilter pageFilter)
 	{
-		return sendRequest(ActionRequest.LIST_OWN_RESTAURANTS);
+		return sendRequest(ActionRequest.LIST_OWN_RESTAURANTS, pageFilter);
+	}
+
+	public ResponseMessage listOwnRestaurants(StringFilter nameFilter, PageFilter pageFilter)
+	{
+		return sendRequest(ActionRequest.LIST_OWN_RESTAURANTS, nameFilter, pageFilter);
 	}
 
 	public ResponseMessage editRestaurant(StringFilter nameFilter, RestaurantInfo restaurant)
 	{
 		return sendRequest(ActionRequest.EDIT_RESTAURANT, nameFilter, restaurant);
+	}
+
+	public ResponseMessage getRestaurant(StringFilter nameFilter)
+	{
+		return sendRequest(ActionRequest.GET_RESTAURANT, nameFilter);
+	}
+
+	public ResponseMessage getUser(StringFilter nameFilter)
+	{
+		return sendRequest(ActionRequest.GET_USER, nameFilter);
 	}
 
 	public ResponseMessage getStatisticRestaurant(RestaurantInfo restaurant)
@@ -163,14 +178,14 @@ public class Protocol implements AutoCloseable
 		return sendRequest(ActionRequest.DELETE_RESTAURANT, nameFilter);
 	}
 
-	public ResponseMessage getCuisines()
+	public ResponseMessage listCuisines()
 	{
 		return sendRequest(ActionRequest.LIST_CUISINES);
 	}
 
-	public ResponseMessage getCuisines(CuisineInfo cuisine)
+	public ResponseMessage listCuisines(StringFilter filter)
 	{
-		return sendRequest(ActionRequest.LIST_CUISINES, cuisine);
+		return sendRequest(ActionRequest.LIST_CUISINES, filter);
 	}
 
 	public ResponseMessage addCuisine(CuisineInfo cuisine)
@@ -193,12 +208,12 @@ public class Protocol implements AutoCloseable
 		return sendRequest(ActionRequest.REMOVE_LIKE_CUISINE, cuisine);
 	}
 
-	public ResponseMessage getCities()
+	public ResponseMessage listCities()
 	{
 		return sendRequest(ActionRequest.LIST_CITIES);
 	}
 
-	public ResponseMessage getCities(StringFilter filter)
+	public ResponseMessage listCities(StringFilter filter)
 	{
 		return sendRequest(ActionRequest.LIST_CITIES, filter);
 	}

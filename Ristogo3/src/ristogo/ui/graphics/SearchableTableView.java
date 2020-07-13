@@ -81,6 +81,11 @@ public class SearchableTableView<T> extends VBox
 		getChildren().addAll(controlBox, tableView, pageControls, detailsLabel, detailsArea);
 	}
 
+	public TableView<T> getTableView()
+	{
+		return tableView;
+	}
+
 	public void setControlsVisible(boolean value)
 	{
 		controlBox.setVisible(value);
@@ -99,6 +104,11 @@ public class SearchableTableView<T> extends VBox
 	public void setOnAction(EventHandler<ActionEvent> handler)
 	{
 		actionButton.setOnAction(handler);
+	}
+
+	public void setActionButtonVisible(boolean value)
+	{
+		actionButton.setVisible(value);
 	}
 
 	public void setDeletable(boolean value)
