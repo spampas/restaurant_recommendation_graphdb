@@ -567,14 +567,13 @@ public class RequestHandler extends Thread
 	private ResponseMessage handleDeleteCuisine(RequestMessage reqMsg)
 	{
 		CuisineInfo cuisine = reqMsg.getEntity(CuisineInfo.class);
-		Cuisine savedCuisine = DBManager.session().load(Cuisine.class, ) 
-		savedCuisine = DBManager.session().delete(Cuisine.class, cuisine.getName(), 0);
-		if(savedCuisine == null) {
-			savedCuisine = new Cuisine(cuisine.getName());
-			DBManager.session().save(savedCuisine);
-			return new ResponseMessage();
-		}
-		return new ResponseMessage("This cuisine is already present");
+		Cuisine savedCuisine = DBManager.session().load(Cuisine.class, cuisine.getName(), 0 );
+		if(savedCuisine == null)
+			return new ResponseMessage("No such Cuisine " + cuisine.getName());
+		if (!loggedUser.isAdmin())
+			return new ResponseMessage("You can edit only restaurants that you own.");
+		DBManager.session().delete(savedCuisine);
+		return new ResponseMessage(cuisine);
 	}
 
 	@RequestHandlerMethod
