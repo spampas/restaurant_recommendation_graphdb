@@ -19,13 +19,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import ristogo.common.entities.City;
-import ristogo.common.entities.Cuisine;
-import ristogo.common.entities.Customer;
-import ristogo.common.entities.Entity;
-import ristogo.common.entities.Restaurant;
-import ristogo.common.entities.User;
-import ristogo.common.entities.enums.Price;
+import ristogo.common.net.entities.Entity;
+import ristogo.common.net.entities.RestaurantInfo;
+import ristogo.common.net.entities.enums.Price;
 import ristogo.common.net.ResponseMessage;
 import ristogo.net.Protocol;
 import ristogo.ui.graphics.beans.UserBean;
@@ -33,8 +29,8 @@ import ristogo.ui.graphics.config.GUIConfig;
 import ristogo.ui.graphics.controls.DialogLabel;
 import ristogo.ui.graphics.controls.DialogTextField;;
 
-public class RestaurantRecommendationDialog extends Dialog<Restaurant> {
-
+public class RestaurantRecommendationDialog extends Dialog<RestaurantInfo> {
+/*
 	private final Button searchButton;
 	private final DialogLabel likeFilterLabel = new DialogLabel("Consider likes coming from: ");
 	private final DialogLabel cityLabel = new DialogLabel("City where they are placed: ");
@@ -76,7 +72,7 @@ public class RestaurantRecommendationDialog extends Dialog<Restaurant> {
 		
 		citySelector.getItems().addAll(loadCities());
 		
-		citySelector.setValue(RistogoGUI.loggedUser.getCity().getName());
+		citySelector.setValue(RistogoGUI.loggedUser.getCity());
 		distanceField.setPromptText("Distance(Km)");
 
 		GridPane grid = new GridPane();
@@ -172,5 +168,5 @@ public class RestaurantRecommendationDialog extends Dialog<Restaurant> {
 	{
 		errorLabel.setVisible(false);
 		searchButton.setDisable(false);
-	}
+	}*/
 }

@@ -21,13 +21,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import ristogo.common.entities.City;
-import ristogo.common.entities.Cuisine;
-import ristogo.common.entities.Customer;
-import ristogo.common.entities.Entity;
-import ristogo.common.entities.Owner;
-import ristogo.common.entities.Restaurant;
-import ristogo.common.entities.User;
+import ristogo.common.net.entities.Entity;
+import ristogo.common.net.entities.UserInfo;
 import ristogo.common.net.ResponseMessage;
 import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
@@ -35,8 +30,8 @@ import ristogo.ui.graphics.controls.DialogLabel;
 import ristogo.ui.graphics.controls.DialogPasswordField;
 import ristogo.ui.graphics.controls.DialogTextField;
 
-public class UserRecommendationDialog extends Dialog<User> {
-
+public class UserRecommendationDialog extends Dialog<UserInfo> {
+/*
 
 	private final Button searchButton;
 	private final DialogLabel cityLabel = new DialogLabel("City where they live: ");
@@ -73,7 +68,7 @@ public class UserRecommendationDialog extends Dialog<User> {
 		
 		citySelector.getItems().addAll(loadCities());
 		
-		citySelector.setValue(RistogoGUI.loggedUser.getCity().getName());
+		citySelector.setValue(RistogoGUI.loggedUser.getCity());
 		distanceField.setPromptText("Distance(Km)");
 		
 		GridPane grid = new GridPane();
@@ -165,5 +160,5 @@ public class UserRecommendationDialog extends Dialog<User> {
 	{
 		errorLabel.setVisible(false);
 		searchButton.setDisable(false);
-	}
+	}*/
 }

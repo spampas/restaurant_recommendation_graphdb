@@ -1,4 +1,4 @@
-package ristogo.common.entities.enums;
+package ristogo.common.net.entities.enums;
 
 import java.util.logging.Logger;
 

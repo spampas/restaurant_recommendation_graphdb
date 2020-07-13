@@ -5,10 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import ristogo.common.entities.Cuisine;
-import ristogo.common.entities.Customer;
-import ristogo.common.entities.Entity;
-import ristogo.common.entities.User;
+import ristogo.common.net.entities.Entity;
 import ristogo.common.net.ResponseMessage;
 import ristogo.net.Protocol;
 import ristogo.ui.graphics.beans.*;
@@ -17,7 +14,7 @@ import ristogo.ui.graphics.config.GUIConfig;
 
 public class CuisineTableView extends TableView<CuisineBean>{
 	
-	
+	/*
 	private final ObservableList<CuisineBean> cuisineList;
 
 	@SuppressWarnings("unchecked")
@@ -80,5 +77,5 @@ public class CuisineTableView extends TableView<CuisineBean>{
 		else
 			new ErrorBox("Error", "An error has occured while fetching the list of cuisines.", resMsg.getErrorMsg()).showAndWait();
 	}
-	
+	*/
 }

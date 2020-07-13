@@ -19,34 +19,30 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import ristogo.common.entities.City;
-import ristogo.common.entities.Customer;
-import ristogo.common.entities.Entity;
-import ristogo.common.entities.Owner;
-import ristogo.common.entities.Restaurant;
-import ristogo.common.entities.User;
+import ristogo.common.net.entities.CityInfo;
+import ristogo.common.net.entities.Entity;
+import ristogo.common.net.entities.UserInfo;
 import ristogo.common.net.ResponseMessage;
 import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
+import ristogo.ui.graphics.controls.CitySelector;
 import ristogo.ui.graphics.controls.DialogLabel;
 import ristogo.ui.graphics.controls.DialogPasswordField;
 import ristogo.ui.graphics.controls.DialogTextField;
 
-final class LoginDialog extends Dialog<User>
+final class LoginDialog extends Dialog<UserInfo>
 {
 	private boolean registering;
 	private final Button okButton;
 	private final Button switchButton;
 	private final DialogLabel confirmLabel = new DialogLabel("Confirm: ");
 	private final DialogLabel cityLabel = new DialogLabel("City: ");
-	private final DialogLabel typeLabel = new DialogLabel("Type: ");
 	private final DialogLabel errorLabel = new DialogLabel("Fill out the form.");
 	private final DialogTextField usernameField = new DialogTextField("Username");
 	private final DialogPasswordField passwordField = new DialogPasswordField("Password");
 	private final DialogPasswordField confirmField = new DialogPasswordField("Confirm password");
-	private final ChoiceBox<String> citySelector = new ChoiceBox<String>();
-	private final ChoiceBox<String> typeSelector = new ChoiceBox<String>();
-	private User loggedUser;
+	private final CitySelector citySelector = new CitySelector();
+	private UserInfo loggedUser;
 
 	LoginDialog()
 	{
@@ -57,7 +53,7 @@ final class LoginDialog extends Dialog<User>
 		dialogPane.getStyleClass().remove("alert");
 
 		setTitle("RistoGo - Login");
-		setHeaderText("Welcome to Ristogo!\nThe application that allows you to book tables at your favorite restaurants!");
+		setHeaderText("Welcome to Ristogo!\nThe application that reccomend the best restaurant for you!");
 		GridPane header = (GridPane)dialogPane.lookup(".header-panel");
 		header.setStyle(GUIConfig.getCSSDialogHeaderStyle());
 		header.lookup(".label").setStyle(GUIConfig.getCSSDialogFgColor());
@@ -68,17 +64,10 @@ final class LoginDialog extends Dialog<User>
 
 		errorLabel.setStyle("-fx-background-color: red;");
 		errorLabel.setVisible(false);
-		
-		typeSelector.getItems().addAll("Customer", "Owner");
+
 		confirmLabel.setVisible(false); confirmField.setVisible(false);
 		cityLabel.setVisible(false); citySelector.setVisible(false);
-		typeLabel.setVisible(false); typeSelector.setVisible(false);
-		
-		typeSelector.getItems().addAll("Customer", "Owner");
-		typeSelector.setValue("Customer");
-		
-		citySelector.getItems().addAll(loadCities());
-		
+
 		DialogLabel usernameLabel = new DialogLabel("Username: ");
 		DialogLabel passwordLabel = new DialogLabel("Password: ");
 
@@ -90,8 +79,7 @@ final class LoginDialog extends Dialog<User>
 		grid.add(passwordLabel, 0, 1); grid.add(passwordField, 1, 1);
 		grid.add(confirmLabel, 0, 2); grid.add(confirmField, 1, 2);
 		grid.add(cityLabel, 0, 3); grid.add(citySelector, 1, 3);
-		grid.add(typeLabel, 0, 4); grid.add(typeSelector, 1, 4);
-		grid.add(errorLabel, 0, 5, 2, 1);
+		grid.add(errorLabel, 0, 4, 2, 1);
 
 		ButtonType okButtonType = new ButtonType("Login", ButtonData.OK_DONE);
 		ButtonType switchButtonType = new ButtonType("Register", ButtonData.OTHER);
@@ -121,51 +109,23 @@ final class LoginDialog extends Dialog<User>
 			return null;
 		});
 	}
-	
-	List<String> loadCities(){
-		
-		List<String> result = new ArrayList<String>();
-		
-		ResponseMessage resMsg = Protocol.getInstance().getCities();
-		if(resMsg.isSuccess()) {
-			for (Entity entity : resMsg.getEntities())
-				result.add(((City)entity).getName());
-			
-			return result;
-		}
-		else {
-			new ErrorBox("Error", "An error has occured while fetching the list of users.", resMsg.getErrorMsg()).showAndWait();
-			return null;
-		}
-	}
 
 	private void filterOkButtonAction(ActionEvent event)
 	{
-		Protocol protocol = Protocol.getInstance();
 		ResponseMessage resMsg;
 		String username = usernameField.getText();
 		String password = passwordField.getText();
-		if (registering) {
-			if (typeSelector.getValue().equals("Owner"))
-				resMsg = protocol.registerRestaurant(new Owner(username, password), new Restaurant(username));
-			else
-				resMsg = protocol.registerUser(new Customer(username, password));
-			
-			if (!resMsg.isSuccess()) {
-				showError(resMsg.getErrorMsg());
-				event.consume();
-				return;
-			}
-			
-		}
-		resMsg = protocol.performLogin(new Customer(username, password));
+		String city = citySelector.getText();
+		if (registering)
+			resMsg = Protocol.getInstance().registerUser(new UserInfo(username, password, new CityInfo(city)));
+		else
+			resMsg = Protocol.getInstance().performLogin(new UserInfo(username, password));
 		if (!resMsg.isSuccess()) {
 			showError(resMsg.getErrorMsg());
 			event.consume();
 			return;
 		}
-		loggedUser = (User)resMsg.getEntity();
-		
+		loggedUser = resMsg.getEntity(UserInfo.class);
 	}
 
 	private void textChangeListener(ObservableValue<? extends String> observable, String oldValue, String newValue)
@@ -180,9 +140,9 @@ final class LoginDialog extends Dialog<User>
 		String confirm = confirmField.getText();
 		if ((username == null || username.isEmpty()) && (password == null || password.isEmpty()))
 			return;
-		if (!User.validateUsername(username))
+		if (!username.matches("^[A-Za-z][A-Za-z0-9]{2,31}$"))
 			showError("Invalid username.");
-		else if (!User.validatePassword(password))
+		else if (password.length() < 8)
 			showError("Invalid password.");
 		else if (registering && !confirm.equals(password))
 			showError("Passwords do not match.");
@@ -210,13 +170,11 @@ final class LoginDialog extends Dialog<User>
 			switchButton.setText("Login");
 			okButton.setText("Register");
 			confirmLabel.setVisible(true); confirmField.setVisible(true);
-			typeLabel.setVisible(true); typeSelector.setVisible(true);
 			cityLabel.setVisible(true); citySelector.setVisible(true);
 		} else {
 			switchButton.setText("Register");
 			okButton.setText("Login");
 			confirmLabel.setVisible(false); confirmField.setVisible(false);
-			typeLabel.setVisible(false); typeSelector.setVisible(false);
 			cityLabel.setVisible(false); citySelector.setVisible(false);
 		}
 		validate();

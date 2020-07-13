@@ -7,14 +7,12 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import ristogo.common.entities.Restaurant;
-import ristogo.common.entities.User;
 import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
 
 public class RestaurantViewer extends VBox {
 	
-	
+	/*
 	private final Label restaurantTableTitle = new Label();
 	private final TextField findField = new TextField();
 	private final Button find = new Button();
@@ -148,5 +146,5 @@ public class RestaurantViewer extends VBox {
 	public RestaurantTableView getTable()
 	{
 		return restaurantsTable;
-	}
+	}*/
 }

@@ -14,7 +14,7 @@ import com.thoughtworks.xstream.security.NoTypePermission;
 import com.thoughtworks.xstream.security.NullPermission;
 import com.thoughtworks.xstream.security.PrimitiveTypePermission;
 
-import ristogo.common.entities.Entity;
+import ristogo.common.net.entities.Entity;
 
 public class Message implements Serializable
 {
@@ -51,8 +51,8 @@ public class Message implements Serializable
 		xs.addPermission(PrimitiveTypePermission.PRIMITIVES);
 		xs.allowTypeHierarchy(Collection.class);
 		xs.allowTypesByWildcard(new String[] {
-			"ristogo.common.entities.**",
-			"ristogo.common.entities.enums.**",
+			"ristogo.common.net.entities.**",
+			"ristogo.common.net.entities.enums.**",
 			"ristogo.common.net.**"
 		});
 		return (Message)xs.fromXML(xml);

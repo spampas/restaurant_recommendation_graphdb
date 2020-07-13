@@ -7,14 +7,13 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import ristogo.common.entities.Customer;
-import ristogo.common.entities.User;
+import ristogo.common.net.entities.UserInfo;
 import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
 import ristogo.ui.graphics.controls.FormLabel;
 
 public class UserViewer extends VBox {
-	
+	/*
 	private final FormLabel userTableTitle = new FormLabel("List of Users");
 	private final TextField findField = new TextField();
 	private final Button find = new Button();
@@ -23,9 +22,9 @@ public class UserViewer extends VBox {
 	private final FormLabel cuisinesLabel = new FormLabel("Cusisines that selected user likes:");
 	private final TextArea cuisinesField = new TextArea();
 	
-	private User loggedUser;
+	private UserInfo loggedUser;
 	
-	public UserViewer (User loggedUser) {
+	public UserViewer (UserInfo loggedUser) {
 		
 		super(10);
 		
@@ -61,11 +60,11 @@ public class UserViewer extends VBox {
 		userTable.loadFriends(loggedUser);
 
 		userTable.setOnMouseClicked((event) -> {
-			User user = userTable.getSelectedEntity();
+			UserInfo user = userTable.getSelectedEntity();
 			if (user == null)
 				return;
 			followButton.setDisable(false);
-			cuisinesField.setText(""/*convert cuisines that user likes to string"*/);
+			cuisinesField.setText(""/*convert cuisines that user likes to string");
 		});
 
 		find.setOnAction(this::handleFindButtonAction);
@@ -85,7 +84,7 @@ public class UserViewer extends VBox {
 	
 	private void handleLikeButtonAction(ActionEvent event)
 	{
-		User selectedUser = userTable.getSelectedEntity();
+		UserInfo selectedUser = userTable.getSelectedEntity();
 		if(selectedUser == null)
 			return;
 		if(followButton.getText().equals("Follow"))
@@ -107,7 +106,7 @@ public class UserViewer extends VBox {
 	public UserTableView getTable() {
 		return userTable;
 	}
-
+*/
 	
 
 }

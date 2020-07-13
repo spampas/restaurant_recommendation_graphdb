@@ -8,13 +8,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import ristogo.common.entities.City;
 import ristogo.common.net.ResponseMessage;
 import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
 
 public class CityViewer extends VBox {
-	
+	/*
 	private final Label cityTableTitle = new Label();
 	private final Button operationButton = new Button();
 	private final Button flushButton = new Button();
@@ -120,5 +119,5 @@ public class CityViewer extends VBox {
 	public CityTableView getTable()
 	{
 		return cityTable;
-	}
+	}*/
 }

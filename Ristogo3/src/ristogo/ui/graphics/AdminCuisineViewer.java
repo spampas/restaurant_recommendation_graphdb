@@ -7,13 +7,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import ristogo.common.entities.Cuisine;
 import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
 import ristogo.ui.graphics.controls.FormLabel;
 
 public class AdminCuisineViewer extends VBox {
-	
+	/*
 	private final Label cuisineTableTitle = new Label();
 	private final FormLabel cuisineLabel = new FormLabel ("New Cuisine");
 	private final TextField cuisineField = new TextField();
@@ -142,5 +141,5 @@ public class AdminCuisineViewer extends VBox {
 	{
 		return cuisineTable;
 	}
-
+*/
 }

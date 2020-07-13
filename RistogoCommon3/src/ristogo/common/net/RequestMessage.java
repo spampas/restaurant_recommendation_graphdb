@@ -4,11 +4,8 @@ import java.io.DataInputStream;
 import java.util.Arrays;
 import java.util.List;
 
-import ristogo.common.entities.Customer;
-import ristogo.common.entities.Entity;
-import ristogo.common.entities.Owner;
-import ristogo.common.entities.Restaurant;
-import ristogo.common.entities.User;
+import ristogo.common.net.entities.Entity;
+import ristogo.common.net.enums.ActionRequest;
 
 public class RequestMessage extends Message
 {
@@ -39,7 +36,8 @@ public class RequestMessage extends Message
 
 	public boolean isValid()
 	{
-		//TODO: Gestire azioni
+		return true;
+		/*//TODO: Gestire azioni
 		boolean hasOwner = false;
 		boolean hasRestaurant = false;
 		switch(action) {
@@ -73,6 +71,6 @@ public class RequestMessage extends Message
 		case DELETE_CITY:
 		default:
 			return false;
-		}
+		}*/
 	}
 }

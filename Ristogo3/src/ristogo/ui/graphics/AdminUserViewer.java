@@ -8,14 +8,12 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import ristogo.common.entities.Cuisine;
-import ristogo.common.entities.User;
 import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
 import ristogo.ui.graphics.controls.FormLabel;
 
 public class AdminUserViewer extends VBox {
-	
+	/*
 	private final Label userTableTitle = new Label();
 	private final Button removeButton = new Button();
 	private final Button flushButton = new Button();
@@ -107,5 +105,5 @@ public class AdminUserViewer extends VBox {
 	{
 		return userTable;
 	}
-
+*/
 }

@@ -10,10 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import ristogo.common.entities.City;
-import ristogo.common.entities.Cuisine;
-import ristogo.common.entities.Restaurant;
-import ristogo.common.entities.enums.Price;
+import ristogo.common.net.entities.enums.Price;
 import ristogo.common.net.ResponseMessage;
 import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
@@ -22,7 +19,7 @@ import ristogo.ui.graphics.controls.FormButton;
 import ristogo.ui.graphics.controls.FormLabel;
 
 final class ModifyRestaurantForm extends VBox
-{
+{/*
 	private final TextField nameField = new TextField();
 	private final ChoiceBox<Cuisine> cuisineField = new ChoiceBox<Cuisine>();
 	private final ChoiceBox<String> citySelector = new ChoiceBox<String>();
@@ -57,9 +54,9 @@ final class ModifyRestaurantForm extends VBox
 		errorLabel.setStyle("-fx-background-color:   red;");
 		errorLabel.setVisible(false);
 
-		cuisineField.getItems().addAll(/*Load from DB*/);
+		cuisineField.getItems().addAll(/*Load from DB);
 		priceField.getItems().addAll(Price.values());
-		citySelector.getItems().addAll(/*Load from DB*/);
+		citySelector.getItems().addAll(/*Load from DB);
 		descriptionField.setWrapText(true);
 		descriptionField.setMinSize(480, 100);
 		descriptionField.setMaxSize(480, 100);
@@ -110,7 +107,7 @@ final class ModifyRestaurantForm extends VBox
 		restaurant.setName(nameField.getText());
 		restaurant.setCuisine(cuisineField.getValue());
 		restaurant.setPrice(priceField.getValue());
-		restaurant.setCity(new City(citySelector.getValue(), null, null));
+		restaurant.setCity(citySelector.getValue());
 		restaurant.setDescription(descriptionField.getText());
 
 		ResponseMessage resMsg = Protocol.getInstance().editRestaurant(restaurant);
@@ -148,7 +145,7 @@ final class ModifyRestaurantForm extends VBox
 		nameField.setText(restaurant.getName());
 		cuisineField.setValue(restaurant.getCuisine());
 		priceField.setValue(restaurant.getPrice());
-		citySelector.setValue(restaurant.getCity().getName());
+		citySelector.setValue(restaurant.getCity());
 		descriptionField.setText(restaurant.getDescription());
-	}
+	}*/
 }

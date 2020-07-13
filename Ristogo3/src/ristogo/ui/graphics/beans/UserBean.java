@@ -2,41 +2,23 @@ package ristogo.ui.graphics.beans;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
-import ristogo.common.entities.Customer;
-import ristogo.common.entities.Owner;
-import ristogo.common.entities.User;
 
-public class UserBean extends EntityBean
+public class UserBean
 {
 	private final SimpleStringProperty username;
-	private final SimpleBooleanProperty owner;
 	private final SimpleStringProperty city;
+	private final SimpleBooleanProperty following;
 
-	public UserBean(int id, String username, boolean owner, String city)
+	public UserBean(String username, String city, boolean following)
 	{
-		super(id);
 		this.username = new SimpleStringProperty(username);
-		this.owner = new SimpleBooleanProperty(owner);
 		this.city = new SimpleStringProperty(city);
-	}
-
-	public static UserBean fromEntity(User user)
-	{
-		return new UserBean(user.getId(), user.getUsername(), user.isOwner(), user.getCity());
-	}
-
-	public User toEntity()
-	{
-		return isOwner() ? new Owner(getId(), getUsername()) : new Customer(getId(), getUsername());
+		this.following = new SimpleBooleanProperty(following);
 	}
 
 	public String getUsername()
 	{
 		return username.get();
-	}
-	
-	public boolean isOwner() {
-		return owner.get();
 	}
 
 	public String getCity()
@@ -49,15 +31,18 @@ public class UserBean extends EntityBean
 		this.username.set(username);
 	}
 
-	public void setRestaurateur(String city)
+	public void setCity(String city)
 	{
 		this.city.set(city);
 	}
-	
-	public void setOwner(boolean owner) {
-		this.owner.set(owner);
+
+	public void setFollowing(boolean following)
+	{
+		this.following.set(following);
 	}
 
-
-	
+	public boolean isFollowing()
+	{
+		return following.get();
+	}
 }

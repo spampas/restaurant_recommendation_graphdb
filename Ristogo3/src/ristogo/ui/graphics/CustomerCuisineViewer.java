@@ -8,14 +8,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import ristogo.common.entities.Cuisine;
 import ristogo.common.net.ResponseMessage;
 import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
 import ristogo.ui.graphics.controls.FormLabel;
 
 public class CustomerCuisineViewer extends VBox {
-	
+	/*
 	private final Label cuisineTableTitle = new Label();
 	private final FormLabel cuisineLabel = new FormLabel ("Select a Cuisine");
 	private final ChoiceBox<Cuisine> cuisineChoice = new ChoiceBox<Cuisine>();
@@ -91,5 +90,5 @@ public class CustomerCuisineViewer extends VBox {
 	{
 		return cuisineTable;
 	}
-
+*/
 }

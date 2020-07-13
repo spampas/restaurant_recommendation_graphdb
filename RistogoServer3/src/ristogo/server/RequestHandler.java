@@ -6,21 +6,32 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.Socket;
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import ristogo.common.entities.Entity;
-import ristogo.common.entities.Restaurant;
-import ristogo.common.entities.User;
-import ristogo.common.entities.enums.UserType;
-import ristogo.common.net.Message;
+import org.neo4j.ogm.cypher.ComparisonOperator;
+import org.neo4j.ogm.cypher.Filter;
+import org.neo4j.ogm.cypher.query.Pagination;
+import org.neo4j.ogm.cypher.query.SortOrder;
+
 import ristogo.common.net.RequestMessage;
 import ristogo.common.net.ResponseMessage;
-import ristogo.db.QueryExecutor;
+import ristogo.common.net.entities.CityInfo;
+import ristogo.common.net.entities.CuisineInfo;
+import ristogo.common.net.entities.PageFilter;
+import ristogo.common.net.entities.RestaurantInfo;
+import ristogo.common.net.entities.StringFilter;
+import ristogo.common.net.entities.UserInfo;
+import ristogo.common.net.enums.ActionRequest;
 import ristogo.server.annotations.RequestHandlerMethod;
-
+import ristogo.server.db.DBManager;
+import ristogo.server.db.entities.City;
+import ristogo.server.db.entities.Cuisine;
+import ristogo.server.db.entities.Restaurant;
+import ristogo.server.db.entities.User;
 
 public class RequestHandler extends Thread
 {
@@ -47,6 +58,7 @@ public class RequestHandler extends Thread
 	{
 		while (!Thread.currentThread().isInterrupted())
 			process();
+		DBManager.getInstance().close();
 		try {
 			inputStream.close();
 			outputStream.close();
@@ -68,7 +80,13 @@ public class RequestHandler extends Thread
 			return;
 		}
 
-		dispatchMessage(reqMsg).send(outputStream);
+		ResponseMessage resMsg = dispatchMessage(reqMsg);
+		if (resMsg == null)
+			new ResponseMessage("Request handler returned NULL (Action: " + reqMsg.getAction().toString() + ").").send(outputStream);
+		else
+			resMsg.send(outputStream);
+		if (reqMsg.getAction() == ActionRequest.LOGOUT)
+			Thread.currentThread().interrupt();
 	}
 
 	private ResponseMessage dispatchMessage(RequestMessage reqMsg)
@@ -80,14 +98,11 @@ public class RequestHandler extends Thread
 			if (!handler.isAnnotationPresent(RequestHandlerMethod.class))
 				throw new NoSuchMethodException();
 			boolean requiresAdmin = handler.getAnnotation(RequestHandlerMethod.class).value();
-			boolean requiresOwnership = handler.getAnnotation(RequestHandlerMethod.class).requiresOwnership();
-			boolean requiresLogin = requiresAdmin || requiresOwnership ? true : handler.getAnnotation(RequestHandlerMethod.class).requiresLogin();
+			boolean requiresLogin = requiresAdmin ? true : handler.getAnnotation(RequestHandlerMethod.class).requiresLogin();
 			if (requiresLogin && loggedUser == null)
-				return new ResponseMessage("Thi action requires authentication.");
+				return new ResponseMessage("This action requires authentication.");
 			if (requiresAdmin && !loggedUser.isAdmin())
 				return new ResponseMessage("This action requires admin privileges.");
-			if (requiresOwnership && !loggedUser.isOwner() && !loggedUser.isAdmin())
-				return new ResponseMessage("This action is reserved to restaurants' owners.");
 			return (ResponseMessage)handler.invoke(this, reqMsg);
 		} catch (NoSuchMethodException e) {
 			return new ResponseMessage("Invalid action.");
@@ -103,14 +118,18 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod(requiresLogin=false)
 	private ResponseMessage handleLogin(RequestMessage reqMsg)
 	{
-		User user = (User)reqMsg.getEntity();
-		if (!user.hasValidUsername() || !user.hasValidPassword())
-			return new ResponseMessage("Invalid username or password.");
-		User savedUser = QueryExecutor.getUserByUsername(user.getUsername());
-		if (savedUser == null || !user.checkPasswordHash(savedUser.getPasswordHash()))
+		UserInfo user = (UserInfo)reqMsg.getEntity();
+		try {
+			User.validateUsername(user.getUsername());
+			User.validatePassword(user.getPassword());
+		} catch (IllegalArgumentException ex) {
+			return new ResponseMessage(ex.getMessage());
+		}
+		User savedUser = DBManager.session().load(User.class, user.getUsername(), 0);
+		if (savedUser == null || !savedUser.checkPassword(user.getPassword()))
 			return new ResponseMessage("Invalid username or password.");
 		loggedUser = savedUser;
-		return new ResponseMessage(loggedUser);
+		return new ResponseMessage(new UserInfo(savedUser.getUsername(), savedUser.isAdmin()));
 	}
 
 	@RequestHandlerMethod
@@ -123,49 +142,36 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod(requiresLogin=false)
 	private ResponseMessage handleRegisterUser(RequestMessage reqMsg)
 	{
-		User user = reqMsg.getEntity(User.class);
-		Restaurant restaurant = reqMsg.getEntity(Restaurant.class);
-		if (!user.hasValidUsername())
-			return new ResponseMessage("Username must be at least 3 characters long and no more than 32 characters long.");
-		if (!user.hasValidPassword())
-			new ResponseMessage("Invalid password.");
-		User savedUser = null;
-		if(restaurant) {
-			
+		UserInfo user = reqMsg.getEntity(UserInfo.class);
+		City city = DBManager.session().load(City.class, user.getCity().getName(), 0);
+		if (city == null)
+			return new ResponseMessage("Invalid city.");
+		try {
+			User savedUser = new User(user.getUsername(), user.getPassword(), city);
+			DBManager.session().save(savedUser);
+			loggedUser = savedUser;
+			return new ResponseMessage(new UserInfo(savedUser.getUsername(), savedUser.isAdmin()));
+		} catch (IllegalArgumentException ex) {
+			return new ResponseMessage(ex.getMessage());
 		}
-		/*try {
-			QueryExecutor.addUser(tx, user)
-			QueryExecutor.beginTransaction();
-			savedUser.merge(user);
-			QueryExecutor.persist(savedUser);
-			if (restaurant != null) {
-				Restaurant savedRestaurant = new Restaurant();
-				if (!savedRestaurant.merge(restaurant)) {
-					QueryExecutor.rollbackTransaction();
-					return new ResponseMessage("Some restaurant's fields are invalid.");
-				}
-				savedRestaurant.setOwner(savedUser);
-				QueryExecutor.persist(savedRestaurant);
-			}
-			QueryExecutor.commitTransaction();
-		} catch (PersistenceException ex) {
-			return new ResponseMessage("Username already in use.");
-		}*/
-		return new ResponseMessage(savedUser);
 	}
 
-	@RequestHandlerMethod(requiresOwnership=true)
-	private ResponseMessage handleGetOwnRestaurant(RequestMessage reqMsg)
+	@RequestHandlerMethod
+	private ResponseMessage handleListOwnRestaurants(RequestMessage reqMsg)
 	{
-		Restaurant restaurant = QueryExecutor.getRestaurantByOwner(loggedUser);
-		if (restaurant == null)
-			return new ResponseMessage("You do not have any restaurant.");
-		return new ResponseMessage(restaurant);
+		List<Restaurant> savedRestaurants = loggedUser.getOwnedRestaurants();
+		List<RestaurantInfo> restaurants = new ArrayList<RestaurantInfo>();
+		for (Restaurant restaurant: savedRestaurants)
+			restaurants.add(new RestaurantInfo(restaurant.getName(),
+				new CuisineInfo(restaurant.getCuisine().getName()),
+				restaurant.getPrice(),
+				new CityInfo(restaurant.getCity().getName())));
+		return new ResponseMessage(restaurants.toArray(new RestaurantInfo[0]));
 	}
 
-	private boolean hasRestaurant(User user, int restaurantId)
+	/*private boolean hasRestaurant(UserInfo user, int restaurantId)
 	{
-		Restaurant restaurant = QueryExecutor.getRestaurantByOwner(user);
+		RestaurantInfo restaurant = DBManager.getRestaurantByOwner(user);
 		if (restaurant == null)
 			return false;
 		return restaurant.getOwner().getId() == user.getId();
@@ -174,33 +180,33 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod(requiresOwnership=true)
 	private ResponseMessage handleEditRestaurant(RequestMessage reqMsg)
 	{
-		Restaurant restaurant = reqMsg.getEntity(Restaurant.class);
+		RestaurantInfo restaurant = reqMsg.getEntity(RestaurantInfo.class);
 		if (!hasRestaurant(loggedUser, restaurant.getId()))
 			return new ResponseMessage("You can only edit restaurants that you own.");
-		Restaurant savedRestaurant = QueryExecutor.getRestaurant(restaurant.getId());
-		/*if (!restaurant_.merge(restaurant))
-			return new ResponseMessage("Some restaurant's fields are invalid.");*/
-		/*savedRestaurant.setOwner(loggedUser);
+		RestaurantInfo savedRestaurant = DBManager.getRestaurant(restaurant.getId());
+		if (!restaurant_.merge(restaurant))
+			return new ResponseMessage("Some restaurant's fields are invalid.");
+		savedRestaurant.setOwner(loggedUser);
 		try {
-			QueryExecutor.update(savedRestaurant);
+			DBManager.update(savedRestaurant);
 		} catch (PersistenceException ex) {
 			return new ResponseMessage("Error while saving the restaurant to the database.");
-		}*/
+		}
 		return new ResponseMessage(savedRestaurant);
 	}
 
 	@RequestHandlerMethod
 	private ResponseMessage handleListRestaurants(RequestMessage reqMsg)
 	{
-		List<Restaurant> restaurants;
+		List<RestaurantInfo> restaurants;
 		if (reqMsg.getEntityCount() > 0) {
-			Restaurant restaurant = reqMsg.getEntity(Restaurant.class);
-			restaurants = QueryExecutor.getRestaurantsByCity(restaurant.getCity());
+			RestaurantInfo restaurant = reqMsg.getEntity(RestaurantInfo.class);
+			restaurants = DBManager.getRestaurantsByCity(restaurant.getCity());
 		} else {
-			restaurants = QueryExecutor.getAllRestaurants();
+			restaurants = DBManager.getAllRestaurants();
 		}
 		ResponseMessage resMsg = new ResponseMessage();
-		for (Restaurant restaurant: restaurants)
+		for (RestaurantInfo restaurant: restaurants)
 			resMsg.addEntity(restaurant);
 		return resMsg;
 	}
@@ -209,30 +215,177 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod(requiresOwnership=true)
 	private ResponseMessage handleDeleteRestaurant(RequestMessage reqMsg)
 	{
-		Restaurant restaurant = reqMsg.getEntity(Restaurant.class);
+		RestaurantInfo restaurant = reqMsg.getEntity(RestaurantInfo.class);
 		if (!hasRestaurant(loggedUser, restaurant.getId()))
 			return new ResponseMessage("You can only delete restaurants that you own.");
-		Restaurant savedRestaurant = QueryExecutor.getRestaurant(restaurant.getId());
+		RestaurantInfo savedRestaurant = DBManager.getRestaurant(restaurant.getId());
 		if (savedRestaurant == null)
 			return new ResponseMessage("Can not find the specified restaurant.");
-		/*try {
-			QueryExecutor.deleteRestaurant(restaurant.getId());
+		try {
+			DBManager.deleteRestaurant(restaurant.getId());
 		} catch (PersistenceException ex) {
 			return new ResponseMessage("Error while deleting the restaurant from the database.");
-		}*/
+		}
+		return new ResponseMessage();
+	}*/
+
+	@RequestHandlerMethod
+	private ResponseMessage handleAddRestaurant(RequestMessage reqMsg)
+	{
+		RestaurantInfo restaurant = reqMsg.getEntity(RestaurantInfo.class);
+		City city = DBManager.session().load(City.class, restaurant.getCity().getName(), 0);
+		if (city == null)
+			return new ResponseMessage("The specified city can not be found.");
+		Cuisine cuisine = DBManager.session().load(Cuisine.class, restaurant.getCuisine().getName(), 0);
+		if (cuisine == null)
+			return new ResponseMessage("The specified cuisine can not be found.");
+		Restaurant savedRestaurant = new Restaurant(restaurant.getName(), loggedUser, restaurant.getPrice(), cuisine, city, restaurant.getDescription());
+		DBManager.session().save(savedRestaurant);
 		return new ResponseMessage();
 	}
 
-	@RequestHandlerMethod(requiresOwnership=true)
-	private ResponseMessage handleRegisterRestaurant(RequestMessage reqMsg)
+	@RequestHandlerMethod
+	private ResponseMessage handleRestaurantDetails(RequestMessage reqMsg)
 	{
-		return null;
+		StringFilter filter = reqMsg.getEntity(StringFilter.class);
+		String name = filter == null ? null : filter.getValue();
+		if (name == null)
+			return new ResponseMessage("Invalid restaurant specified.");
+		Restaurant restaurant = DBManager.session().load(Restaurant.class, name);
+		if (restaurant == null)
+			return new ResponseMessage("The specified restaurant can not be found.");
+
+		return new ResponseMessage(new RestaurantInfo(restaurant.getName(),
+			new UserInfo(restaurant.getOwner().getUsername()),
+			new CuisineInfo(restaurant.getCuisine().getName()),
+			restaurant.getPrice(),
+			new CityInfo(restaurant.getCity().getName()),
+			restaurant.getDescription(),
+			restaurant.isLikedBy(loggedUser)));
+	}
+
+	@RequestHandlerMethod
+	private ResponseMessage handleListRestaurants(RequestMessage reqMsg)
+	{
+		StringFilter filter = reqMsg.getEntity(StringFilter.class);
+		PageFilter pageFilter = reqMsg.getEntity(PageFilter.class);
+		String regex = filter == null ? null : "(?i).*" + filter.getValue() + ".*";
+		Collection<Restaurant> restaurants;
+		if (filter == null)
+			restaurants = DBManager.session().loadAll(Restaurant.class,
+				new SortOrder().add("name"),
+				new Pagination(pageFilter.getPage(), pageFilter.getPerPage()), 1);
+		else
+			restaurants = DBManager.session().loadAll(Restaurant.class,
+				new Filter("name", ComparisonOperator.MATCHES, regex),
+				new SortOrder().add("name"),
+				new Pagination(pageFilter.getPage(), pageFilter.getPerPage()), 1);
+		List<RestaurantInfo> infos = new ArrayList<RestaurantInfo>();
+		restaurants.forEach((Restaurant r) -> {
+			infos.add(new RestaurantInfo(
+				r.getName(),
+				new UserInfo(r.getOwner().getUsername()),
+				new CuisineInfo(r.getCuisine().getName()),
+				r.getPrice(),
+				new CityInfo(r.getCity().getName()),
+				r.getDescription(),
+				r.isLikedBy(loggedUser)
+				));
+		});
+		return new ResponseMessage(infos.toArray(new RestaurantInfo[0]));
+	}
+
+	@RequestHandlerMethod
+	private ResponseMessage handleListLikedRestaurants(RequestMessage reqMsg)
+	{
+		StringFilter filter = reqMsg.getEntity(StringFilter.class);
+		PageFilter pageFilter = reqMsg.getEntity(PageFilter.class);
+		String regex = filter == null ? null : "(?i).*" + filter.getValue() + ".*";
+		List<Restaurant> restaurants = Restaurant.loadRestaurantsLikedBy(
+			loggedUser,
+			regex,
+			pageFilter.getPage(), pageFilter.getPerPage()
+			);
+		List<RestaurantInfo> infos = new ArrayList<RestaurantInfo>();
+		restaurants.forEach((Restaurant r) -> {
+			infos.add(new RestaurantInfo(
+				r.getName(),
+				new UserInfo(r.getOwner().getUsername()),
+				new CuisineInfo(r.getCuisine().getName()),
+				r.getPrice(),
+				new CityInfo(r.getCity().getName()),
+				r.getDescription(),
+				true
+				));
+		});
+		return new ResponseMessage(infos.toArray(new RestaurantInfo[0]));
+	}
+
+	@RequestHandlerMethod
+	private ResponseMessage handleEditRestaurant(RequestMessage reqMsg)
+	{
+		StringFilter filter = reqMsg.getEntity(StringFilter.class);
+		String name = filter == null ? null : filter.getValue();
+		RestaurantInfo restaurant = reqMsg.getEntity(RestaurantInfo.class);
+		if (name == null)
+			return new ResponseMessage("Invalid restaurant specified.");
+		Restaurant savedRestaurant = DBManager.session().load(Restaurant.class, name);
+		if (savedRestaurant == null)
+			return new ResponseMessage("The specified restaurant can not be found.");
+		if (!savedRestaurant.getOwner().equals(loggedUser))
+			return new ResponseMessage("You can edit only restaurants that you own.");
+		City city = DBManager.session().load(City.class, restaurant.getCity().getName(), 0);
+		if (city == null)
+			return new ResponseMessage("Can not find the specified city.");
+		Cuisine cuisine = DBManager.session().load(Cuisine.class, restaurant.getCuisine().getName(), 0);
+		if (cuisine == null)
+			return new ResponseMessage("Can not find the specified cuisine.");
+		savedRestaurant.setName(restaurant.getName());
+		savedRestaurant.setCity(city);
+		savedRestaurant.setCuisine(cuisine);
+		savedRestaurant.setPrice(restaurant.getPrice());
+		savedRestaurant.setDescription(restaurant.getDescription());
+		DBManager.session().save(savedRestaurant);
+		return new ResponseMessage();
+	}
+
+	@RequestHandlerMethod
+	private ResponseMessage handleDeleteRestaurant(RequestMessage reqMsg)
+	{
+		StringFilter filter = reqMsg.getEntity(StringFilter.class);
+		String name = filter == null ? null : filter.getValue();
+		if (name == null)
+			return new ResponseMessage("Invalid restaurant specified.");
+		Restaurant savedRestaurant = DBManager.session().load(Restaurant.class, name);
+		if (savedRestaurant == null)
+			return new ResponseMessage("The specified restaurant can not be found.");
+		if (!loggedUser.isAdmin() && !savedRestaurant.getOwner().equals(loggedUser))
+			return new ResponseMessage("You can edit only restaurants that you own.");
+		DBManager.session().delete(savedRestaurant);
+		return new ResponseMessage();
 	}
 
 	@RequestHandlerMethod
 	private ResponseMessage handleListUsers(RequestMessage reqMsg)
 	{
-		return null;
+		StringFilter filter = reqMsg.getEntity(StringFilter.class);
+		PageFilter pageFilter = reqMsg.getEntity(PageFilter.class);
+		String regex = filter == null ? null : "(?i).*" + filter.getValue() + ".*";
+		Collection<User> users;
+		if (regex == null)
+			users = DBManager.session().loadAll(User.class,
+				new SortOrder().add("username"),
+				new Pagination(pageFilter.getPage(), pageFilter.getPerPage()), 0);
+		else
+			users = DBManager.session().loadAll(User.class,
+				new Filter("username", ComparisonOperator.MATCHES, regex),
+				new SortOrder().add("username"),
+				new Pagination(pageFilter.getPage(), pageFilter.getPerPage()), 0);
+		List<UserInfo> infos = new ArrayList<UserInfo>();
+		users.forEach((User u) -> {
+			infos.add(new UserInfo(u.getUsername(), new CityInfo(u.getCity().getName()), u.isFollowedBy(loggedUser)));
+		});
+		return new ResponseMessage(infos.toArray(new UserInfo[0]));
 	}
 
 	@RequestHandlerMethod
@@ -244,13 +397,39 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod
 	private ResponseMessage handleFollowUser(RequestMessage reqMsg)
 	{
-		return null;
+		StringFilter filter = reqMsg.getEntity(StringFilter.class);
+		String username = filter == null ? null : filter.getValue();
+		if (username == null || !User.isValidUsername(username))
+			return new ResponseMessage("Invalid user.");
+		User user = DBManager.session().load(User.class, username, 0);
+		if (user == null)
+			return new ResponseMessage("Can not find the specified user.");
+		if (user.equals(loggedUser))
+			return new ResponseMessage("You can not follow yourself.");
+		if (loggedUser.isFollowing(user))
+			return new ResponseMessage("You already follow this user.");
+		loggedUser.follow(user);
+		DBManager.session().save(loggedUser);
+		return new ResponseMessage();
 	}
 
 	@RequestHandlerMethod
 	private ResponseMessage handleUnfollowUser(RequestMessage reqMsg)
 	{
-		return null;
+		StringFilter filter = reqMsg.getEntity(StringFilter.class);
+		String username = filter == null ? null : filter.getValue();
+		if (username == null || !User.isValidUsername(username))
+			return new ResponseMessage("Invalid user.");
+		User user = DBManager.session().load(User.class, username, 0);
+		if (user == null)
+			return new ResponseMessage("Can not find the specified user.");
+		if (user.equals(loggedUser))
+			return new ResponseMessage("You can not unfollow yourself.");
+		if (!loggedUser.isFollowing(user))
+			return new ResponseMessage("You are not following this user.");
+		loggedUser.unfollow(user);
+		DBManager.session().save(loggedUser);
+		return new ResponseMessage();
 	}
 
 	@RequestHandlerMethod(true)
@@ -307,10 +486,24 @@ public class RequestHandler extends Thread
 		return null;
 	}
 
-	@RequestHandlerMethod
+	@RequestHandlerMethod(requiresLogin=false)
 	private ResponseMessage handleListCities(RequestMessage reqMsg)
 	{
-		return null;
+		StringFilter filter = reqMsg.getEntity(StringFilter.class);
+		String regex = filter == null ? null : "(?i).*" + filter.getValue() + ".*";
+		Collection<City> cities;
+		if (filter == null)
+			cities = DBManager.session().loadAll(City.class,
+				new SortOrder().add("name"),
+				new Pagination(0, 10), 0);
+		else
+			cities = DBManager.session().loadAll(City.class,
+				new Filter("name", ComparisonOperator.MATCHES, regex),
+				new SortOrder().add("name"),
+				new Pagination(0, 10), 0);
+		List<CityInfo> infos = new ArrayList<CityInfo>();
+		cities.forEach((City c) -> { infos.add(new CityInfo(c.getName(), c.getLatitude(), c.getLongitude())); });
+		return new ResponseMessage(infos.toArray(new CityInfo[0]));
 	}
 
 	@RequestHandlerMethod(true)

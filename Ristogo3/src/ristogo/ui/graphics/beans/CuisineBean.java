@@ -1,26 +1,14 @@
 package ristogo.ui.graphics.beans;
 
 import javafx.beans.property.SimpleStringProperty;
-import ristogo.common.entities.Cuisine;
 
-public class CuisineBean extends EntityBean
+public class CuisineBean
 {
 	private final SimpleStringProperty cuisine;
 
-	public CuisineBean(int id, String cuisine)
+	public CuisineBean(String cuisine)
 	{
-		super(id);
 		this.cuisine = new SimpleStringProperty(cuisine);
-	}
-
-	public static CuisineBean fromEntity(Cuisine cuisine)
-	{
-		return new CuisineBean(cuisine.getId(), cuisine.getName());
-	}
-
-	public Cuisine toEntity()
-	{
-		return new Cuisine(getId(), getCuisine());
 	}
 
 	public String getCuisine()

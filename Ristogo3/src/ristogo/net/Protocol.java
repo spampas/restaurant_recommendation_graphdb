@@ -6,25 +6,24 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Logger;
 
-import ristogo.common.entities.City;
-import ristogo.common.entities.Cuisine;
-import ristogo.common.entities.Customer;
-import ristogo.common.entities.Entity;
-import ristogo.common.entities.Owner;
-import ristogo.common.entities.Restaurant;
-import ristogo.common.entities.User;
-import ristogo.common.net.ActionRequest;
-import ristogo.common.net.Message;
+import ristogo.common.net.entities.CityInfo;
+import ristogo.common.net.entities.CuisineInfo;
+import ristogo.common.net.entities.Entity;
+import ristogo.common.net.entities.PageFilter;
+import ristogo.common.net.entities.RestaurantInfo;
+import ristogo.common.net.entities.StringFilter;
+import ristogo.common.net.entities.UserInfo;
 import ristogo.common.net.RequestMessage;
 import ristogo.common.net.ResponseMessage;
+import ristogo.common.net.enums.ActionRequest;
 import ristogo.config.Configuration;
 
 public class Protocol implements AutoCloseable
 {
-	private Socket socket = null;
-	private DataInputStream inputStream = null;
-	private DataOutputStream outputStream = null;
-	private static Protocol instance = null;
+	private Socket socket;
+	private DataInputStream inputStream;
+	private DataOutputStream outputStream;
+	private static Protocol instance;
 
 	private Protocol() throws IOException
 	{
@@ -37,18 +36,19 @@ public class Protocol implements AutoCloseable
 
 	public static Protocol getInstance()
 	{
-		if(instance == null)
-			try {
-				instance = new Protocol();
-			} catch (IOException ex) {
-				Logger.getLogger(Protocol.class.getName()).severe("Unable to connect to server: " + ex.getMessage());
-				System.exit(1);
-			}
+		if(instance != null)
+			return instance;
+		try {
+			instance = new Protocol();
+		} catch (IOException ex) {
+			Logger.getLogger(Protocol.class.getName()).severe("Unable to connect to server: " + ex.getMessage());
+			System.exit(1);
+		}
 		return instance;
 	}
 
 
-	public ResponseMessage performLogin(User user)
+	public ResponseMessage performLogin(UserInfo user)
 	{
 		return sendRequest(ActionRequest.LOGIN, user);
 	}
@@ -58,149 +58,157 @@ public class Protocol implements AutoCloseable
 		return sendRequest(ActionRequest.LOGOUT);
 	}
 
-	public ResponseMessage registerUser(Customer customer)
+	public ResponseMessage registerUser(UserInfo user)
 	{
-		ResponseMessage resMsg = sendRequest(ActionRequest.REGISTER_USER, customer);
-		if (resMsg.isSuccess() && !(resMsg.getEntity() instanceof Customer))
-			return getProtocolErrorMessage();
-		return resMsg;
+		return sendRequest(ActionRequest.REGISTER_USER, user);
 	}
 
-	public ResponseMessage registerRestaurant(Owner owner, Restaurant restaurant)
-	{		
-		ResponseMessage resMsg = sendRequest(ActionRequest.REGISTER_RESTAURANT, owner, restaurant);
-		if (resMsg.isSuccess() && !(resMsg.getEntity() instanceof Owner))
-			return getProtocolErrorMessage();
-		return resMsg;
-	}
-	
-	public ResponseMessage getUsers()
+	public ResponseMessage addRestaurant(RestaurantInfo restaurant)
 	{
-		return sendRequest(ActionRequest.LIST_USERS);
-	}
-	
-	public ResponseMessage getUsers(User user)
-	{
-		return sendRequest(ActionRequest.LIST_USERS, user);
-	}
-	
-	public ResponseMessage getFriends(User user)
-	{
-		return sendRequest(ActionRequest.LIST_FRIENDS, user);
+		return sendRequest(ActionRequest.ADD_RESTAURANT, restaurant);
 	}
 
-	public ResponseMessage followUser(User user)
+	public ResponseMessage listUsers(StringFilter stringFilter, PageFilter pageFilter)
 	{
-		return sendRequest(ActionRequest.FOLLOW_USER, user);
+		return sendRequest(ActionRequest.LIST_USERS, stringFilter, pageFilter);
 	}
-	
-	public ResponseMessage unfollowUser(User user)
+
+	public ResponseMessage listUsers(PageFilter pageFilter)
 	{
-		return sendRequest(ActionRequest.UNFOLLOW_USER, user);
+		return sendRequest(ActionRequest.LIST_USERS, pageFilter);
 	}
-	
-	public ResponseMessage deleteUser(User user)
+
+	public ResponseMessage listFollowers(StringFilter stringFilter, PageFilter pageFilter)
+	{
+		return sendRequest(ActionRequest.LIST_FOLLOWERS, stringFilter, pageFilter);
+	}
+
+	public ResponseMessage listFollowers(PageFilter pageFilter)
+	{
+		return sendRequest(ActionRequest.LIST_FOLLOWERS, pageFilter);
+	}
+
+	public ResponseMessage listFollowing(StringFilter stringFilter, PageFilter pageFilter)
+	{
+		return sendRequest(ActionRequest.LIST_FOLLOWING, stringFilter, pageFilter);
+	}
+
+	public ResponseMessage listFollowing(PageFilter pageFilter)
+	{
+		return sendRequest(ActionRequest.LIST_FOLLOWING, pageFilter);
+	}
+
+	public ResponseMessage followUser(StringFilter filter)
+	{
+		return sendRequest(ActionRequest.FOLLOW_USER, filter);
+	}
+
+	public ResponseMessage unfollowUser(StringFilter filter)
+	{
+		return sendRequest(ActionRequest.UNFOLLOW_USER, filter);
+	}
+
+	public ResponseMessage deleteUser(UserInfo user)
 	{
 		return sendRequest(ActionRequest.DELETE_USER, user);
 	}
-	
-	public ResponseMessage getRestaurants()
+
+	public ResponseMessage listRestaurants(StringFilter nameFilter, PageFilter pageFilter)
 	{
-		return sendRequest(ActionRequest.LIST_RESTAURANTS);
+		return sendRequest(ActionRequest.LIST_RESTAURANTS, nameFilter, pageFilter);
 	}
-	
-	public ResponseMessage getRestaurants(Restaurant restaurant)
+
+	public ResponseMessage listRestaurants(PageFilter pageFilter)
 	{
-		return sendRequest(ActionRequest.LIST_RESTAURANTS, restaurant);
+		return sendRequest(ActionRequest.LIST_RESTAURANTS, pageFilter);
 	}
-	
-	public ResponseMessage getRestaurants(User user)
+
+	public ResponseMessage listLikedRestaurants(StringFilter nameFilter, PageFilter pageFilter)
 	{
-		return sendRequest(ActionRequest.LIST_RESTAURANTS, user);
+		return sendRequest(ActionRequest.LIST_LIKED_RESTAURANTS, nameFilter, pageFilter);
 	}
-	
-	public ResponseMessage putLikeRestaurant(Restaurant restaurant)
+
+	public ResponseMessage listLikedRestaurants(PageFilter pageFilter)
+	{
+		return sendRequest(ActionRequest.LIST_LIKED_RESTAURANTS, pageFilter);
+	}
+
+	public ResponseMessage putLikeRestaurant(RestaurantInfo restaurant)
 	{
 		return sendRequest(ActionRequest.PUT_LIKE_RESTAURANT, restaurant);
 	}
-	
-	public ResponseMessage removeLikeRestaurant(Restaurant restaurant)
+
+	public ResponseMessage removeLikeRestaurant(RestaurantInfo restaurant)
 	{
 		return sendRequest(ActionRequest.REMOVE_LIKE_RESTAURANT, restaurant);
 	}
-	
-	public ResponseMessage getOwnRestaurant()
+
+	public ResponseMessage listOwnRestaurants()
 	{
-		return sendRequest(ActionRequest.GET_OWN_RESTAURANT);
+		return sendRequest(ActionRequest.LIST_OWN_RESTAURANTS);
 	}
-	
-	public ResponseMessage getStatisticRestaurant(Restaurant restaurant)
+
+	public ResponseMessage editRestaurant(StringFilter nameFilter, RestaurantInfo restaurant)
+	{
+		return sendRequest(ActionRequest.EDIT_RESTAURANT, nameFilter, restaurant);
+	}
+
+	public ResponseMessage getStatisticRestaurant(RestaurantInfo restaurant)
 	{
 		return sendRequest(ActionRequest.LIST_USERS, restaurant);
 	}
 
-	public ResponseMessage editRestaurant(Restaurant restaurant)
+	public ResponseMessage deleteRestaurant(StringFilter nameFilter)
 	{
-		return sendRequest(ActionRequest.EDIT_RESTAURANT, restaurant);
+		return sendRequest(ActionRequest.DELETE_RESTAURANT, nameFilter);
 	}
 
-	public ResponseMessage deleteRestaurant(Restaurant restaurant)
-	{
-		return sendRequest(ActionRequest.DELETE_RESTAURANT, restaurant);
-	}
-	
 	public ResponseMessage getCuisines()
 	{
 		return sendRequest(ActionRequest.LIST_CUISINES);
 	}
-	
-	public ResponseMessage getCuisines(Cuisine cuisine)
+
+	public ResponseMessage getCuisines(CuisineInfo cuisine)
 	{
 		return sendRequest(ActionRequest.LIST_CUISINES, cuisine);
 	}
-	
-	public ResponseMessage addCuisine(Cuisine cuisine)
+
+	public ResponseMessage addCuisine(CuisineInfo cuisine)
 	{
-		ResponseMessage resMsg = sendRequest(ActionRequest.ADD_CUISINE, cuisine);
-		if (resMsg.isSuccess() && !(resMsg.getEntity() instanceof Cuisine))
-			return getProtocolErrorMessage();
-		return resMsg;
+		return sendRequest(ActionRequest.ADD_CUISINE, cuisine);
 	}
 
-	public ResponseMessage deleteCuisine(Cuisine cuisine)
+	public ResponseMessage deleteCuisine(CuisineInfo cuisine)
 	{
 		return sendRequest(ActionRequest.DELETE_CUISINE, cuisine);
 	}
-	
-	public ResponseMessage putLikeCuisine(Cuisine cuisine)
+
+	public ResponseMessage putLikeCuisine(CuisineInfo cuisine)
 	{
 		return sendRequest(ActionRequest.PUT_LIKE_CUISINE, cuisine);
 	}
-	
-	public ResponseMessage removeLikeCuisine(Cuisine cuisine)
+
+	public ResponseMessage removeLikeCuisine(CuisineInfo cuisine)
 	{
 		return sendRequest(ActionRequest.REMOVE_LIKE_CUISINE, cuisine);
 	}
-	
+
 	public ResponseMessage getCities()
 	{
 		return sendRequest(ActionRequest.LIST_CITIES);
 	}
-	
-	public ResponseMessage getCities(City city)
+
+	public ResponseMessage getCities(StringFilter filter)
 	{
-		return sendRequest(ActionRequest.LIST_CITIES, city);
+		return sendRequest(ActionRequest.LIST_CITIES, filter);
 	}
-	
-	public ResponseMessage addCity(City city)
+
+	public ResponseMessage addCity(CityInfo city)
 	{
-		ResponseMessage resMsg = sendRequest(ActionRequest.ADD_CITY, city);
-		if (resMsg.isSuccess() && !(resMsg.getEntity() instanceof City))
-			return getProtocolErrorMessage();
-		return resMsg;
+		return sendRequest(ActionRequest.ADD_CITY, city);
 	}
-	
-	public ResponseMessage deleteCity(City city)
+
+	public ResponseMessage deleteCity(CityInfo city)
 	{
 		return sendRequest(ActionRequest.DELETE_CITY, city);
 	}
@@ -209,7 +217,7 @@ public class Protocol implements AutoCloseable
 	{
 		Logger.getLogger(Protocol.class.getName()).entering(Protocol.class.getName(), "sendRequest", entities);
 		new RequestMessage(actionRequest, entities).send(outputStream);
-		ResponseMessage resMsg = (ResponseMessage)Message.receive(inputStream);
+		ResponseMessage resMsg = ResponseMessage.receive(inputStream);
 		Logger.getLogger(Protocol.class.getName()).exiting(Protocol.class.getName(), "sendRequest", entities);
 		return resMsg != null && resMsg.isValid(actionRequest) ? resMsg : getProtocolErrorMessage();
 	}
@@ -220,6 +228,7 @@ public class Protocol implements AutoCloseable
 		return new ResponseMessage("Invalid response from server.");
 	}
 
+	@Override
 	public void close() throws IOException
 	{
 		inputStream.close();

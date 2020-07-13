@@ -11,4 +11,9 @@ public class FormLabel extends Label
 		setFont(GUIConfig.getFormLabelFont());
 		setTextFill(GUIConfig.getFgColor());
 	}
+
+	public FormLabel()
+	{
+		this("");
+	}
 }

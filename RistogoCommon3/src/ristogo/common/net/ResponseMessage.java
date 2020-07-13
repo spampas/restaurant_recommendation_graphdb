@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import ristogo.common.entities.Entity;
-import ristogo.common.entities.Restaurant;
-import ristogo.common.entities.User;
+import ristogo.common.net.entities.Entity;
+import ristogo.common.net.enums.ActionRequest;
 
 public class ResponseMessage extends Message
 {
@@ -50,7 +49,8 @@ public class ResponseMessage extends Message
 
 	public boolean isValid(ActionRequest actionRequest)
 	{
-		// TODO: Gestire azioni
+		return true;
+		/*// TODO: Gestire azioni
 		if (!isSuccess())
 			return getEntityCount() == 0;
 		switch(actionRequest)
@@ -86,7 +86,7 @@ public class ResponseMessage extends Message
 		case DELETE_CITY:
 		default:
 			return false;
-		}
+		}*/
 	}
 
 	public static ResponseMessage receive(DataInputStream input)

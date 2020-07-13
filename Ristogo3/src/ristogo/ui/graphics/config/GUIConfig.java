@@ -272,12 +272,12 @@ public class GUIConfig
 		return getCSSPadding() + getCSSBorderDim();
 	}
 
-	public static double getMaxRowDisplayable(boolean isOwner)
+	public static int getMaxRowDisplayable(boolean isOwner)
 	{
 		return config.getNumberRowsDisplayable() - (isOwner ? 0 : 2);
 	}
 
-	public static double getMaxRowDisplayable()
+	public static int getMaxRowDisplayable()
 	{
 		return getMaxRowDisplayable(true);
 	}

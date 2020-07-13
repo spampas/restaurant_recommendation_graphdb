@@ -2,8 +2,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>RistogoServer</groupId>
-	<artifactId>RistogoServer</artifactId>
+	<groupId>RistogoServer3</groupId>
+	<artifactId>RistogoServer3</artifactId>
 	<version>1.0.0</version>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
@@ -46,15 +46,21 @@
 			<version>1.4</version>
 		</dependency>
 		<dependency>
-			<groupId>RistogoCommon</groupId>
-			<artifactId>RistogoCommon</artifactId>
+			<groupId>RistogoCommon3</groupId>
+			<artifactId>RistogoCommon3</artifactId>
 			<version>1.0.0</version>
 		</dependency>
-
 		<dependency>
-			<groupId>org.neo4j.driver</groupId>
-			<artifactId>neo4j-java-driver</artifactId>
-			<version>4.0.1</version>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-ogm-core</artifactId>
+			<version>3.2.14</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-ogm-bolt-driver</artifactId>
+			<version>3.2.14</version>
+			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 </project>

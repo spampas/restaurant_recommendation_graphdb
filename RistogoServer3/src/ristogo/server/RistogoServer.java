@@ -15,6 +15,8 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import ristogo.server.db.DBManager;
+
 public class RistogoServer
 {
 	private static int port = 8888;
@@ -53,9 +55,9 @@ public class RistogoServer
 			Logger.getLogger(RistogoServer.class.getName()).log(Level.SEVERE, null, ex);
 		} finally {
 			Logger.getLogger(RistogoServer.class.getName()).info("Terminating...");
-			// TODO sostituire ??? DBManager.closeFactory();
 			if (pool != null)
 				pool.shutdown();
+			DBManager.dispose();
 			Logger.getLogger(RistogoServer.class.getName()).exiting(RistogoServer.class.getName(), "startServer");
 		}
 	}
