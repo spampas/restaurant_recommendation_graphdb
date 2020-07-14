@@ -3,6 +3,7 @@ package ristogo.server.db.entities;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -307,6 +308,42 @@ public class User
 		}
 		return followingUsers;
 	}
+	
+	public List<User> recommendUser(Cuisine cuisine, int distance, boolean airDistance, City city){
+		City targetCity = city == null ? getCity() : city;
+		Map<String,Object> parameters = new HashMap<String,Object>();
+		String distanceQuery = null;
+		String cuisineQuery = "";
+		String cityQuery = "(city) ";
+		parameters.put("city", targetCity.getName());
+		parameters.put("username", getUsername());
+		if(distance > 0) {
+			parameters.put("distance", distance);
+			cityQuery = "(city|city2) ";
+			if(airDistance)
+				distanceQuery = "MATCH (city2:City) "
+				+ "WHERE distance(point1({latitude: city2.latitude, longitude: city2.longitude}), "
+						+ "point2({latitude: city.latitude, longitude: city.longitude:})) "
+						+ "<= $distance ";
+			else
+				distanceQuery = "";
+		}
+		if(cuisine != null) {
+			parameters.put("cuisine", cuisine.getName());
+			cuisineQuery = "(cuisine:Cuisine{name:$cuisine})<-[:LIKE]-";
+		}
+			
+		
+		Iterable<User> recommended = DBManager.session().query(User.class,
+				"MATCH (city:City{name:$city}) " + distanceQuery 
+				+ "MATCH "+ cuisineQuery +"(user:User)-[:LIVE]->"+ cityQuery
+					+ "WHERE NOT EXISTS( (:User{name:$username})-[:FOLLOWS]->(user) ) "
+				+ "RETURN user", parameters);
+		List<User> users = new ArrayList<User>();
+		recommended.forEach(users::add);
+		return users;
+	}
+
 
 	public boolean isFollowing(User user)
 	{

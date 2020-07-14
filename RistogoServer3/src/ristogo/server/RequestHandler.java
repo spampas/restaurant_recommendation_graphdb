@@ -24,6 +24,8 @@ import ristogo.common.net.entities.CityInfo;
 import ristogo.common.net.entities.CuisineInfo;
 import ristogo.common.net.entities.Entity;
 import ristogo.common.net.entities.PageFilter;
+import ristogo.common.net.entities.RecommendRestaurantInfo;
+import ristogo.common.net.entities.RecommendUserInfo;
 import ristogo.common.net.entities.RestaurantInfo;
 import ristogo.common.net.entities.StatisticInfo;
 import ristogo.common.net.entities.StringFilter;
@@ -654,6 +656,9 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod
 	private ResponseMessage handleRecommendRestaurant(RequestMessage reqMsg)
 	{
+		RecommendRestaurantInfo info = reqMsg.getEntity(RecommendRestaurantInfo.class);
+		if(info == null)
+			return new ResponseMessage("Recommendation info is null");
 		
 		return null;
 	}
@@ -661,7 +666,23 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod
 	private ResponseMessage handleRecommendUser(RequestMessage reqMsg)
 	{
-		return null;
+		RecommendUserInfo info = reqMsg.getEntity(RecommendUserInfo.class);
+		Cuisine cuisine = null;
+		City city = null;
+		if(info == null)
+			return new ResponseMessage("Recommendation info is null");
+		if(info.getCuisine() != null)
+			cuisine = DBManager.session().load(Cuisine.class, info.getCuisine().getName(), 0);
+		if(info.getCity() != null)
+			city = DBManager.session().load(City.class, info.getCity().getName(), 0);
+		List<User> recommended = loggedUser.recommendUser(cuisine, info.getDistance(), info.isAirDistance(), city);
+		List<UserInfo> recommendedInfo = new ArrayList<UserInfo>();
+		recommended.forEach((User u) -> {
+			CityInfo cityInfo = new CityInfo(u.getCity().getName());
+			recommendedInfo.add(new UserInfo(u.getUsername(), cityInfo));
+		});
+		
+		return new ResponseMessage(recommendedInfo.toArray(new UserInfo[0]));
 	}
 	
 	
