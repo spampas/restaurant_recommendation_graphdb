@@ -650,7 +650,22 @@ public class RequestHandler extends Thread
 		DBManager.session().delete(savedCuisine);
 		return new ResponseMessage(cuisine);
 	}
-
+	
+	@RequestHandlerMethod
+	private ResponseMessage handleRecommendRestaurant(RequestMessage reqMsg)
+	{
+		
+		return null;
+	}
+	
+	@RequestHandlerMethod
+	private ResponseMessage handleRecommendUser(RequestMessage reqMsg)
+	{
+		return null;
+	}
+	
+	
+	
 	@RequestHandlerMethod
 	private ResponseMessage handlePutLikeCuisine(RequestMessage reqMsg)
 	{
