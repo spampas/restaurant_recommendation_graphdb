@@ -1,4 +1,4 @@
-package ristogo.ui.graphics;
+package ristogo.ui.graphics.oldcode;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
