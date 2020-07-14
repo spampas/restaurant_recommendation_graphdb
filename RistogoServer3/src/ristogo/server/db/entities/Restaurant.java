@@ -110,6 +110,10 @@ public class Restaurant
 	{
 		return usersWhoLike;
 	}
+	
+	public int getLikesCount() {
+		return usersWhoLike == null ? 0 : usersWhoLike.size();
+	}
 
 	public boolean isLikedBy(User user)
 	{
@@ -166,5 +170,47 @@ public class Restaurant
 	@PreDelete
 	private void preDelete()
 	{
+	}
+
+	public int getCityRank()
+	{
+		Iterable<String> found = DBManager.session().query(String.class,
+			"MATCH (u:User)-[rel:LIKES]->(r:Restaurant)-[:LOCATED]->(city:City{name:$city})"
+			+ "ORDER BY count(rel) "
+			+ "RETURN r.name",
+			Map.ofEntries(Map.entry("city", getCity().getName())));
+		List<String> ranking = new ArrayList<String>();
+		found.forEach(ranking::add);
+		
+		return ranking.indexOf(getName()) + 1;
+	}
+	
+	public int getCuisineRank()
+	{
+		Iterable<String> found = DBManager.session().query(String.class,
+			"MATCH (u:User)-[rel:LIKES]->(r:Restaurant)-[:SERVE]->(cuisine:Cuisine{name:$cuisine})"
+			+ "ORDER BY count(rel) "
+			+ "RETURN r.name",
+			Map.ofEntries(Map.entry("cuisine", getCuisine().getName())));
+		List<String> ranking = new ArrayList<String>();
+		found.forEach(ranking::add);
+		
+		return ranking.indexOf(getName()) + 1;
+	}
+	
+	public int getCityCuisineRank()
+	{
+		Iterable<String> found = DBManager.session().query(String.class,
+			"MATCH (city:City{name:$city})<-[:LOCATED]-(r:Restaurant)-[:SERVE]->(cuisine:Cuisine{name:$cuisine})"
+			+ "WITH r"
+			+ "MATCH (user:User)-[rel:LIKES]->(r)"
+			+ "ORDER BY count(rel) "
+			+ "RETURN r.name",
+			Map.ofEntries(Map.entry("cuisine", getCuisine().getName()),
+					Map.entry("city", getCity().getName())));
+		List<String> ranking = new ArrayList<String>();
+		found.forEach(ranking::add);
+		
+		return ranking.indexOf(getName()) + 1;
 	}
 }

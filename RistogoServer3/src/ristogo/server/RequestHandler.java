@@ -25,6 +25,7 @@ import ristogo.common.net.entities.CuisineInfo;
 import ristogo.common.net.entities.Entity;
 import ristogo.common.net.entities.PageFilter;
 import ristogo.common.net.entities.RestaurantInfo;
+import ristogo.common.net.entities.StatisticInfo;
 import ristogo.common.net.entities.StringFilter;
 import ristogo.common.net.entities.UserInfo;
 import ristogo.common.net.enums.ActionRequest;
@@ -522,7 +523,16 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod
 	private ResponseMessage handleGetStatisticRestaurant(RequestMessage reqMsg)
 	{
-		return null;
+		//Rank by Likes for restaurant 
+		RestaurantInfo restaurant = reqMsg.getEntity(RestaurantInfo.class);
+		if(restaurant == null)
+			return new ResponseMessage("No specified restaurant");
+		Restaurant savedRestaurant = DBManager.session().load(Restaurant.class, restaurant.getName(), 1);
+		StatisticInfo stat = new StatisticInfo(savedRestaurant.getLikesCount(),
+				savedRestaurant.getCityRank(),
+				savedRestaurant.getCuisineRank(),
+				savedRestaurant.getCityCuisineRank());
+		return new ResponseMessage(stat);
 	}
 	
 	@RequestHandlerMethod
