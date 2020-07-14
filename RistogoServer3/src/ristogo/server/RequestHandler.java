@@ -575,9 +575,17 @@ public class RequestHandler extends Thread
 		if (restaurant == null)
 			return new ResponseMessage("Can not find the specified restaurant.");
 		
-		
-		DBManager.session().save(loggedUser);
-		return new ResponseMessage();
+		RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant.getName(), 
+				new UserInfo(restaurant.getOwner().getUsername()),
+				new CuisineInfo(restaurant.getCuisine().getName()),
+				restaurant.getPrice(),
+				new CityInfo(restaurant.getCity().getName(),
+						restaurant.getCity().getLatitude(),
+						restaurant.getCity().getLongitude()),				
+				restaurant.getDescription(),
+				loggedUser.getLikedRestaurants().contains(restaurant));
+				
+		return new ResponseMessage(restaurantInfo);
 	}
 
 	@RequestHandlerMethod
