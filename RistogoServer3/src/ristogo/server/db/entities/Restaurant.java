@@ -1,6 +1,7 @@
 package ristogo.server.db.entities;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -174,12 +175,13 @@ public class Restaurant
 
 	public int getCityRank()
 	{
-		Iterable<String> found = DBManager.session().query(String.class,
-			"MATCH (u:User)-[rel:LIKES]->(r:Restaurant)-[:LOCATED]->(city:City{name:$city})"
-			+ "ORDER BY count(rel) "
-			+ "RETURN r.name",
+		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
+			"MATCH (u:User)-[:LIKES]->(r:Restaurant)-[:LOCATED]->(city:City{name:$city}) "
+			+ "WITH r, count(u) as rank "
+			+ "ORDER BY rank DESC "
+			+ "RETURN r",
 			Map.ofEntries(Map.entry("city", getCity().getName())));
-		List<String> ranking = new ArrayList<String>();
+		List<Restaurant> ranking = new ArrayList<Restaurant>();
 		found.forEach(ranking::add);
 		
 		return ranking.indexOf(getName()) + 1;
@@ -187,30 +189,31 @@ public class Restaurant
 	
 	public int getCuisineRank()
 	{
-		Iterable<String> found = DBManager.session().query(String.class,
-			"MATCH (u:User)-[rel:LIKES]->(r:Restaurant)-[:SERVE]->(cuisine:Cuisine{name:$cuisine})"
-			+ "ORDER BY count(rel) "
-			+ "RETURN r.name",
+		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
+			"MATCH (u:User)-[rel:LIKES]->(r:Restaurant)-[:SERVE]->(cuisine:Cuisine{name:$cuisine}) "	
+			+ "WITH r, count(u) as rank "
+			+ "ORDER BY rank DESC "
+			+ "RETURN r",
 			Map.ofEntries(Map.entry("cuisine", getCuisine().getName())));
-		List<String> ranking = new ArrayList<String>();
+		List<Restaurant> ranking = new ArrayList<Restaurant>();
 		found.forEach(ranking::add);
-		
-		return ranking.indexOf(getName()) + 1;
+				
+		return ranking.indexOf(this) + 1;
 	}
 	
 	public int getCityCuisineRank()
 	{
-		Iterable<String> found = DBManager.session().query(String.class,
+		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
 			"MATCH (city:City{name:$city})<-[:LOCATED]-(r:Restaurant)-[:SERVE]->(cuisine:Cuisine{name:$cuisine})"
-			+ "WITH r"
-			+ "MATCH (user:User)-[rel:LIKES]->(r)"
-			+ "ORDER BY count(rel) "
-			+ "RETURN r.name",
+			+ "MATCH (user:User)-[:LIKES]->(r) "
+			+ "WITH r, count(u) as rank "
+			+ "ORDER BY rank DESC "
+			+ "RETURN r",
 			Map.ofEntries(Map.entry("cuisine", getCuisine().getName()),
 					Map.entry("city", getCity().getName())));
-		List<String> ranking = new ArrayList<String>();
+		List<Restaurant> ranking = new ArrayList<Restaurant>();
 		found.forEach(ranking::add);
 		
-		return ranking.indexOf(getName()) + 1;
+		return ranking.indexOf(this) + 1;
 	}
 }

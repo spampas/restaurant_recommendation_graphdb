@@ -1,6 +1,11 @@
 package ristogo.server;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
 import java.util.TimeZone;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -14,8 +19,13 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.neo4j.ogm.cypher.Filter;
+import org.neo4j.ogm.model.Result;
 
 import ristogo.server.db.DBManager;
+import ristogo.server.db.entities.City;
+import ristogo.server.db.entities.Cuisine;
+import ristogo.server.db.entities.User;
 
 public class RistogoServer
 {
@@ -36,9 +46,69 @@ public class RistogoServer
 		}
 
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-
+		
+		
+		createAdmin();
 		startServer();
+		
+		
 		Logger.getLogger(RistogoServer.class.getName()).exiting(RistogoServer.class.getName(), "main", args);
+	}
+	
+	private static void createAdmin()
+	{
+		List<User> adminsList = new ArrayList<User>();
+		Iterable<User> admins = DBManager.session().query(User.class, "MATCH (n:Admin) RETURN n", Collections.EMPTY_MAP);
+		admins.forEach(adminsList::add);
+		if(!adminsList.isEmpty())
+			return;
+		Scanner scanner = System.console() != null ?
+		new Scanner(System.console().reader()) : new Scanner(System.in);
+		System.out.println("*** CREATE ADMIN USER ***");
+		System.out.println();
+		String username = null;
+		while (username == null) {
+			System.out.print("USERNAME [admin]: ");
+			System.out.flush();
+			username = scanner.nextLine();
+			username.trim();
+			if (username.isBlank()) {
+				username = "admin";
+				break;
+			}
+			if (!username.matches("^[A-Za-z0-9]{3,32}$")) {
+				System.out.println("Invalid username.");
+				username = null;
+				continue;
+			}
+		}
+		String password = null;
+		while (password == null) {
+			System.out.print("PASSWORD: ");
+			System.out.flush();
+			if (System.console() == null)
+				password = scanner.nextLine();
+			else
+				password = new String(System.console().readPassword());
+			if (password.isBlank()) {
+				System.out.println("Invalid password.");
+				password = null;
+				continue;
+			}
+			if (password.length() < 8) {
+				System.out.println("Password must be at least 8 chars long.");
+				password = null;
+				continue;
+			}
+		}
+		User admin = new User();
+		admin.setUsername(username);
+		admin.setPassword(password);
+		admin.promote();
+		DBManager.session().save(admin);
+		System.out.println();
+		System.out.println("*** ADMIN '" + username + "' CREATED ***");
+		System.out.println();
 	}
 
 	private static void startServer()
