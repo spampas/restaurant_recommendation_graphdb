@@ -13,7 +13,7 @@ import ristogo.common.net.entities.RestaurantInfo;
 import ristogo.common.net.entities.UserInfo;
 import ristogo.ui.graphics.beans.RestaurantBean;
 import ristogo.ui.graphics.config.GUIConfig;
-import ristogo.ui.graphics.controls.FormButton;
+import ristogo.ui.graphics.controls.base.FormButton;
 
 public class RestaurantsPane extends BasePane
 {
@@ -62,7 +62,7 @@ public class RestaurantsPane extends BasePane
 	@Override
 	protected Node createRight()
 	{
-		list = new EditRestaurantsPanel("Your restaurants", loggedUser, this::handleSelectRestaurant);
+		//list = new EditRestaurantsPanel("Your restaurants", loggedUser, this::handleSelectRestaurant);
 		return list;
 	}
 
@@ -73,7 +73,7 @@ public class RestaurantsPane extends BasePane
 
 	private void handleFormAction(ActionEvent event)
 	{
-		list.refresh();
+		//list.refresh();
 	}
 
 	@Override

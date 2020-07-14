@@ -17,7 +17,7 @@ import ristogo.net.Protocol;
 import ristogo.ui.graphics.beans.RestaurantBean;
 import ristogo.ui.graphics.beans.UserBean;
 import ristogo.ui.graphics.config.GUIConfig;
-import ristogo.ui.graphics.controls.RistogoTableView;
+import ristogo.ui.graphics.controls.base.RistogoTableView;
 
 public class EditRestaurantTableView extends RistogoTableView<RestaurantBean>
 {
@@ -68,7 +68,7 @@ public class EditRestaurantTableView extends RistogoTableView<RestaurantBean>
 	}
 
 	@Override
-	protected boolean populateTable(int page)
+	public boolean populateTable(int page)
 	{
 		ResponseMessage resMsg;
 		if (filter == null)

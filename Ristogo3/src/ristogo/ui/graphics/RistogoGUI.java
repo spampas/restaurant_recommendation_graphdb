@@ -24,7 +24,7 @@ import ristogo.common.net.entities.RestaurantInfo;
 import ristogo.common.net.entities.UserInfo;
 import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
-import ristogo.ui.graphics.controls.FormButton;
+import ristogo.ui.graphics.controls.base.FormButton;
 
 public final class RistogoGUI extends Application
 {

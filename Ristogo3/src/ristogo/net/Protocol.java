@@ -108,9 +108,9 @@ public class Protocol implements AutoCloseable
 		return sendRequest(ActionRequest.UNFOLLOW_USER, filter);
 	}
 
-	public ResponseMessage deleteUser(UserInfo user)
+	public ResponseMessage deleteUser(StringFilter nameFilter)
 	{
-		return sendRequest(ActionRequest.DELETE_USER, user);
+		return sendRequest(ActionRequest.DELETE_USER, nameFilter);
 	}
 
 	public ResponseMessage listRestaurants(StringFilter nameFilter, PageFilter pageFilter)
@@ -133,14 +133,14 @@ public class Protocol implements AutoCloseable
 		return sendRequest(ActionRequest.LIST_LIKED_RESTAURANTS, pageFilter);
 	}
 
-	public ResponseMessage putLikeRestaurant(RestaurantInfo restaurant)
+	public ResponseMessage likeRestaurant(StringFilter nameFilter)
 	{
-		return sendRequest(ActionRequest.PUT_LIKE_RESTAURANT, restaurant);
+		return sendRequest(ActionRequest.LIKE_RESTAURANT, nameFilter);
 	}
 
-	public ResponseMessage removeLikeRestaurant(RestaurantInfo restaurant)
+	public ResponseMessage unlikeRestaurant(StringFilter nameFilter)
 	{
-		return sendRequest(ActionRequest.REMOVE_LIKE_RESTAURANT, restaurant);
+		return sendRequest(ActionRequest.UNLIKE_RESTAURANT, nameFilter);
 	}
 
 	public ResponseMessage listOwnRestaurants(PageFilter pageFilter)

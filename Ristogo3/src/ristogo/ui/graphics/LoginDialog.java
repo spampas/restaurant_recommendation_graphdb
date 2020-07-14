@@ -25,10 +25,10 @@ import ristogo.common.net.entities.UserInfo;
 import ristogo.common.net.ResponseMessage;
 import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
-import ristogo.ui.graphics.controls.CitySelector;
-import ristogo.ui.graphics.controls.DialogLabel;
-import ristogo.ui.graphics.controls.DialogPasswordField;
-import ristogo.ui.graphics.controls.DialogTextField;
+import ristogo.ui.graphics.controls.base.CitySelector;
+import ristogo.ui.graphics.controls.base.DialogLabel;
+import ristogo.ui.graphics.controls.base.DialogPasswordField;
+import ristogo.ui.graphics.controls.base.DialogTextField;
 
 final class LoginDialog extends Dialog<UserInfo>
 {

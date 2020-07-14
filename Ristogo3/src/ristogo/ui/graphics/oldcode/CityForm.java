@@ -6,7 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import ristogo.ui.graphics.config.GUIConfig;
-import ristogo.ui.graphics.controls.FormLabel;
+import ristogo.ui.graphics.controls.base.FormLabel;
 
 public class CityForm extends GridPane {
 

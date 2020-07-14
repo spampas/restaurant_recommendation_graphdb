@@ -14,7 +14,7 @@ import ristogo.ui.graphics.config.GUIConfig;
 
 public abstract class MenuPanel extends VBox
 {
-	private VBox content = new VBox(10);
+	/*private VBox content = new VBox(10);
 	private ToolBar toolBar = new ToolBar();
 	private LinkedHashMap<String, SearchableTableView<?>> menus;
 
@@ -70,5 +70,5 @@ public abstract class MenuPanel extends VBox
 		if (menus.size() > 1)
 			this.content.getChildren().add(toolBar);
 		this.content.getChildren().add(content);
-	}
+	}*/
 }

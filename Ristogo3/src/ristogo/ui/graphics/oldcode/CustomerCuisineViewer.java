@@ -11,7 +11,7 @@ import javafx.scene.layout.VBox;
 import ristogo.common.net.ResponseMessage;
 import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
-import ristogo.ui.graphics.controls.FormLabel;
+import ristogo.ui.graphics.controls.base.FormLabel;
 
 public class CustomerCuisineViewer extends VBox {
 	/*

@@ -10,7 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import ristogo.common.net.entities.UserInfo;
 import ristogo.ui.graphics.config.GUIConfig;
-import ristogo.ui.graphics.controls.FormButton;
+import ristogo.ui.graphics.controls.base.FormButton;
 
 public class PreferencesPane extends BasePane
 {

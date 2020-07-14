@@ -1,37 +1,33 @@
-package ristogo.ui.graphics;
+package ristogo.ui.graphics.controls;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import ristogo.common.net.entities.CityInfo;
-import ristogo.common.net.entities.CuisineInfo;
-import ristogo.common.net.entities.Entity;
+import ristogo.common.net.ResponseMessage;
 import ristogo.common.net.entities.PageFilter;
 import ristogo.common.net.entities.RestaurantInfo;
 import ristogo.common.net.entities.StringFilter;
 import ristogo.common.net.entities.UserInfo;
 import ristogo.common.net.entities.enums.Price;
-import ristogo.common.net.ResponseMessage;
 import ristogo.net.Protocol;
+import ristogo.ui.graphics.ErrorBox;
 import ristogo.ui.graphics.beans.RestaurantBean;
+import ristogo.ui.graphics.beans.UserBean;
 import ristogo.ui.graphics.config.GUIConfig;
-import ristogo.ui.graphics.controls.RistogoTableView;
+import ristogo.ui.graphics.controls.base.RistogoTableView;
 
-final class RestaurantTableView extends RistogoTableView<RestaurantBean>
+public class RestaurantsTableView extends RistogoTableView<RestaurantBean>
 {
-	protected boolean liked;
-
-	public RestaurantTableView(boolean liked)
-	{
-		super();
-		this.liked = liked;
+	enum FilterType {
+		ALL,
+		LIKED,
+		RECOMMEND
 	}
+
+	private FilterType filterType = FilterType.ALL;
 
 	@Override
 	protected Collection<TableColumn<RestaurantBean, ?>> generateColumns()
@@ -78,19 +74,43 @@ final class RestaurantTableView extends RistogoTableView<RestaurantBean>
 	}
 
 	@Override
-	protected boolean populateTable(int page)
+	public boolean populateTable(int page)
 	{
 		ResponseMessage resMsg;
-		if (filter == null)
-			if (liked)
+		switch(filterType) {
+		case LIKED:
+			if (filter == null)
 				resMsg = Protocol.getInstance().listLikedRestaurants(new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
 			else
-				resMsg = Protocol.getInstance().listRestaurants(new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
-		else
-			if (liked)
 				resMsg = Protocol.getInstance().listLikedRestaurants(new StringFilter(filter), new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
+			break;
+		case RECOMMEND:
+			//TODO
+		case ALL:
+		default:
+			if (filter == null)
+				resMsg = Protocol.getInstance().listRestaurants(new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
 			else
 				resMsg = Protocol.getInstance().listRestaurants(new StringFilter(filter), new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
+		}
 		return extractItemsFromMessage(resMsg);
+	}
+
+	public void filter(String filter)
+	{
+		filterType = FilterType.ALL;
+		super.filter(filter);
+	}
+
+	public void filterLiked(String filter)
+	{
+		filterType = FilterType.LIKED;
+		super.filter(filter);
+	}
+
+	public void filterRecommend(String filter) //TODO
+	{
+		filterType = FilterType.RECOMMEND;
+		super.filter(filter);
 	}
 }

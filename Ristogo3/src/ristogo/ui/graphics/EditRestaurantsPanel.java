@@ -22,7 +22,7 @@ import ristogo.ui.graphics.config.GUIConfig;
 
 public class EditRestaurantsPanel extends MenuPanel
 {
-	private static SearchableTableView<RestaurantBean> table = new SearchableTableView<RestaurantBean>(new EditRestaurantTableView());
+	/*private static SearchableTableView<RestaurantBean> table = new SearchableTableView<RestaurantBean>(new EditRestaurantTableView());
 	private static LinkedHashMap<String, SearchableTableView<?>> map;
 	static {
 		map = new LinkedHashMap<String, SearchableTableView<?>>();
@@ -59,6 +59,6 @@ public class EditRestaurantsPanel extends MenuPanel
 	public void refresh()
 	{
 		table.refresh();
-	}
+	}*/
 
 }

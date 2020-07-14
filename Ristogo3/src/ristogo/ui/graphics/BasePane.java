@@ -17,7 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import ristogo.common.net.entities.UserInfo;
 import ristogo.ui.graphics.config.GUIConfig;
-import ristogo.ui.graphics.controls.FormButton;
+import ristogo.ui.graphics.controls.base.FormButton;
 
 public abstract class BasePane extends BorderPane
 {

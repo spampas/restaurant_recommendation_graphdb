@@ -1,4 +1,4 @@
-package ristogo.ui.graphics.controls;
+package ristogo.ui.graphics.controls.base;
 
 import java.util.Collection;
 
@@ -23,21 +23,15 @@ public abstract class RistogoTableView<S> extends TableView<S>
 		setFixedCellSize(35);
 		setMinWidth(600);
 		setMaxWidth(800);
-		setPrefHeight(GUIConfig.getMaxRowDisplayable() * getFixedCellSize());
+		setMinHeight(GUIConfig.getMaxRowDisplayable() * getFixedCellSize());
+		setMaxHeight(GUIConfig.getMaxRowDisplayable() * getFixedCellSize());
 
 		getColumns().addAll(generateColumns());
 		setItems(items);
 	}
 
 	protected abstract Collection<TableColumn<S, ?>> generateColumns();
-	protected abstract boolean populateTable(int page);
-
-	public boolean setPage(int page)
-	{
-		if (page < 0)
-			return false;
-		return populateTable(page);
-	}
+	public abstract boolean populateTable(int page);
 
 	public void filter(String filter)
 	{

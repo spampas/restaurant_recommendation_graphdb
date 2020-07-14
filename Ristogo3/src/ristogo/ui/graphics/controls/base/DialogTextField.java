@@ -1,4 +1,4 @@
-package ristogo.ui.graphics.controls;
+package ristogo.ui.graphics.controls.base;
 
 import javafx.scene.control.TextField;
 import ristogo.ui.graphics.config.GUIConfig;

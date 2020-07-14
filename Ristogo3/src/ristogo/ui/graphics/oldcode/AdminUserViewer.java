@@ -10,7 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
-import ristogo.ui.graphics.controls.FormLabel;
+import ristogo.ui.graphics.controls.base.FormLabel;
 
 public class AdminUserViewer extends VBox {
 	/*

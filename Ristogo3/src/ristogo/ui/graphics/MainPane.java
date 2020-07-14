@@ -16,7 +16,9 @@ import javafx.scene.layout.VBox;
 import ristogo.common.net.entities.RestaurantInfo;
 import ristogo.common.net.entities.UserInfo;
 import ristogo.ui.graphics.config.GUIConfig;
-import ristogo.ui.graphics.controls.FormButton;
+import ristogo.ui.graphics.controls.RestaurantsPanel;
+import ristogo.ui.graphics.controls.UsersPanel;
+import ristogo.ui.graphics.controls.base.FormButton;
 
 public class MainPane extends BasePane
 {
@@ -43,109 +45,11 @@ public class MainPane extends BasePane
 
 		return grid;
 	}
-	/*private VBox buildCustomerInterface()
-	{
-		VBox applicationInterface = new VBox(10);
-		HBox menu = new HBox();
-
-		VBox leftPart = new VBox(10);
-		VBox leftMenu = new VBox(10);
-		Label subtitleUser = new Label("Users Menu");
-		subtitleUser.setFont(GUIConfig.getTitleFont());
-		subtitleUser.setTextFill(GUIConfig.getFgColor());
-		ButtonForm buttonFormLeft = new ButtonForm("restaurant");
-		UserViewer userTable = new UserViewer(loggedUser);
-
-
-		leftMenu.getChildren().addAll(buttonFormLeft, userTable);
-		leftPart.getChildren().addAll(subtitleUser, leftMenu);
-		leftPart.setAlignment(Pos.CENTER);
-
-		VBox rightPart = new VBox(10);
-		VBox rightMenu = new VBox(10);
-		Label subtitleRestaurant = new Label("Restaurants Menu");
-		subtitleRestaurant.setFont(GUIConfig.getTitleFont());
-		subtitleRestaurant.setTextFill(GUIConfig.getFgColor());
-		ButtonForm buttonFormRight = new ButtonForm("friend");
-		RestaurantViewer restaurantTable = new RestaurantViewer(loggedUser);
-
-		rightMenu.getChildren().addAll(buttonFormRight,restaurantTable);
-		rightPart.getChildren().addAll(subtitleRestaurant, rightMenu);
-		rightPart.setAlignment(Pos.CENTER);
-
-		menu.getChildren().addAll(leftPart, rightPart);
-
-		applicationInterface.getChildren().addAll(title, menu, optionMenu);
-		applicationInterface.setAlignment(Pos.CENTER);
-
-		applicationInterface.setStyle(GUIConfig.getCSSFormBoxStyle());
-
-		leftMenu.setStyle(GUIConfig.getCSSInterfacePartStyle());
-		leftMenu.setStyle(GUIConfig.getCSSFormBoxStyle());
-		rightMenu.setStyle(GUIConfig.getCSSInterfacePartStyle());
-		rightMenu.setStyle(GUIConfig.getCSSFormBoxStyle());
-		leftMenu.setPrefSize(500, 600);
-		rightMenu.setPrefSize(500, 600);
-		leftPart.setPrefSize(500, 600);
-		rightPart.setPrefSize(500, 600);
-		menu.setPrefSize(1000, 600);
-
-
-		buttonFormLeft.getMyButton().setOnMouseClicked((event) -> {
-			userTable.getFollowButton().setText("Unfollow");
-			userTable.getUserTableTitle().setText("List of Users that you follow");
-			userTable.getTable().loadFriends(loggedUser);
-
-		});
-
-		buttonFormLeft.getFindButton().setOnMouseClicked((event) -> {
-			userTable.getFollowButton().setText("Follow");
-			userTable.getUserTableTitle().setText("List of Users");
-			userTable.getTable().loadUser();
-		});
-
-		buttonFormLeft.getRecommendedButton().setOnMouseClicked((event) -> {
-			userTable.getFollowButton().setText("Follow");
-			userTable.getUserTableTitle().setText("List of Users recommended to you");
-			UserRecommendationDialog recommendationDialog = new UserRecommendationDialog();
-			Optional<UserInfo> result = recommendationDialog.showAndWait();
-			result.ifPresentOrElse(
-				data -> { loggedUser = data; },
-				() -> { }
-			);
-
-		});
-
-		buttonFormRight.getMyButton().setOnMouseClicked((event) -> {
-				restaurantTable.getLikeButton().setText("Remove Like");
-				restaurantTable.getRestaurantTableTitle().setText("List of Restaurants that you like");
-				restaurantTable.getTable().loadRestaurants(loggedUser);
-		});
-
-		buttonFormRight.getFindButton().setOnMouseClicked((event) -> {
-			restaurantTable.getLikeButton().setText("Put Like");
-			restaurantTable.getRestaurantTableTitle().setText("List of Restaurants");
-			restaurantTable.getTable().refreshRestaurants();
-		});
-
-		buttonFormRight.getRecommendedButton().setOnMouseClicked((event) -> {
-			restaurantTable.getLikeButton().setText("Put Like");
-			restaurantTable.getRestaurantTableTitle().setText("List of Restaurants recommended to you");
-			RestaurantRecommendationDialog recommendationDialog = new RestaurantRecommendationDialog();
-			Optional<RestaurantInfo> result = recommendationDialog.showAndWait();
-			result.ifPresentOrElse(
-				data -> { restaurant = data; },
-				() -> { }
-			);
-		});
-
-		return applicationInterface;
-	}*/
 
 	@Override
 	protected Node createLeft()
 	{
-		return new UsersPanel();
+		return new UsersPanel(loggedUser.isAdmin());
 	}
 
 	@Override
@@ -157,7 +61,7 @@ public class MainPane extends BasePane
 	@Override
 	protected Node createRight()
 	{
-		return new RestaurantsPanel();
+		return new RestaurantsPanel(loggedUser.isAdmin());
 	}
 
 	@Override

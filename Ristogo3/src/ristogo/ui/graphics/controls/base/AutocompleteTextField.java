@@ -1,4 +1,4 @@
-package ristogo.ui.graphics.controls;
+package ristogo.ui.graphics.controls.base;
 
 import java.util.LinkedList;
 import java.util.List;

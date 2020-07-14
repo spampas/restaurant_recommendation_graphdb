@@ -19,11 +19,11 @@ import ristogo.common.net.entities.enums.Price;
 import ristogo.common.net.ResponseMessage;
 import ristogo.net.Protocol;
 import ristogo.ui.graphics.config.GUIConfig;
-import ristogo.ui.graphics.controls.CitySelector;
-import ristogo.ui.graphics.controls.CuisineSelector;
-import ristogo.ui.graphics.controls.DialogLabel;
-import ristogo.ui.graphics.controls.FormButton;
-import ristogo.ui.graphics.controls.FormLabel;
+import ristogo.ui.graphics.controls.base.CitySelector;
+import ristogo.ui.graphics.controls.base.CuisineSelector;
+import ristogo.ui.graphics.controls.base.DialogLabel;
+import ristogo.ui.graphics.controls.base.FormButton;
+import ristogo.ui.graphics.controls.base.FormLabel;
 
 final class EditRestaurantForm extends VBox
 {
