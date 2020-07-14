@@ -131,9 +131,9 @@ public class User
 	{
 		if(likedCuisines == null) {
 			Iterable<Cuisine> cuisines = DBManager.session().query(Cuisine.class,
-					"MATCH (user:User)-[:LIKE]->(cuisine:Cuisine)"
-					+ "WHERE user.username = $username"
-					+ "RETURN restaurant", Map.ofEntries(Map.entry("username", getUsername())));
+					"MATCH (user:User)-[:LIKE]->(cuisine:Cuisine) "
+					+ "WHERE user.username = $username "
+					+ "RETURN cuisine", Map.ofEntries(Map.entry("username", getUsername())));
 			likedCuisines = new ArrayList<Cuisine>();
 			cuisines.forEach(likedCuisines::add);
 		}

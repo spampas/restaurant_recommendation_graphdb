@@ -535,9 +535,6 @@ public class RequestHandler extends Thread
 		User user = DBManager.session().load(User.class, username, 0);
 		if (user == null)
 			return new ResponseMessage("Can not find the specified user.");
-		
-		if (!loggedUser.isFollowing(user))
-			return new ResponseMessage("You are not following this user.");
 		List<CuisineInfo> cuisineInfo = new ArrayList<CuisineInfo>(); 
 		user.getLikedCuisines().forEach((Cuisine cuisine) -> {
 			cuisineInfo.add(new CuisineInfo(cuisine.getName()));
@@ -572,17 +569,13 @@ public class RequestHandler extends Thread
 	private ResponseMessage handleGetRestaurant(RequestMessage reqMsg)
 	{
 		StringFilter filter = reqMsg.getEntity(StringFilter.class);
-		String username = filter == null ? null : filter.getValue();
-		if (username == null || !User.isValidUsername(username))
-			return new ResponseMessage("Invalid user.");
-		User user = DBManager.session().load(User.class, username, 0);
-		if (user == null)
-			return new ResponseMessage("Can not find the specified user.");
-		if (user.equals(loggedUser))
-			return new ResponseMessage("You can not unfollow yourself.");
-		if (!loggedUser.isFollowing(user))
-			return new ResponseMessage("You are not following this user.");
-		loggedUser.unfollow(user);
+		String name = filter == null ? null : filter.getValue();
+		
+		Restaurant restaurant = DBManager.session().load(Restaurant.class, name, 0);
+		if (restaurant == null)
+			return new ResponseMessage("Can not find the specified restaurant.");
+		
+		
 		DBManager.session().save(loggedUser);
 		return new ResponseMessage();
 	}
