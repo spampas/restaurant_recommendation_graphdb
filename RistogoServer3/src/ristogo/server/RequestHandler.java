@@ -289,7 +289,7 @@ public class RequestHandler extends Thread
 				new UserInfo(r.getOwner().getUsername()),
 				new CuisineInfo(r.getCuisine().getName()),
 				r.getPrice(),
-				new CityInfo(r.getCity().getName()),
+				new CityInfo(r.getCity().getName(), r.getCity().getLatitude(),r.getCity().getLongitude()),
 				r.getDescription(),
 				r.isLikedBy(loggedUser)
 				));

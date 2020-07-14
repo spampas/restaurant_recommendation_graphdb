@@ -114,6 +114,7 @@ public class Restaurant
 	public boolean isLikedBy(User user)
 	{
 		List<User> likes = getUsersWhoLike();
+		if(likes == null) return false;
 		for (User u: likes)
 			if (u.equals(user))
 				return true;
