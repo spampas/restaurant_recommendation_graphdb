@@ -123,9 +123,10 @@ public class Restaurant
 
 	public static List<Restaurant> loadRestaurantsLikedBy(User user, String nameRegex, int page, int perPage)
 	{
+		if (nameRegex == null || nameRegex.isEmpty() )
+			 return loadRestaurantsLikedBy(user,page,perPage);
 		String regexFilter = "";
-		if (nameRegex != null)
-			regexFilter = "AND r.name =~ $regex ";
+		regexFilter = "AND r.name =~ $regex ";
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
 			"MATCH (u:User)-[:LIKES]->(r:Restaurant)<-[:OWNS]-(o:User) " +
 			"OPTIONAL MATCH (c:Cuisine)<-[:SERVES]-(r)-[:LOCATED]->(ci:City) " +
@@ -136,6 +137,25 @@ public class Restaurant
 			"LIMIT $limit ",
 			Map.ofEntries(Map.entry("username", user.getUsername()),
 				Map.entry("regex", nameRegex),
+				Map.entry("skip", page*perPage),
+				Map.entry("limit", perPage)));
+		List<Restaurant> restaurants = new ArrayList<Restaurant>();
+		found.forEach(restaurants::add);
+		return restaurants;
+	}
+	
+	public static List<Restaurant> loadRestaurantsLikedBy(User user, int page, int perPage)
+	{
+		
+		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
+			"MATCH (u:User)-[:LIKES]->(r:Restaurant)<-[:OWNS]-(o:User) " +
+			"OPTIONAL MATCH (c:Cuisine)<-[:SERVES]-(r)-[:LOCATED]->(ci:City) " +
+			"WHERE u.username = $username " +
+			"RETURN u, r, o, c, ci " +
+			"ORDER BY r.name " +
+			"SKIP $skip " +
+			"LIMIT $limit ",
+			Map.ofEntries(Map.entry("username", user.getUsername()),
 				Map.entry("skip", page*perPage),
 				Map.entry("limit", perPage)));
 		List<Restaurant> restaurants = new ArrayList<Restaurant>();
