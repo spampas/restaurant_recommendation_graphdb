@@ -473,6 +473,24 @@ public class RequestHandler extends Thread
 		return new ResponseMessage();
 	}
 
+	@RequestHandlerMethod
+	private ResponseMessage handleGetCity(RequestMessage reqMsg) {
+		CityInfo city = new CityInfo(loggedUser.getCity().getName(), loggedUser.getCity().getLatitude(), loggedUser.getCity().getLongitude());
+		return new ResponseMessage(city);
+	}
+
+	@RequestHandlerMethod
+	private ResponseMessage handleSetCity(RequestMessage reqMsg) {
+		CityInfo city = reqMsg.getEntity(CityInfo.class);
+		if (city == null)
+			return new ResponseMessage("No city selected");
+		City savedCity = DBManager.session().load(City.class, city.getName(), 0);
+		if(savedCity == null)
+			return new ResponseMessage("Can't find selected city " + city.getName());
+		loggedUser.setCity(savedCity);
+		return new ResponseMessage();
+	}
+	
 	@RequestHandlerMethod(true)
 	private ResponseMessage handleDeleteUser(RequestMessage reqMsg)
 	{

@@ -2,6 +2,8 @@ package ristogo.common.net.enums;
 
 import java.io.Serializable;
 
+
+
 public enum ActionRequest implements Serializable
 {
 	LOGIN, 
