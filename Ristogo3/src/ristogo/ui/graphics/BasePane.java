@@ -17,6 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import ristogo.common.net.entities.UserInfo;
 import ristogo.ui.graphics.config.GUIConfig;
+import ristogo.ui.graphics.controls.BasePanel;
 import ristogo.ui.graphics.controls.base.FormButton;
 
 public abstract class BasePane extends BorderPane
@@ -60,13 +61,12 @@ public abstract class BasePane extends BorderPane
 		}
 	}
 
-	protected abstract Node createHeader();
-	protected abstract Node createLeft();
-	protected abstract Node createCenter();
-	protected abstract Node createRight();
-	protected abstract Node createFooter();
+	protected abstract BasePanel createLeft();
+	protected abstract BasePanel createCenter();
+	protected abstract BasePanel createRight();
+	protected abstract View getView();
 
-	protected GridPane createHeaderBase()
+	protected GridPane createHeader()
 	{
 		Label title = new Label("RistoGo - Recommendations");
 		title.setFont(GUIConfig.getTitleFont());
@@ -87,5 +87,39 @@ public abstract class BasePane extends BorderPane
 		grid.add(icon, 1, 0);
 
 		return grid;
+	}
+
+	protected ToolBar createFooter()
+	{
+		ToolBar toolBar = new ToolBar();
+		if (getView() != View.MAIN) {
+			FormButton mainButton = new FormButton("Home");
+			mainButton.setOnAction((event) -> {
+				changeView.accept(View.MAIN);
+			});
+			toolBar.getItems().add(mainButton);
+		}
+		if (getView() != View.RESTAURANTS) {
+			FormButton restaurantButton = new FormButton("My Restaurants");
+			restaurantButton.setOnAction((event) -> {
+				changeView.accept(View.RESTAURANTS);
+			});
+			toolBar.getItems().add(restaurantButton);
+		}
+		if (getView() != View.PREFERENCES) {
+			FormButton prefButton = new FormButton("My Preferences");
+			prefButton.setOnAction((event) -> {
+				changeView.accept(View.PREFERENCES);
+			});
+			toolBar.getItems().add(prefButton);
+		}
+		if (!loggedUser.isAdmin() || getView() == View.ADMIN)
+			return toolBar;
+		FormButton adminButton = new FormButton("Admin Panel");
+		adminButton.setOnAction((event) -> {
+			changeView.accept(View.ADMIN);
+		});
+		toolBar.getItems().add(adminButton);
+		return toolBar;
 	}
 }

@@ -25,21 +25,25 @@ public class UsersPanel extends TablePanel
 		controlBox.setButtonDisable(true);
 		menuBar.addMenu("All", () -> {
 			controlBox.setButtonDisable(true);
+			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
 			tv.filter(null);
 		});
 		menuBar.addMenu("Followers", () -> {
 			controlBox.setButtonDisable(true);
+			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
 			tv.filterFollowers(null);
 		});
 		menuBar.addMenu("Following", () -> {
 			controlBox.setButtonDisable(true);
+			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
 			tv.filterFollowing(null);
 		});
 		menuBar.addMenu("Recommend", () -> {
 			controlBox.setButtonDisable(true);
+			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
 			tv.filterRecommend(null);
 		});
@@ -48,6 +52,7 @@ public class UsersPanel extends TablePanel
 			UserBean item = ptv.getSelection();
 			if (item == null) {
 				controlBox.setButtonDisable(true);
+				ptv.setDeleteDisable(true);
 				return;
 			}
 			ResponseMessage resMsg;
@@ -61,6 +66,7 @@ public class UsersPanel extends TablePanel
 			}
 			item.setFollowing(!item.isFollowing());
 			controlBox.setButtonDisable(true);
+			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
 			ptv.refresh();
 		});
@@ -91,6 +97,7 @@ public class UsersPanel extends TablePanel
 					return;
 				}
 				controlBox.setButtonDisable(true);
+				ptv.setDeleteDisable(true);
 				detailsBox.setText("");
 				ptv.refresh();
 			});

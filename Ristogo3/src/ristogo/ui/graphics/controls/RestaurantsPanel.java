@@ -21,18 +21,22 @@ public class RestaurantsPanel extends TablePanel
 		TextAreaDetailsBox detailsBox = new TextAreaDetailsBox("Description:");
 		ptv.setFindHint("Name...");
 		controlBox.setButtonDisable(true);
+		ptv.setDeleteDisable(true);
 		menuBar.addMenu("All", () -> {
 			controlBox.setButtonDisable(true);
+			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
 			tv.filter(null);
 		});
 		menuBar.addMenu("Liked", () -> {
 			controlBox.setButtonDisable(true);
+			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
 			tv.filterLiked(null);
 		});
 		menuBar.addMenu("Recommend", () -> {
 			controlBox.setButtonDisable(true);
+			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
 			tv.filterRecommend(null);
 		});
@@ -41,6 +45,7 @@ public class RestaurantsPanel extends TablePanel
 			RestaurantBean item = ptv.getSelection();
 			if (item == null) {
 				controlBox.setButtonDisable(true);
+				ptv.setDeleteDisable(true);
 				return;
 			}
 			ResponseMessage resMsg;
@@ -54,6 +59,7 @@ public class RestaurantsPanel extends TablePanel
 			}
 			item.setLiked(!item.isLiked());
 			controlBox.setButtonDisable(true);
+			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
 			ptv.refresh();
 		});
@@ -80,6 +86,7 @@ public class RestaurantsPanel extends TablePanel
 					return;
 				}
 				controlBox.setButtonDisable(true);
+				ptv.setDeleteDisable(true);
 				detailsBox.setText("");
 				ptv.refresh();
 			});

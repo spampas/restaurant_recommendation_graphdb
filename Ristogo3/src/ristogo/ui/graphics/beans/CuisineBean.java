@@ -1,14 +1,20 @@
 package ristogo.ui.graphics.beans;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class CuisineBean
 {
 	private final SimpleStringProperty cuisine;
 
-	public CuisineBean(String cuisine)
+	public CuisineBean(String cuisine, boolean liked)
 	{
 		this.cuisine = new SimpleStringProperty(cuisine);
+	}
+
+	public CuisineBean(String cuisine)
+	{
+		this(cuisine, false);
 	}
 
 	public String getCuisine()
@@ -20,5 +26,4 @@ public class CuisineBean
 	{
 		this.cuisine.set(cuisine);
 	}
-
 }

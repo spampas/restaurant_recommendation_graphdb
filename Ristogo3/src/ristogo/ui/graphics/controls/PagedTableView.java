@@ -103,6 +103,11 @@ public class PagedTableView<T> extends VBox
 		findField.setPromptText(text);
 	}
 
+	public void setDeleteButtonText(String text)
+	{
+		deleteButton.setText(text);
+	}
+
 	public void refresh()
 	{
 		tableView.getSelectionModel().clearSelection();

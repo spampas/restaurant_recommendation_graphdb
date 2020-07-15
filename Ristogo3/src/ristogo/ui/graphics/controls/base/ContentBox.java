@@ -82,4 +82,12 @@ public abstract class ContentBox extends VBox
 	{
 		return titleLabel.getText();
 	}
+
+	public void addAllContent(Node... contents)
+	{
+		if (contents == null)
+			return;
+		for (Node content: contents)
+			addContent(content);
+	}
 }

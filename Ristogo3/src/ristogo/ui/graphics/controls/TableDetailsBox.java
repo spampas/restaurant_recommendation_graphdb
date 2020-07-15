@@ -3,18 +3,18 @@ package ristogo.ui.graphics.controls;
 import ristogo.ui.graphics.controls.base.ControlBox;
 import ristogo.ui.graphics.controls.base.MenuBar;
 
-public abstract class TablePanel extends BasePanel
+public abstract class TableDetailsBox extends DetailsBox
 {
 	private MenuBar menuBar;
 	private ControlBox controlBox;
 	private PagedTableView<?> tableView;
 	private DetailsBox detailsBox;
 
-	public TablePanel(String title)
+	public TableDetailsBox(String title)
 	{
 		super(title);
-		setMinSize(600, 600);
-		setMaxSize(900, 800);
+		//setMinSize(600, 600);
+		//setMaxSize(900, 800);
 	}
 
 	public void setMenuBar(MenuBar menuBar)

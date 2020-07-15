@@ -23,8 +23,8 @@ public abstract class RistogoTableView<S> extends TableView<S>
 		setFixedCellSize(35);
 		setMinWidth(600);
 		setMaxWidth(800);
-		setMinHeight(GUIConfig.getMaxRowDisplayable() * getFixedCellSize());
-		setMaxHeight(GUIConfig.getMaxRowDisplayable() * getFixedCellSize());
+		setMinHeight((GUIConfig.getMaxRowDisplayable() + 1) * getFixedCellSize());
+		setMaxHeight((GUIConfig.getMaxRowDisplayable() + 1) * getFixedCellSize());
 
 		getColumns().addAll(generateColumns());
 		setItems(items);

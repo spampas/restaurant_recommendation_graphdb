@@ -13,12 +13,15 @@ import ristogo.common.net.entities.RestaurantInfo;
 import ristogo.common.net.entities.UserInfo;
 import ristogo.ui.graphics.beans.RestaurantBean;
 import ristogo.ui.graphics.config.GUIConfig;
+import ristogo.ui.graphics.controls.BasePanel;
+import ristogo.ui.graphics.controls.ManageRestaurantsPanel;
+import ristogo.ui.graphics.controls.RestaurantFormPanel;
 import ristogo.ui.graphics.controls.base.FormButton;
 
 public class RestaurantsPane extends BasePane
 {
-	protected EditRestaurantForm form;
-	protected EditRestaurantsPanel list;
+	protected RestaurantFormPanel form;
+	protected ManageRestaurantsPanel panel;
 
 	public RestaurantsPane(Consumer<View> changeView, UserInfo loggedUser)
 	{
@@ -26,9 +29,9 @@ public class RestaurantsPane extends BasePane
 	}
 
 	@Override
-	protected Node createHeader()
+	protected GridPane createHeader()
 	{
-		GridPane grid = createHeaderBase();
+		GridPane grid = super.createHeader();
 
 		Label restaurantsLabel = new Label("Restaurants");
 		restaurantsLabel.setFont(GUIConfig.getWelcomeFont());
@@ -45,25 +48,23 @@ public class RestaurantsPane extends BasePane
 	}
 
 	@Override
-	protected Node createLeft()
+	protected RestaurantFormPanel createLeft()
 	{
-		form = new EditRestaurantForm();
-		form.setOnCommit(this::handleFormAction);
-		form.setOnDelete(this::handleFormAction);
+		form = new RestaurantFormPanel(this::handleCommitRestaurant);
 		return form;
 	}
 
 	@Override
-	protected Node createCenter()
+	protected BasePanel createCenter()
 	{
 		return null;
 	}
 
 	@Override
-	protected Node createRight()
+	protected ManageRestaurantsPanel createRight()
 	{
-		//list = new EditRestaurantsPanel("Your restaurants", loggedUser, this::handleSelectRestaurant);
-		return list;
+		panel = new ManageRestaurantsPanel(this::handleSelectRestaurant);
+		return panel;
 	}
 
 	private void handleSelectRestaurant(RestaurantInfo restaurant)
@@ -71,33 +72,15 @@ public class RestaurantsPane extends BasePane
 		form.setRestaurant(restaurant);
 	}
 
-	private void handleFormAction(ActionEvent event)
+	private void handleCommitRestaurant(RestaurantInfo restaurant)
 	{
-		//list.refresh();
+		panel.refresh();
 	}
 
 	@Override
-	protected Node createFooter()
+	protected View getView()
 	{
-		ToolBar toolBar = new ToolBar();
-		FormButton mainButton = new FormButton("Home");
-		mainButton.setOnAction((event) -> {
-			changeView.accept(View.MAIN);
-		});
-		toolBar.getItems().add(mainButton);
-		FormButton prefButton = new FormButton("My Preferences");
-		prefButton.setOnAction((event) -> {
-			changeView.accept(View.PREFERENCES);
-		});
-		if (!loggedUser.isAdmin())
-			return toolBar;
-		FormButton adminButton = new FormButton("Admin Panel");
-		adminButton.setOnAction((event) -> {
-			changeView.accept(View.ADMIN);
-		});
-		toolBar.getItems().add(adminButton);
-		toolBar.getItems().add(prefButton);
-		return toolBar;
+		return View.RESTAURANTS;
 	}
 
 }

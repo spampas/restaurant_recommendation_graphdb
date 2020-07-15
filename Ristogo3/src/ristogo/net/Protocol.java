@@ -168,9 +168,9 @@ public class Protocol implements AutoCloseable
 		return sendRequest(ActionRequest.GET_USER, nameFilter);
 	}
 
-	public ResponseMessage getStatisticRestaurant(RestaurantInfo restaurant)
+	public ResponseMessage getStatisticRestaurant(StringFilter nameFilter)
 	{
-		return sendRequest(ActionRequest.LIST_USERS, restaurant);
+		return sendRequest(ActionRequest.LIST_USERS, nameFilter);
 	}
 
 	public ResponseMessage deleteRestaurant(StringFilter nameFilter)
@@ -178,14 +178,19 @@ public class Protocol implements AutoCloseable
 		return sendRequest(ActionRequest.DELETE_RESTAURANT, nameFilter);
 	}
 
-	public ResponseMessage listCuisines()
+	public ResponseMessage listCuisines(PageFilter pageFilter)
 	{
-		return sendRequest(ActionRequest.LIST_CUISINES);
+		return sendRequest(ActionRequest.LIST_CUISINES, pageFilter);
 	}
 
-	public ResponseMessage listCuisines(StringFilter filter)
+	public ResponseMessage listCuisines(StringFilter nameFilter, PageFilter pageFilter)
 	{
-		return sendRequest(ActionRequest.LIST_CUISINES, filter);
+		return sendRequest(ActionRequest.LIST_CUISINES, nameFilter, pageFilter);
+	}
+
+	public ResponseMessage listCuisines(StringFilter nameFilter)
+	{
+		return sendRequest(ActionRequest.LIST_CUISINES, nameFilter);
 	}
 
 	public ResponseMessage addCuisine(CuisineInfo cuisine)
@@ -198,14 +203,14 @@ public class Protocol implements AutoCloseable
 		return sendRequest(ActionRequest.DELETE_CUISINE, cuisine);
 	}
 
-	public ResponseMessage putLikeCuisine(CuisineInfo cuisine)
+	public ResponseMessage likeCuisine(StringFilter nameFilter)
 	{
-		return sendRequest(ActionRequest.PUT_LIKE_CUISINE, cuisine);
+		return sendRequest(ActionRequest.LIKE_CUISINE, nameFilter);
 	}
 
-	public ResponseMessage removeLikeCuisine(CuisineInfo cuisine)
+	public ResponseMessage unlikeCuisine(StringFilter nameFilter)
 	{
-		return sendRequest(ActionRequest.REMOVE_LIKE_CUISINE, cuisine);
+		return sendRequest(ActionRequest.UNLIKE_CUISINE, nameFilter);
 	}
 
 	public ResponseMessage listCities()
@@ -226,6 +231,16 @@ public class Protocol implements AutoCloseable
 	public ResponseMessage deleteCity(CityInfo city)
 	{
 		return sendRequest(ActionRequest.DELETE_CITY, city);
+	}
+
+	public ResponseMessage setCity(StringFilter stringFilter)
+	{
+		return sendRequest(ActionRequest.SET_CITY, stringFilter);
+	}
+
+	public ResponseMessage getCity()
+	{
+		return sendRequest(ActionRequest.GET_CITY);
 	}
 
 	private ResponseMessage sendRequest(ActionRequest actionRequest, Entity... entities)

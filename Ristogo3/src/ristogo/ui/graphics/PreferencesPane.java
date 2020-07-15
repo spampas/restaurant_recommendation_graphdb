@@ -10,6 +10,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import ristogo.common.net.entities.UserInfo;
 import ristogo.ui.graphics.config.GUIConfig;
+import ristogo.ui.graphics.controls.BasePanel;
+import ristogo.ui.graphics.controls.PreferencesPanel;
 import ristogo.ui.graphics.controls.base.FormButton;
 
 public class PreferencesPane extends BasePane
@@ -21,9 +23,9 @@ public class PreferencesPane extends BasePane
 	}
 
 	@Override
-	protected Node createHeader()
+	protected GridPane createHeader()
 	{
-		GridPane grid = createHeaderBase();
+		GridPane grid = super.createHeader();
 
 		Label prefLabel = new Label("Preferences");
 		prefLabel.setFont(GUIConfig.getWelcomeFont());
@@ -35,49 +37,27 @@ public class PreferencesPane extends BasePane
 	}
 
 	@Override
-	protected Node createLeft()
+	protected BasePanel createLeft()
 	{
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	protected Node createCenter()
+	protected PreferencesPanel createCenter()
 	{
-		// TODO Auto-generated method stub
+		return new PreferencesPanel();
+	}
+
+	@Override
+	protected BasePanel createRight()
+	{
 		return null;
 	}
 
 	@Override
-	protected Node createRight()
+	protected View getView()
 	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected Node createFooter()
-	{
-		ToolBar toolBar = new ToolBar();
-		FormButton mainButton = new FormButton("Home");
-		mainButton.setOnAction((event) -> {
-			changeView.accept(View.MAIN);
-		});
-		toolBar.getItems().add(mainButton);
-		FormButton restaurantButton = new FormButton("My Restaurants");
-		restaurantButton.setOnAction((event) -> {
-			changeView.accept(View.RESTAURANTS);
-		});
-		toolBar.getItems().add(restaurantButton);
-		if (!loggedUser.isAdmin())
-			return toolBar;
-		FormButton adminButton = new FormButton("Admin Panel");
-		adminButton.setOnAction((event) -> {
-			changeView.accept(View.ADMIN);
-		});
-		toolBar.getItems().add(adminButton);
-		return toolBar;
-
+		return View.PREFERENCES;
 	}
 
 }

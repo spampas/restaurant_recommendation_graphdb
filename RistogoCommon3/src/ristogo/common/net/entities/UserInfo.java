@@ -37,12 +37,12 @@ public class UserInfo extends Entity
 
 	public UserInfo(String username, boolean admin)
 	{
-		this(username, null, null, true);
+		this(username, null, null, false, admin);
 	}
 
 	public UserInfo(String username, String password, boolean admin)
 	{
-		this(username, password, null, admin);
+		this(username, password, null, false, admin);
 	}
 
 	public UserInfo(String username, String password, CityInfo city, boolean following)

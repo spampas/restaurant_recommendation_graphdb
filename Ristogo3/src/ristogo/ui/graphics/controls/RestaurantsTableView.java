@@ -28,6 +28,18 @@ public class RestaurantsTableView extends RistogoTableView<RestaurantBean>
 	}
 
 	private FilterType filterType = FilterType.ALL;
+	private boolean owned;
+
+	public RestaurantsTableView(boolean owned)
+	{
+		super();
+		this.owned = owned;
+	}
+
+	public RestaurantsTableView()
+	{
+		this(false);
+	}
 
 	@Override
 	protected Collection<TableColumn<RestaurantBean, ?>> generateColumns()
@@ -77,22 +89,28 @@ public class RestaurantsTableView extends RistogoTableView<RestaurantBean>
 	public boolean populateTable(int page)
 	{
 		ResponseMessage resMsg;
-		switch(filterType) {
-		case LIKED:
+		if (!owned)
+			switch(filterType) {
+			case LIKED:
+				if (filter == null)
+					resMsg = Protocol.getInstance().listLikedRestaurants(new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
+				else
+					resMsg = Protocol.getInstance().listLikedRestaurants(new StringFilter(filter), new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
+				break;
+			case RECOMMEND:
+				//TODO
+			case ALL:
+			default:
+				if (filter == null)
+					resMsg = Protocol.getInstance().listRestaurants(new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
+				else
+					resMsg = Protocol.getInstance().listRestaurants(new StringFilter(filter), new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
+			}
+		else
 			if (filter == null)
-				resMsg = Protocol.getInstance().listLikedRestaurants(new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
+				resMsg = Protocol.getInstance().listOwnRestaurants(new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
 			else
-				resMsg = Protocol.getInstance().listLikedRestaurants(new StringFilter(filter), new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
-			break;
-		case RECOMMEND:
-			//TODO
-		case ALL:
-		default:
-			if (filter == null)
-				resMsg = Protocol.getInstance().listRestaurants(new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
-			else
-				resMsg = Protocol.getInstance().listRestaurants(new StringFilter(filter), new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
-		}
+				resMsg = Protocol.getInstance().listOwnRestaurants(new StringFilter(filter), new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
 		return extractItemsFromMessage(resMsg);
 	}
 

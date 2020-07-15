@@ -16,6 +16,7 @@ import javafx.scene.layout.VBox;
 import ristogo.common.net.entities.RestaurantInfo;
 import ristogo.common.net.entities.UserInfo;
 import ristogo.ui.graphics.config.GUIConfig;
+import ristogo.ui.graphics.controls.BasePanel;
 import ristogo.ui.graphics.controls.RestaurantsPanel;
 import ristogo.ui.graphics.controls.UsersPanel;
 import ristogo.ui.graphics.controls.base.FormButton;
@@ -28,9 +29,9 @@ public class MainPane extends BasePane
 	}
 
 	@Override
-	protected Node createHeader()
+	protected GridPane createHeader()
 	{
-		GridPane grid = createHeaderBase();
+		GridPane grid = super.createHeader();
 
 		Label welcomeLabel = new Label("Welcome");
 		welcomeLabel.setFont(GUIConfig.getWelcomeFont());
@@ -47,45 +48,26 @@ public class MainPane extends BasePane
 	}
 
 	@Override
-	protected Node createLeft()
+	protected UsersPanel createLeft()
 	{
 		return new UsersPanel(loggedUser.isAdmin());
 	}
 
 	@Override
-	protected Node createCenter()
+	protected BasePanel createCenter()
 	{
 		return null;
 	}
 
 	@Override
-	protected Node createRight()
+	protected RestaurantsPanel createRight()
 	{
 		return new RestaurantsPanel(loggedUser.isAdmin());
 	}
 
 	@Override
-	protected Node createFooter()
+	protected View getView()
 	{
-		ToolBar toolBar = new ToolBar();
-		FormButton restaurantButton = new FormButton("My Restaurants");
-		restaurantButton.setOnAction((event) -> {
-			changeView.accept(View.RESTAURANTS);
-		});
-		toolBar.getItems().add(restaurantButton);
-		FormButton prefButton = new FormButton("My Preferences");
-		prefButton.setOnAction((event) -> {
-			changeView.accept(View.PREFERENCES);
-		});
-		toolBar.getItems().add(prefButton);
-		if (!loggedUser.isAdmin())
-			return toolBar;
-		FormButton adminButton = new FormButton("Admin Panel");
-		adminButton.setOnAction((event) -> {
-			changeView.accept(View.ADMIN);
-		});
-		toolBar.getItems().add(adminButton);
-		return toolBar;
+		return View.MAIN;
 	}
-
 }
