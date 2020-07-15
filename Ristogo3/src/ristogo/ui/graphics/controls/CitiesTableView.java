@@ -22,13 +22,6 @@ import ristogo.ui.graphics.controls.base.RistogoTableView;
 
 public class CitiesTableView extends RistogoTableView<CityBean>
 {
-	public CitiesTableView()
-	{
-		super();
-		setMinWidth(350);
-		setMaxWidth(400);
-	}
-
 	@Override
 	protected Collection<TableColumn<CityBean, ?>> generateColumns()
 	{

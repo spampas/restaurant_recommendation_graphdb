@@ -14,14 +14,15 @@ import ristogo.ui.graphics.controls.base.FormButton;
 public class AddCityControlBox extends ControlBox
 {
 	private final CitySelector nameField = new CitySelector();
-	private final TextArea latField = new TextArea();
-	private final TextArea lonField = new TextArea();
+	private final TextField latField = new TextField();
+	private final TextField lonField = new TextField();
 	private final FormButton addButton;
 
 	public AddCityControlBox()
 	{
 		super();
 		nameField.setPromptText("City name");
+		nameField.setAutocompleteDisable(true);
 		latField.setPromptText("Latitude");
 		lonField.setPromptText("Longitude");
 		addButton = new FormButton("Add");
@@ -47,6 +48,8 @@ public class AddCityControlBox extends ControlBox
 		addButton.setOnAction((event) -> {
 			handler.accept(nameField.getText());
 			nameField.clear();
+			latField.clear();
+			lonField.clear();
 			addButton.setDisable(true);
 		});
 	}

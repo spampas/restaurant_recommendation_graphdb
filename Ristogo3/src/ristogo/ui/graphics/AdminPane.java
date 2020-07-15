@@ -11,6 +11,8 @@ import javafx.scene.layout.Priority;
 import ristogo.common.net.entities.UserInfo;
 import ristogo.ui.graphics.config.GUIConfig;
 import ristogo.ui.graphics.controls.BasePanel;
+import ristogo.ui.graphics.controls.CitiesPanel;
+import ristogo.ui.graphics.controls.CuisinesPanel;
 import ristogo.ui.graphics.controls.base.FormButton;
 
 public class AdminPane extends BasePane
@@ -36,24 +38,21 @@ public class AdminPane extends BasePane
 	}
 
 	@Override
-	protected BasePanel createLeft()
+	protected CitiesPanel createLeft()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return new CitiesPanel();
 	}
 
 	@Override
 	protected BasePanel createCenter()
 	{
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	protected BasePanel createRight()
+	protected CuisinesPanel createRight()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return new CuisinesPanel();
 	}
 
 	@Override

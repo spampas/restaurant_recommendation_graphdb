@@ -1,5 +1,7 @@
 package ristogo.ui.graphics.controls;
 
+import java.util.List;
+
 import ristogo.common.net.ResponseMessage;
 import ristogo.common.net.entities.CityInfo;
 import ristogo.common.net.entities.StringFilter;
@@ -31,6 +33,13 @@ public class CitiesPanel extends TablePanel
 			ptv.refresh();
 		});
 		setControlBox(controlBox);
+		ptv.setOnSelect((item) -> {
+			controlBox.setButtonDisable(item == null);
+			if (item == null)
+				return;
+			controlBox.setCity(new CityInfo(item.getName(), item.getLatitude(), item.getLongitude()));
+		});
+
 		ptv.setDeletable(true);
 		ptv.setOnDelete((item) -> {
 			ResponseMessage resMsg = Protocol.getInstance().deleteCity(new StringFilter(item.getName()));
