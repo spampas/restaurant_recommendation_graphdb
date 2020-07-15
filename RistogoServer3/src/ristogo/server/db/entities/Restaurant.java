@@ -178,8 +178,8 @@ public class Restaurant
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
 			"MATCH (u:User)-[:LIKES]->(r:Restaurant)-[:LOCATED]->(city:City{name:$city}) "
 			+ "WITH r, count(u) as rank "
-			+ "ORDER BY rank DESC "
-			+ "RETURN r",
+			+ "RETURN (r)--(), rank)"
+			+ "ORDER BY rank DESC ",
 			Map.ofEntries(Map.entry("city", getCity().getName())));
 		List<Restaurant> ranking = new ArrayList<Restaurant>();
 		found.forEach(ranking::add);
@@ -192,8 +192,8 @@ public class Restaurant
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
 			"MATCH (u:User)-[rel:LIKES]->(r:Restaurant)-[:SERVE]->(cuisine:Cuisine{name:$cuisine}) "	
 			+ "WITH r, count(u) as rank "
-			+ "ORDER BY rank DESC "
-			+ "RETURN r",
+			+ "RETURN (r)--(), rank"
+			+ "ORDER BY rank DESC ",
 			Map.ofEntries(Map.entry("cuisine", getCuisine().getName())));
 		List<Restaurant> ranking = new ArrayList<Restaurant>();
 		found.forEach(ranking::add);
@@ -205,10 +205,10 @@ public class Restaurant
 	{
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
 			"MATCH (city:City{name:$city})<-[:LOCATED]-(r:Restaurant)-[:SERVE]->(cuisine:Cuisine{name:$cuisine})"
-			+ "MATCH (user:User)-[:LIKES]->(r) "
+			+ ", (user:User)-[:LIKES]->(r) "
 			+ "WITH r, count(u) as rank "
-			+ "ORDER BY rank DESC "
-			+ "RETURN r",
+			+ "RETURN (r)--(), rank"
+			+ "ORDER BY rank DESC ",
 			Map.ofEntries(Map.entry("cuisine", getCuisine().getName()),
 					Map.entry("city", getCity().getName())));
 		List<Restaurant> ranking = new ArrayList<Restaurant>();

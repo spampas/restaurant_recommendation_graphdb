@@ -106,7 +106,7 @@ public class User
 			Iterable<Restaurant> restaurants = DBManager.session().query(Restaurant.class,
 				"MATCH (user:User)-[:OWNS]->(restaurant:Restaurant) " +
 				"WHERE user.username = $username " +
-				"RETURN restaurant",
+				"RETURN (restaurant)--()",
 				Map.ofEntries(Map.entry("username", username)));
 			ownedRestaurants = new ArrayList<Restaurant>();
 			restaurants.forEach(ownedRestaurants::add);
@@ -320,36 +320,43 @@ public class User
 		return followingUsers;
 	}
 	
-	public List<User> recommendUser(Cuisine cuisine, int distance, boolean airDistance, City city){
+	/*
+	MATCH (city:City{name:$city}), (city1:City)<-[:LOCATED]-(u:User)-[:LIKES]->(c:Cuisine{name:$cuisine}) 
+	WITH city1, u, c, point({longitude: city.longitude, latitude:city.latitude}) as p1 ,
+	point({longitude: city1.longitude, latitude:city1.latitude}) as p2
+	WITH distance(p1,p2) as dist, city1, u, c 
+	WHERE dist <= $distance AND NOT EXISTS ((u)<-[:FOLLOWS]-(:User{username:$username}))
+	RETURN u ,distance(p1,p2) AS dist
+	ORDER BY dist
+	SKIP $skip
+	LIMIT $limit
+	*/
+	public List<User> recommendUser(Cuisine cuisine, int distance, boolean airDistance, City city, int page, int perPage){
 		City targetCity = city == null ? getCity() : city;
 		Map<String,Object> parameters = new HashMap<String,Object>();
-		String distanceQuery = null;
-		String cuisineQuery = "";
-		String cityQuery = "(city) ";
 		parameters.put("city", targetCity.getName());
 		parameters.put("username", getUsername());
-		if(distance > 0) {
-			parameters.put("distance", distance);
-			cityQuery = "(city|city2) ";
-			if(airDistance)
-				distanceQuery = ", (city2:City) "
-				+ "WHERE distance(point({latitude: city2.latitude, longitude: city2.longitude}), "
-						+ "point({latitude: city.latitude, longitude: city.longitude})) "
-						+ "<= $distance ";
-			else
-				distanceQuery = "";
-		}
+		parameters.put("distance", distance*1000);
+		parameters.put("skip", page*perPage);
+		parameters.put("limit", perPage);
+		String cuisineQuery = " ";
 		if(cuisine != null) {
 			parameters.put("cuisine", cuisine.getName());
-			cuisineQuery = "(cuisine:Cuisine{name:$cuisine})<-[:LIKES]-";
+			cuisineQuery = "-[:LIKES]->(c:Cuisine{name:$cuisine}) ";
 		}
 			
 		
-		Iterable<User> recommended = DBManager.session().query(User.class,
-				"MATCH (city:City{name:$city}) " + distanceQuery 
-				+ ", "+ cuisineQuery +"(user:User)-[:LOCATED]->"+ cityQuery
-					+ "WHERE NOT EXISTS( (:User{name:$username})-[:FOLLOWS]->(user) ) "
-				+ "RETURN user", parameters);
+		Iterable<User> recommended = DBManager.session().query(User.class, "MATCH (city:City{name:$city}), (city1:City)<-[:LOCATED]-(u:User)"+ cuisineQuery+ 
+				"WITH city1, u, point({longitude: city.longitude, latitude:city.latitude}) as p1, " + 
+				"point({longitude: city1.longitude, latitude:city1.latitude}) as p2 " + 
+				"WITH distance(p1,p2) as dist, city1, u " + 
+				"WHERE dist <= $distance AND NOT EXISTS ((u)<-[:FOLLOWS]-(:User{username:$username})) "
+				+ "AND (u.username <> $username)" + 
+				"RETURN (u)-[:LOCATED]->(:City), dist "+
+				"ORDER BY dist " + 
+				"SKIP $skip " + 
+				"LIMIT $limit", parameters);
+				
 		List<User> users = new ArrayList<User>();
 		recommended.forEach(users::add);
 		return users;
@@ -389,8 +396,7 @@ public class User
 
 	public void unfollow(User user)
 	{
-		List<User> followed = getFollowedUsers();
-		ListIterator<User> iterator = followed.listIterator();
+		ListIterator<User> iterator = getFollowedUsers().listIterator();
 		while (iterator.hasNext())
 			if (iterator.next().equals(user)) {
 				iterator.remove();

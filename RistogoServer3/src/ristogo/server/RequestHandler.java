@@ -465,6 +465,7 @@ public class RequestHandler extends Thread
 	{
 		StringFilter filter = reqMsg.getEntity(StringFilter.class);
 		String username = filter == null ? null : filter.getValue();
+		loggedUser = DBManager.session().load(User.class, loggedUser.getUsername(),1);
 		if (username == null || !User.isValidUsername(username))
 			return new ResponseMessage("Invalid user.");
 		User user = DBManager.session().load(User.class, username, 0);
@@ -475,6 +476,7 @@ public class RequestHandler extends Thread
 		if (!loggedUser.isFollowing(user))
 			return new ResponseMessage("You are not following this user.");
 		loggedUser.unfollow(user);
+		user.removeFollower(loggedUser);
 		DBManager.session().save(loggedUser);
 		return new ResponseMessage();
 	}
@@ -557,10 +559,13 @@ public class RequestHandler extends Thread
 	private ResponseMessage handleGetStatisticRestaurant(RequestMessage reqMsg)
 	{
 		//Rank by Likes for restaurant 
-		RestaurantInfo restaurant = reqMsg.getEntity(RestaurantInfo.class);
-		if(restaurant == null)
-			return new ResponseMessage("No specified restaurant");
-		Restaurant savedRestaurant = DBManager.session().load(Restaurant.class, restaurant.getName(), 1);
+		StringFilter restaurant = reqMsg.getEntity(StringFilter.class);
+		String name = restaurant == null ? null : restaurant.getValue();
+		if(name == null)
+			return new ResponseMessage("No restaurant specified");		
+		Restaurant savedRestaurant = DBManager.session().load(Restaurant.class, name, 0);
+		if(savedRestaurant == null)
+			return new ResponseMessage("Can't find specified Restaurant");
 		StatisticInfo stat = new StatisticInfo(savedRestaurant.getLikesCount(),
 				savedRestaurant.getCityRank(),
 				savedRestaurant.getCuisineRank(),
@@ -724,15 +729,18 @@ public class RequestHandler extends Thread
 	private ResponseMessage handleRecommendUser(RequestMessage reqMsg)
 	{
 		RecommendUserInfo info = reqMsg.getEntity(RecommendUserInfo.class);
+		PageFilter pageFilter = reqMsg.getEntity(PageFilter.class);
 		Cuisine cuisine = null;
 		City city = null;
 		if(info == null)
 			return new ResponseMessage("Recommendation info is null");
 		if(info.getCuisine() != null)
 			cuisine = DBManager.session().load(Cuisine.class, info.getCuisine().getName(), 0);
-		if(info.getCity() != null)
-			city = DBManager.session().load(City.class, info.getCity().getName(), 0);
-		List<User> recommended = loggedUser.recommendUser(cuisine, info.getDistance(), info.isAirDistance(), city);
+		if(info.getCity() == null)
+			return new ResponseMessage("No city specified");
+		
+		city = DBManager.session().load(City.class, info.getCity().getName(), 0);
+		List<User> recommended = loggedUser.recommendUser(cuisine, info.getDistance(), info.isAirDistance(), city, pageFilter.getPage(), pageFilter.getPerPage());
 		List<UserInfo> recommendedInfo = new ArrayList<UserInfo>();
 		recommended.forEach((User u) -> {
 			CityInfo cityInfo = new CityInfo(u.getCity().getName());
