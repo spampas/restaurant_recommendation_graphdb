@@ -31,6 +31,8 @@ public class CuisinesPanel extends TablePanel
 			ptv.refresh();
 		});
 		setControlBox(controlBox);
+		ptv.setOnSelect((item) -> {
+		});
 		ptv.setDeletable(true);
 		ptv.setOnDelete((item) -> {
 			ResponseMessage resMsg = Protocol.getInstance().deleteCuisine(new StringFilter(item.getCuisine()));

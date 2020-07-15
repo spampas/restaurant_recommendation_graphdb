@@ -29,6 +29,8 @@ public class CuisinesDetailsBox extends TableDetailsBox
 			ptv.refresh();
 		});
 		setControlBox(controlBox);
+		ptv.setOnSelect((item) -> {
+		});
 		ptv.setDeletable(true);
 		ptv.setDeleteButtonText("Remove");
 		ptv.setOnDelete((item) -> {
