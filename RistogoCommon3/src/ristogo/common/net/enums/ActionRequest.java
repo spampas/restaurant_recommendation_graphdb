@@ -37,7 +37,8 @@ public enum ActionRequest implements Serializable
 	RECOMMEND_RESTAURANT,
 	RECOMMEND_USER,
 	SET_CITY, //TODO
-	GET_CITY; //TODO
+	GET_CITY,
+	LIST_LIKED_CUISINES; //TODO
 
 	public String toCamelCaseString()
 	{

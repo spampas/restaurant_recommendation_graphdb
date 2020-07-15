@@ -116,35 +116,46 @@ public class User
 
 	public List<Restaurant> getLikedRestaurants()
 	{
-		if(likedRestaurants == null) {
 			Iterable<Restaurant> restaurants = DBManager.session().query(Restaurant.class,
-					"MATCH (user:User)-[:LIKE]->(restaurant:Restaurant) "
+					"MATCH (user:User)-[:LIKES]->(restaurant:Restaurant) "
 					+ "WHERE user.username = $username "
 					+ "RETURN restaurant", Map.ofEntries(Map.entry("username", getUsername())));
 			likedRestaurants = new ArrayList<Restaurant>();
-			restaurants.forEach(likedRestaurants::add);
-		}
-
+			if(restaurants != null)
+				restaurants.forEach(likedRestaurants::add);		
 		return likedRestaurants;
 	}
 
+	public List<Cuisine> getLikedCuisines(String regex){
+		String regexFilter = "";
+		if (regex == null)
+			return getLikedCuisines();
+		
+		regexFilter = "AND cuisine.name =~ $regex ";
+		Iterable<Cuisine> cuisines = DBManager.session().query(Cuisine.class,
+				"MATCH (user:User)-[:LIKES]->(cuisine:Cuisine) "
+				+ "WHERE user.username = $username " + regexFilter
+				+ "RETURN cuisine", Map.ofEntries(Map.entry("username", getUsername()),
+						Map.entry("regex", regex)));
+		likedCuisines = new ArrayList<Cuisine>();
+		cuisines.forEach(likedCuisines::add);
+		return likedCuisines;
+	}
+	
 	public List<Cuisine> getLikedCuisines()
 	{
-		if(likedCuisines == null) {
-			Iterable<Cuisine> cuisines = DBManager.session().query(Cuisine.class,
-					"MATCH (user:User)-[:LIKE]->(cuisine:Cuisine) "
+		Iterable<Cuisine> cuisines = DBManager.session().query(Cuisine.class,
+					"MATCH (user:User)-[:LIKES]->(cuisine:Cuisine) "
 					+ "WHERE user.username = $username "
 					+ "RETURN cuisine", Map.ofEntries(Map.entry("username", getUsername())));
 			likedCuisines = new ArrayList<Cuisine>();
 			cuisines.forEach(likedCuisines::add);
-		}
-		return likedCuisines;
+			return likedCuisines;
 	}
 	
 	public void unlikeCuisine(Cuisine cuisine)
 	{
 		getLikedCuisines().remove(cuisine);
-		cuisine.getUsersWhoLike().remove(this);
 	}
 	
 	public void setUsername(String username)
@@ -156,25 +167,25 @@ public class User
 	public void addRestaurant(Restaurant restaurant)
 	{
 		getOwnedRestaurants().add(restaurant);
-		restaurant.setOwner(this);
 	}
 
 	public void likeRestaurant(Restaurant restaurant)
 	{
 		getLikedRestaurants().add(restaurant);
-		restaurant.getUsersWhoLike().add(this);
 	}
 	
 	public void unlikeRestaurant(Restaurant restaurant) {
-		
-		if(getLikedRestaurants().contains(restaurant))
-			getLikedRestaurants().remove(restaurant);
+		ListIterator<Restaurant> iterator = getLikedRestaurants().listIterator();
+		while(iterator.hasNext())
+			if(iterator.next().equals(restaurant)) {
+				iterator.remove();
+				return;
+			}
 	}
 
 	public void likeCuisine(Cuisine cuisine)
 	{
 		getLikedCuisines().add(cuisine);
-		cuisine.addUserWhoLike(this);
 	}
 
 	public boolean checkPasswordHash(String passwordHash)
@@ -321,7 +332,7 @@ public class User
 			parameters.put("distance", distance);
 			cityQuery = "(city|city2) ";
 			if(airDistance)
-				distanceQuery = "MATCH (city2:City) "
+				distanceQuery = ", (city2:City) "
 				+ "WHERE distance(point1({latitude: city2.latitude, longitude: city2.longitude}), "
 						+ "point2({latitude: city.latitude, longitude: city.longitude:})) "
 						+ "<= $distance ";
@@ -367,7 +378,6 @@ public class User
 	{
 		if (followedUsers == null)
 			followedUsers = new ArrayList<User>();
-		user.addFollower(this);
 		followedUsers.add(user);
 	}
 
@@ -384,7 +394,6 @@ public class User
 		while (iterator.hasNext())
 			if (iterator.next().equals(user)) {
 				iterator.remove();
-				user.removeFollower(this);
 				return;
 			}
 	}
@@ -396,7 +405,6 @@ public class User
 		while (iterator.hasNext())
 			if (iterator.next().equals(user)) {
 				iterator.remove();
-				user.removeFollower(this);
 				return;
 			}
 	}

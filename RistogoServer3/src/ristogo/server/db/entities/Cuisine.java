@@ -69,4 +69,51 @@ public class Cuisine
 	public void addUserWhoLike(User user) {
 		getUsersWhoLike().add(user);
 	}
+	
+	public static List<Cuisine> loadCuisinesLikedBy(User user, String nameRegex, int page, int perPage)
+	{
+		if (nameRegex == null || nameRegex.isEmpty() )
+			 return loadCuisinesLikedBy(user,page,perPage);
+		String regexFilter = "";
+		regexFilter = "AND c.name =~ $regex ";
+		Iterable<Cuisine> found = DBManager.session().query(Cuisine.class,
+			"MATCH (u:User)-[:LIKES]->(c:Cuisine) " +
+			"WHERE u.username = $username " + regexFilter +
+			"RETURN c " +
+			"ORDER BY c.name " +
+			"SKIP $skip " +
+			"LIMIT $limit ",
+			Map.ofEntries(Map.entry("username", user.getUsername()),
+				Map.entry("regex", nameRegex),
+				Map.entry("skip", page*perPage),
+				Map.entry("limit", perPage)));
+		List<Cuisine> cuisines = new ArrayList<Cuisine>();
+		found.forEach(cuisines::add);
+		return cuisines;
+	}
+	
+	public static List<Cuisine> loadCuisinesLikedBy(User user, int page, int perPage)
+	{
+		
+		Iterable<Cuisine> found = DBManager.session().query(Cuisine.class,
+				"MATCH (u:User)-[:LIKES]->(c:Cuisine) " +
+				"WHERE u.username = $username " +
+				"RETURN c " +
+				"ORDER BY c.name " +
+				"SKIP $skip " +
+				"LIMIT $limit ",
+				Map.ofEntries(Map.entry("username", user.getUsername()),
+					Map.entry("skip", page*perPage),
+					Map.entry("limit", perPage)));
+			List<Cuisine> cuisines = new ArrayList<Cuisine>();
+			found.forEach(cuisines::add);
+			return cuisines;
+	}
+	
+	public boolean equals(Object o) {
+		if(o == this) return true;
+		if(!(o instanceof Cuisine)) return false;
+		Cuisine c = (Cuisine) o;
+		return name.equals(c.name);
+	}
 }

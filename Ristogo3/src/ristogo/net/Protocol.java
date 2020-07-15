@@ -182,12 +182,12 @@ public class Protocol implements AutoCloseable
 	
 	public ResponseMessage listLikedCuisines(PageFilter pageFilter)
 	{
-		return sendRequest(ActionRequest.LIST_CUISINES, pageFilter);
+		return sendRequest(ActionRequest.LIST_LIKED_CUISINES, pageFilter);
 	}
 
 	public ResponseMessage listLikedCuisines(StringFilter nameFilter, PageFilter pageFilter)
 	{
-		return sendRequest(ActionRequest.LIST_CUISINES, nameFilter, pageFilter);
+		return sendRequest(ActionRequest.LIST_LIKED_CUISINES, nameFilter, pageFilter);
 	}
 
 	public ResponseMessage listCuisines(PageFilter pageFilter)
