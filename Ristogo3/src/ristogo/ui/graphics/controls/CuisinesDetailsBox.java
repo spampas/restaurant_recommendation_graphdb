@@ -12,8 +12,8 @@ public class CuisinesDetailsBox extends TableDetailsBox
 	{
 		super("Add your favourite cuisines:");
 
-		AddCuisineControlBox controlBox = new AddCuisineControlBox();
-		CuisinesTableView tv = new CuisinesTableView();
+		AddCuisineControlBox controlBox = new AddCuisineControlBox(true);
+		CuisinesTableView tv = new CuisinesTableView(true);
 		PagedTableView<CuisineBean> ptv = new PagedTableView<CuisineBean>(tv);
 		ptv.setFindHint("Search liked cuisines...");
 		ptv.setDeleteDisable(true);

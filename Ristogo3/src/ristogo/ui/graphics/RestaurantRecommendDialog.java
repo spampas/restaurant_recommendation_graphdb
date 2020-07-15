@@ -75,6 +75,11 @@ public class RestaurantRecommendDialog extends Dialog<RecommendRestaurantInfo>
 		errorLabel.setStyle("-fx-background-color: red;");
 		errorLabel.setVisible(false);
 
+		ButtonType okButtonType = new ButtonType("Search", ButtonData.OK_DONE);
+		dialogPane.getButtonTypes().addAll(okButtonType, ButtonType.CLOSE);
+
+		searchButton = (Button)dialogPane.lookupButton(okButtonType);
+
 		ResponseMessage resMsg = Protocol.getInstance().getCity();
 		if (!resMsg.isSuccess())
 			showError(resMsg.getErrorMsg());
@@ -95,10 +100,6 @@ public class RestaurantRecommendDialog extends Dialog<RecommendRestaurantInfo>
 		grid.add(priceFilterLabel, 0, 5); grid.add(priceFilterSelector, 1, 5);
 		grid.add(errorLabel, 0, 6, 2, 1);
 
-		ButtonType okButtonType = new ButtonType("Search", ButtonData.OK_DONE);
-		dialogPane.getButtonTypes().addAll(okButtonType, ButtonType.CLOSE);
-
-		searchButton = (Button)dialogPane.lookupButton(okButtonType);
 		searchButton.addEventFilter(ActionEvent.ACTION, this::filterOkButtonAction);
 
 		ButtonBar buttonBar = (ButtonBar)dialogPane.lookup(".button-bar");

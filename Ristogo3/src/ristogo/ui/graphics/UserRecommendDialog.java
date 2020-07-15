@@ -70,6 +70,11 @@ public class UserRecommendDialog extends Dialog<RecommendUserInfo>
 		errorLabel.setStyle("-fx-background-color: red;");
 		errorLabel.setVisible(false);
 
+		ButtonType okButtonType = new ButtonType("Search", ButtonData.OK_DONE);
+		dialogPane.getButtonTypes().addAll(okButtonType, ButtonType.CLOSE);
+
+		searchButton = (Button)dialogPane.lookupButton(okButtonType);
+
 		ResponseMessage resMsg = Protocol.getInstance().getCity();
 		if (!resMsg.isSuccess())
 			showError(resMsg.getErrorMsg());
@@ -87,11 +92,6 @@ public class UserRecommendDialog extends Dialog<RecommendUserInfo>
 		grid.add(airDistanceField, 1, 2);
 		grid.add(cuisineLabel, 0, 3); grid.add(cuisineSelector, 1, 3);
 		grid.add(errorLabel, 0, 4, 2, 1);
-
-		ButtonType okButtonType = new ButtonType("Search", ButtonData.OK_DONE);
-		dialogPane.getButtonTypes().addAll(okButtonType, ButtonType.CLOSE);
-
-		searchButton = (Button)dialogPane.lookupButton(okButtonType);
 
 		searchButton.addEventFilter(ActionEvent.ACTION, this::filterOkButtonAction);
 

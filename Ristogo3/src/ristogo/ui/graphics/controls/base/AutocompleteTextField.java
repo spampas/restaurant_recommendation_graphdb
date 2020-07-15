@@ -17,6 +17,7 @@ import javafx.scene.control.TextField;
 public class AutocompleteTextField extends TextField
 {
 	private ContextMenu entriesPopup;
+	private boolean disabled;
 
 	public AutocompleteTextField(Function<String, List<String>> searchCb)
 	{
@@ -27,7 +28,7 @@ public class AutocompleteTextField extends TextField
 			@Override
 			public void changed(ObservableValue<? extends String> observableValue, String s, String s2)
 			{
-				if (getText().length() < 2) {
+				if (getText().length() < 2 || disabled) {
 					entriesPopup.hide();
 					return;
 				}
@@ -72,5 +73,10 @@ public class AutocompleteTextField extends TextField
 		}
 		entriesPopup.getItems().clear();
 		entriesPopup.getItems().addAll(menuItems);
+	}
+
+	public void setAutocompleteDisable(boolean value)
+	{
+		this.disabled = value;
 	}
 }

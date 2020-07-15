@@ -14,10 +14,11 @@ public class AddCuisineControlBox extends ControlBox
 	private final CuisineSelector addField = new CuisineSelector();
 	private final FormButton addButton;
 
-	public AddCuisineControlBox()
+	public AddCuisineControlBox(boolean autocomplete)
 	{
 		super();
 		addField.setPromptText("Cuisine name");
+		addField.setAutocompleteDisable(!autocomplete);
 		addButton = new FormButton("Add");
 		addButton.setDisable(true);
 
@@ -49,5 +50,10 @@ public class AddCuisineControlBox extends ControlBox
 	private void textChangeListener(ObservableValue<? extends String> observable, String oldValue, String newValue)
 	{
 		addButton.setDisable(addField.getText() == null || addField.getText().isEmpty());
+	}
+
+	public void setText(String text)
+	{
+		addField.setText(text);
 	}
 }

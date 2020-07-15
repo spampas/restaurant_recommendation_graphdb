@@ -20,9 +20,12 @@ import ristogo.ui.graphics.controls.base.RistogoTableView;
 
 public class CuisinesTableView extends RistogoTableView<CuisineBean>
 {
-	public CuisinesTableView()
+	private boolean liked;
+
+	public CuisinesTableView(boolean liked)
 	{
 		super();
+		this.liked = liked;
 		setMinWidth(350);
 		setMaxWidth(400);
 	}
@@ -57,10 +60,16 @@ public class CuisinesTableView extends RistogoTableView<CuisineBean>
 	public boolean populateTable(int page)
 	{
 		ResponseMessage resMsg;
-		if (filter == null)
-			resMsg = Protocol.getInstance().listCuisines(new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
+		if (liked)
+			if (filter == null)
+				resMsg = Protocol.getInstance().listLikedCuisines(new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
+			else
+				resMsg = Protocol.getInstance().listLikedCuisines(new StringFilter(filter), new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
 		else
-			resMsg = Protocol.getInstance().listCuisines(new StringFilter(filter), new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
+			if (filter == null)
+				resMsg = Protocol.getInstance().listCuisines(new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
+			else
+				resMsg = Protocol.getInstance().listCuisines(new StringFilter(filter), new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
 		return extractItemsFromMessage(resMsg);
 	}
 

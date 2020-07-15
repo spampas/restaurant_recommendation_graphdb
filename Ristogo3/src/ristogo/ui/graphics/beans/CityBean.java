@@ -9,7 +9,7 @@ public class CityBean
 	private final SimpleDoubleProperty latitude;
 	private final SimpleDoubleProperty longitude;
 
-	public CityBean(int id, String city, double latitude, double longitude)
+	public CityBean(String city, double latitude, double longitude)
 	{
 		this.name = new SimpleStringProperty(city);
 		this.latitude = new SimpleDoubleProperty(latitude);

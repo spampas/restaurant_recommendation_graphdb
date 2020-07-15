@@ -179,6 +179,16 @@ public class Protocol implements AutoCloseable
 	{
 		return sendRequest(ActionRequest.DELETE_RESTAURANT, nameFilter);
 	}
+	
+	public ResponseMessage listLikedCuisines(PageFilter pageFilter)
+	{
+		return sendRequest(ActionRequest.LIST_CUISINES, pageFilter);
+	}
+
+	public ResponseMessage listLikedCuisines(StringFilter nameFilter, PageFilter pageFilter)
+	{
+		return sendRequest(ActionRequest.LIST_CUISINES, nameFilter, pageFilter);
+	}
 
 	public ResponseMessage listCuisines(PageFilter pageFilter)
 	{
@@ -200,9 +210,9 @@ public class Protocol implements AutoCloseable
 		return sendRequest(ActionRequest.ADD_CUISINE, cuisine);
 	}
 
-	public ResponseMessage deleteCuisine(CuisineInfo cuisine)
+	public ResponseMessage deleteCuisine(StringFilter nameFilter)
 	{
-		return sendRequest(ActionRequest.DELETE_CUISINE, cuisine);
+		return sendRequest(ActionRequest.DELETE_CUISINE, nameFilter);
 	}
 
 	public ResponseMessage likeCuisine(StringFilter nameFilter)
@@ -220,9 +230,19 @@ public class Protocol implements AutoCloseable
 		return sendRequest(ActionRequest.LIST_CITIES);
 	}
 
-	public ResponseMessage listCities(StringFilter filter)
+	public ResponseMessage listCities(StringFilter nameFilter, PageFilter pageFilter)
 	{
-		return sendRequest(ActionRequest.LIST_CITIES, filter);
+		return sendRequest(ActionRequest.LIST_CITIES, nameFilter, pageFilter);
+	}
+
+	public ResponseMessage listCities(PageFilter pageFilter)
+	{
+		return sendRequest(ActionRequest.LIST_CITIES, pageFilter);
+	}
+
+	public ResponseMessage listCities(StringFilter nameFilter)
+	{
+		return sendRequest(ActionRequest.LIST_CITIES, nameFilter);
 	}
 
 	public ResponseMessage addCity(CityInfo city)
@@ -230,9 +250,9 @@ public class Protocol implements AutoCloseable
 		return sendRequest(ActionRequest.ADD_CITY, city);
 	}
 
-	public ResponseMessage deleteCity(CityInfo city)
+	public ResponseMessage deleteCity(StringFilter stringFilter)
 	{
-		return sendRequest(ActionRequest.DELETE_CITY, city);
+		return sendRequest(ActionRequest.DELETE_CITY, stringFilter);
 	}
 
 	public ResponseMessage setCity(StringFilter stringFilter)
