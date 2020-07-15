@@ -10,6 +10,8 @@ import ristogo.common.net.entities.CityInfo;
 import ristogo.common.net.entities.CuisineInfo;
 import ristogo.common.net.entities.Entity;
 import ristogo.common.net.entities.PageFilter;
+import ristogo.common.net.entities.RecommendRestaurantInfo;
+import ristogo.common.net.entities.RecommendUserInfo;
 import ristogo.common.net.entities.RestaurantInfo;
 import ristogo.common.net.entities.StringFilter;
 import ristogo.common.net.entities.UserInfo;
@@ -241,6 +243,26 @@ public class Protocol implements AutoCloseable
 	public ResponseMessage getCity()
 	{
 		return sendRequest(ActionRequest.GET_CITY);
+	}
+
+	public ResponseMessage recommendUser(RecommendUserInfo recommendFilter, PageFilter pageFilter)
+	{
+		return sendRequest(ActionRequest.RECOMMEND_USER, recommendFilter, pageFilter);
+	}
+
+	public ResponseMessage recommendUser(StringFilter nameFilter, RecommendUserInfo recommendFilter, PageFilter pageFilter)
+	{
+		return sendRequest(ActionRequest.RECOMMEND_USER, nameFilter, recommendFilter, pageFilter);
+	}
+
+	public ResponseMessage recommendRestaurant(RecommendRestaurantInfo recommendFilter, PageFilter pageFilter)
+	{
+		return sendRequest(ActionRequest.RECOMMEND_RESTAURANT, recommendFilter, pageFilter);
+	}
+
+	public ResponseMessage recommendRestaurant(StringFilter nameFilter, RecommendRestaurantInfo recommendFilter, PageFilter pageFilter)
+	{
+		return sendRequest(ActionRequest.RECOMMEND_RESTAURANT, nameFilter, recommendFilter, pageFilter);
 	}
 
 	private ResponseMessage sendRequest(ActionRequest actionRequest, Entity... entities)

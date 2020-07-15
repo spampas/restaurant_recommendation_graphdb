@@ -1,16 +1,19 @@
 package ristogo.common.net.entities;
 
+import ristogo.common.net.entities.enums.LikesFrom;
 import ristogo.common.net.entities.enums.Price;
 
 public class RecommendRestaurantInfo extends Entity {
 	private CuisineInfo cuisine;
+	private CityInfo city;
 	private int distance;
 	private boolean airDistance;
-	private int depth;
+	private LikesFrom depth;
 	private Price price;
 	
-	public RecommendRestaurantInfo(CuisineInfo cuisine, int distance, boolean airDistance, int depth, Price price ) {
+	public RecommendRestaurantInfo(CuisineInfo cuisine, CityInfo city, int distance, boolean airDistance, LikesFrom depth, Price price ) {
 		this.cuisine = cuisine;
+		this.city = city;
 		this.distance = distance;
 		this.airDistance = airDistance;
 		this.depth = depth;
@@ -47,12 +50,12 @@ public class RecommendRestaurantInfo extends Entity {
 		this.airDistance = airDistance;
 	}
 
-	public int getDepth()
+	public LikesFrom getDepth()
 	{
 		return depth;
 	}
 
-	public void setDepth(int depth)
+	public void setDepth(LikesFrom depth)
 	{
 		this.depth = depth;
 	}
@@ -65,5 +68,15 @@ public class RecommendRestaurantInfo extends Entity {
 	public void setPrice(Price price)
 	{
 		this.price = price;
+	}
+
+	public CityInfo getCity()
+	{
+		return city;
+	}
+
+	public void setCity(CityInfo city)
+	{
+		this.city = city;
 	}
 }

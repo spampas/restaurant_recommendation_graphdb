@@ -1,10 +1,16 @@
 package ristogo.ui.graphics.controls;
 
+import java.util.Optional;
+
 import ristogo.common.net.ResponseMessage;
+import ristogo.common.net.entities.RecommendRestaurantInfo;
+import ristogo.common.net.entities.RecommendUserInfo;
 import ristogo.common.net.entities.RestaurantInfo;
 import ristogo.common.net.entities.StringFilter;
 import ristogo.net.Protocol;
 import ristogo.ui.graphics.ErrorBox;
+import ristogo.ui.graphics.RestaurantRecommendDialog;
+import ristogo.ui.graphics.UserRecommendDialog;
 import ristogo.ui.graphics.beans.RestaurantBean;
 import ristogo.ui.graphics.beans.UserBean;
 import ristogo.ui.graphics.controls.base.MenuBar;
@@ -38,7 +44,12 @@ public class RestaurantsPanel extends TablePanel
 			controlBox.setButtonDisable(true);
 			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
-			tv.filterRecommend(null);
+			RestaurantRecommendDialog login = new RestaurantRecommendDialog();
+			Optional<RecommendRestaurantInfo> result = login.showAndWait();
+			result.ifPresentOrElse(
+				(data) -> { tv.filterRecommend(null, data); },
+				() -> { tv.filterRecommend(null, null); }
+			);
 		});
 		setMenuBar(menuBar);
 		controlBox.setOnClick(() -> {

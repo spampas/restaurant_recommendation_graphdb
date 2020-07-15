@@ -8,6 +8,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import ristogo.common.net.ResponseMessage;
 import ristogo.common.net.entities.PageFilter;
+import ristogo.common.net.entities.RecommendUserInfo;
 import ristogo.common.net.entities.StringFilter;
 import ristogo.common.net.entities.UserInfo;
 import ristogo.net.Protocol;
@@ -26,6 +27,7 @@ public class UsersTableView extends RistogoTableView<UserBean>
 	}
 
 	private FilterType filterType = FilterType.ALL;
+	private RecommendUserInfo recommendFilter;
 
 	@Override
 	protected Collection<TableColumn<UserBean, ?>> generateColumns()
@@ -78,7 +80,11 @@ public class UsersTableView extends RistogoTableView<UserBean>
 				resMsg = Protocol.getInstance().listFollowing(new StringFilter(filter), new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
 			break;
 		case RECOMMEND:
-			//TODO
+			if (filter == null)
+				resMsg = Protocol.getInstance().recommendUser(recommendFilter, new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
+			else
+				resMsg = Protocol.getInstance().recommendUser(new StringFilter(filter), recommendFilter, new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
+			break;
 		case ALL:
 		default:
 			if (filter == null)
@@ -107,9 +113,10 @@ public class UsersTableView extends RistogoTableView<UserBean>
 		super.filter(filter);
 	}
 
-	public void filterRecommend(String filter) //TODO
+	public void filterRecommend(String filter, RecommendUserInfo recommend)
 	{
 		filterType = FilterType.RECOMMEND;
+		recommendFilter = recommend;
 		super.filter(filter);
 	}
 }

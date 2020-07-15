@@ -8,6 +8,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import ristogo.common.net.ResponseMessage;
 import ristogo.common.net.entities.PageFilter;
+import ristogo.common.net.entities.RecommendRestaurantInfo;
 import ristogo.common.net.entities.RestaurantInfo;
 import ristogo.common.net.entities.StringFilter;
 import ristogo.common.net.entities.UserInfo;
@@ -29,6 +30,7 @@ public class RestaurantsTableView extends RistogoTableView<RestaurantBean>
 
 	private FilterType filterType = FilterType.ALL;
 	private boolean owned;
+	private RecommendRestaurantInfo recommendFilter;
 
 	public RestaurantsTableView(boolean owned)
 	{
@@ -98,7 +100,11 @@ public class RestaurantsTableView extends RistogoTableView<RestaurantBean>
 					resMsg = Protocol.getInstance().listLikedRestaurants(new StringFilter(filter), new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
 				break;
 			case RECOMMEND:
-				//TODO
+			if (filter == null)
+				resMsg = Protocol.getInstance().recommendRestaurant(recommendFilter, new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
+			else
+				resMsg = Protocol.getInstance().recommendRestaurant(new StringFilter(filter), recommendFilter, new PageFilter(page, GUIConfig.getMaxRowDisplayable()));
+			break;
 			case ALL:
 			default:
 				if (filter == null)
@@ -126,9 +132,10 @@ public class RestaurantsTableView extends RistogoTableView<RestaurantBean>
 		super.filter(filter);
 	}
 
-	public void filterRecommend(String filter) //TODO
+	public void filterRecommend(String filter, RecommendRestaurantInfo recommend) //TODO
 	{
 		filterType = FilterType.RECOMMEND;
+		recommendFilter = recommend;
 		super.filter(filter);
 	}
 }
