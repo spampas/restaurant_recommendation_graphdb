@@ -387,10 +387,13 @@ public class RequestHandler extends Thread
 				new SortOrder().add("username"),
 				new Pagination(pageFilter.getPage(), pageFilter.getPerPage()), 0);
 		List<UserInfo> infos = new ArrayList<UserInfo>();
-		users.forEach((User u) -> {
-			if(!u.equals(loggedUser))	
+		try {users.forEach((User u) -> {
+			if(!u.equals(loggedUser) && !(u.isAdmin()))	
 				infos.add(new UserInfo(u.getUsername(), new CityInfo(u.getCity().getName()), u.isFollowedBy(loggedUser)));
-		});
+			});
+		} catch (NullPointerException ex) {
+			return new ResponseMessage();
+		}
 		return new ResponseMessage(infos.toArray(new UserInfo[0]));
 	}
 
