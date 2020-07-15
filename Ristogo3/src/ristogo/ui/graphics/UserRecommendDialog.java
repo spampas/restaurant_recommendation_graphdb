@@ -43,9 +43,9 @@ public class UserRecommendDialog extends Dialog<RecommendUserInfo>
 	private final DialogLabel distanceLabel = new DialogLabel("Distance from the city selected (by default is you city)");
 	private final DialogLabel cuisineLabel = new DialogLabel("Cuisine that they like: ");
 	private final DialogLabel errorLabel = new DialogLabel("Fill out the form.");
-	private final CuisineSelector citySelector = new CuisineSelector();
+	private final CuisineSelector cuisineSelector = new CuisineSelector();
 	private final TextField distanceField = new TextField();
-	private final CitySelector cuisineSelector = new CitySelector();
+	private final CitySelector citySelector = new CitySelector();
 	private final CheckBox airDistanceField = new CheckBox("Air distance");
 	private RecommendUserInfo filter;
 
