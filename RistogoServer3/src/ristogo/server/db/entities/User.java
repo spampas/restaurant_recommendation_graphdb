@@ -333,21 +333,21 @@ public class User
 			cityQuery = "(city|city2) ";
 			if(airDistance)
 				distanceQuery = ", (city2:City) "
-				+ "WHERE distance(point1({latitude: city2.latitude, longitude: city2.longitude}), "
-						+ "point2({latitude: city.latitude, longitude: city.longitude:})) "
+				+ "WHERE distance(point({latitude: city2.latitude, longitude: city2.longitude}), "
+						+ "point({latitude: city.latitude, longitude: city.longitude})) "
 						+ "<= $distance ";
 			else
 				distanceQuery = "";
 		}
 		if(cuisine != null) {
 			parameters.put("cuisine", cuisine.getName());
-			cuisineQuery = "(cuisine:Cuisine{name:$cuisine})<-[:LIKE]-";
+			cuisineQuery = "(cuisine:Cuisine{name:$cuisine})<-[:LIKES]-";
 		}
 			
 		
 		Iterable<User> recommended = DBManager.session().query(User.class,
 				"MATCH (city:City{name:$city}) " + distanceQuery 
-				+ "MATCH "+ cuisineQuery +"(user:User)-[:LIVE]->"+ cityQuery
+				+ ", "+ cuisineQuery +"(user:User)-[:LOCATED]->"+ cityQuery
 					+ "WHERE NOT EXISTS( (:User{name:$username})-[:FOLLOWS]->(user) ) "
 				+ "RETURN user", parameters);
 		List<User> users = new ArrayList<User>();

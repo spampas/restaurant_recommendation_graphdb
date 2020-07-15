@@ -16,7 +16,7 @@ public class ManageRestaurantsPanel extends TablePanel
 	public ManageRestaurantsPanel(Consumer<RestaurantInfo> onSelect)
 	{
 		super("Your Restaurants");
-		RestaurantsTableView tv = new RestaurantsTableView();
+		RestaurantsTableView tv = new RestaurantsTableView(true);
 		PagedTableView<RestaurantBean> ptv = new PagedTableView<RestaurantBean>(tv);
 		RestaurantStatisticsDetailsBox detailsBox = new RestaurantStatisticsDetailsBox();
 		ptv.setFindHint("Name...");

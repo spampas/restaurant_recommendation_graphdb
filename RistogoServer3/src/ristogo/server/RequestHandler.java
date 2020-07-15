@@ -752,27 +752,31 @@ public class RequestHandler extends Thread
 		if(name == null)
 			return new ResponseMessage("No cuisine specified");
 		Cuisine toBeLikedCuisine = DBManager.session().load(Cuisine.class, name, 0);
+		if(toBeLikedCuisine == null)
+			return new ResponseMessage("Can't find specified cuisine");
 		if(loggedUser.getLikedCuisines().contains(toBeLikedCuisine))
 			return new ResponseMessage("You already like this cuisine");
 		loggedUser.likeCuisine(toBeLikedCuisine);
 		DBManager.session().save(loggedUser);
-		return new ResponseMessage(cuisine);
+		return new ResponseMessage();
 	}
 
 	@RequestHandlerMethod
 	private ResponseMessage handleUnlikeCuisine(RequestMessage reqMsg)
 	{
-		CuisineInfo cuisine = reqMsg.getEntity(CuisineInfo.class);
-		if(cuisine == null)
+		StringFilter cuisine = reqMsg.getEntity(StringFilter.class);
+		String name = cuisine == null ? null : cuisine.getValue();
+		if(name == null)
 			return new ResponseMessage("No cuisine specified");
 		Session session = DBManager.session();
-		Cuisine toBeUnlikedCuisine = session.load(Cuisine.class, cuisine.getName(), 1);
-		if(loggedUser.getLikedCuisines().contains(toBeUnlikedCuisine))
-			return new ResponseMessage("You already like this cuisine");
+		Cuisine toBeUnlikedCuisine = session.load(Cuisine.class, name, 1);
+		if(toBeUnlikedCuisine == null)
+			return new ResponseMessage("Can't find specified cuisine");
+		if(!loggedUser.getLikedCuisines().contains(toBeUnlikedCuisine))
+			return new ResponseMessage("You already unlike this cuisine");
 		loggedUser.unlikeCuisine(toBeUnlikedCuisine);
 		session.save(loggedUser);
-		session.clear();
-		return new ResponseMessage(cuisine);
+		return new ResponseMessage();
 	}
 
 	@RequestHandlerMethod(requiresLogin=false)
