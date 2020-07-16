@@ -660,7 +660,7 @@ public class RequestHandler extends Thread
 			CuisineInfo cuisineInfo = new CuisineInfo(r.getCuisine().getName());
 			restaurants.add(new RestaurantInfo(r.getName(), cuisineInfo , r.getPrice(), cityInfo));
 		});
-		return new ResponseMessage();
+		return new ResponseMessage(recommended.toArray(new RestaurantInfo[0]));
 	}
 
 	@RequestHandlerMethod
