@@ -159,9 +159,9 @@ public class Restaurant
 		regexFilter = "AND r.name =~ $regex ";
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
 			"MATCH (u:User)-[like:LIKES]->(r:Restaurant)<-[:OWNS]-(o:User) " +
-			"OPTIONAL MATCH (c:Cuisine)<-[:SERVES]-(r)-[:LOCATED]->(ci:City) " +
+			", (c:Cuisine)<-[:SERVES]-(r)-[:LOCATED]->(ci:City) " +
 			"WHERE u.username = $username " + regexFilter +
-			"RETURN * " +
+			"RETURN (r)--() " +
 			"ORDER BY r.name " +
 			"SKIP $skip " +
 			"LIMIT $limit ",
@@ -178,9 +178,9 @@ public class Restaurant
 	{
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
 			"MATCH (u:User)-[like:LIKES]->(r:Restaurant)<-[own:OWNS]-(o:User) " +
-			"OPTIONAL MATCH (c:Cuisine)<-[serve:SERVES]-(r)-[located:LOCATED]->(ci:City) " +
+			", (c:Cuisine)<-[serve:SERVES]-(r)-[located:LOCATED]->(ci:City) " +
 			"WHERE u.username = $username " +
-			"RETURN * " +
+			"RETURN (r)--() " +
 			"ORDER BY r.name " +
 			"SKIP $skip " +
 			"LIMIT $limit ",

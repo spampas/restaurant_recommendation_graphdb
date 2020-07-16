@@ -32,6 +32,7 @@ public class RestaurantsPanel extends TablePanel
 			controlBox.setButtonDisable(true);
 			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
+			ptv.setFilterFunction(tv::filter);
 			tv.filter(null);
 			ptv.reset();
 		});
@@ -39,6 +40,7 @@ public class RestaurantsPanel extends TablePanel
 			controlBox.setButtonDisable(true);
 			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
+			ptv.setFilterFunction(tv::filterLiked);
 			tv.filterLiked(null);
 			ptv.reset();
 		});
@@ -50,8 +52,8 @@ public class RestaurantsPanel extends TablePanel
 			RestaurantRecommendDialog login = new RestaurantRecommendDialog();
 			Optional<RecommendRestaurantInfo> result = login.showAndWait();
 			result.ifPresentOrElse(
-				(data) -> { tv.filterRecommend(null, data); },
-				() -> { tv.filterRecommend(null, null); }
+				(data) -> { ptv.setFilterFunction(tv::filter); tv.filterRecommend(null, data); }, //TODO
+				() -> { }
 			);
 		});
 		setMenuBar(menuBar);

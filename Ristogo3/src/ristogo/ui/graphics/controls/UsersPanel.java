@@ -30,6 +30,7 @@ public class UsersPanel extends TablePanel
 			controlBox.setButtonDisable(true);
 			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
+			ptv.setFilterFunction(tv::filter);
 			tv.filter(null);
 			ptv.reset();
 		});
@@ -37,6 +38,7 @@ public class UsersPanel extends TablePanel
 			controlBox.setButtonDisable(true);
 			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
+			ptv.setFilterFunction(tv::filterFollowers);
 			tv.filterFollowers(null);
 			ptv.reset();
 		});
@@ -44,6 +46,7 @@ public class UsersPanel extends TablePanel
 			controlBox.setButtonDisable(true);
 			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
+			ptv.setFilterFunction(tv::filterFollowing);
 			tv.filterFollowing(null);
 			ptv.reset();
 		});
@@ -54,8 +57,8 @@ public class UsersPanel extends TablePanel
 			UserRecommendDialog login = new UserRecommendDialog();
 			Optional<RecommendUserInfo> result = login.showAndWait();
 			result.ifPresentOrElse(
-				(data) -> { tv.filterRecommend(null, data); },
-				() -> { tv.filterRecommend(null, null); }
+				(data) -> { ptv.setFilterFunction(tv::filter); tv.filterRecommend(null, data); }, //TODO
+				() -> { }
 			);
 			ptv.reset();
 		});

@@ -252,6 +252,11 @@ public class RequestHandler extends Thread
 	}
 
 	@RequestHandlerMethod
+	private ResponseMessage handleRecommendRestaurants(RequestMessage reqMsg) {
+		
+		return null;
+	}
+	@RequestHandlerMethod
 	private ResponseMessage handleListLikedRestaurants(RequestMessage reqMsg)
 	{
 		StringFilter filter = reqMsg.getEntity(StringFilter.class);

@@ -2,6 +2,8 @@ package ristogo.ui.graphics.controls;
 
 import java.util.function.Consumer;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -17,23 +19,18 @@ public class PagedTableView<T> extends VBox
 	private TextField findField = new TextField();
 	private FormButton findButton = new FormButton("Filter");
 	private PageBar pageBar = new PageBar();
+	private Consumer<String> filterFunction;
 
 	public PagedTableView(RistogoTableView<T> tableView)
 	{
 		super(10);
 		this.tableView = tableView;
+		filterFunction = tableView::filter;
 		findField.setMinSize(200, 30);
 		findField.setMaxSize(400, 30);
-		findButton.setOnAction((event) -> {
-			tableView.filter(findField.getText());
-		});
 		deleteButton.setDisable(true);
 		deleteButton.setVisible(false);
-		findButton.setOnAction((event) -> {
-			tableView.filter(findField.getText());
-			page = 0;
-			pageBar.setPreviousVisible(false);
-		});
+		findButton.setOnAction(this::handleFindClick);
 		pageBar.setOnPrevious(() -> {
 			if (tableView.populateTable(page - 1))
 				page--;
@@ -53,6 +50,18 @@ public class PagedTableView<T> extends VBox
 		HBox controlBox = new HBox(10);
 		controlBox.getChildren().addAll(findField, findButton, deleteButton);
 		getChildren().addAll(controlBox, tableView, pageBar);
+	}
+
+	private void handleFindClick(ActionEvent event)
+	{
+			filterFunction.accept(findField.getText());
+			page = 0;
+			pageBar.setPreviousVisible(false);
+	}
+
+	public void setFilterFunction(Consumer<String> function)
+	{
+		this.filterFunction = function;
 	}
 
 	public RistogoTableView<T> getTableView()

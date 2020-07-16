@@ -172,7 +172,7 @@ public class Protocol implements AutoCloseable
 
 	public ResponseMessage getStatisticRestaurant(StringFilter nameFilter)
 	{
-		return sendRequest(ActionRequest.LIST_USERS, nameFilter);
+		return sendRequest(ActionRequest.GET_STATISTIC_RESTAURANT, nameFilter);
 	}
 
 	public ResponseMessage deleteRestaurant(StringFilter nameFilter)
