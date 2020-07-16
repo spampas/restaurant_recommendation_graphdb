@@ -433,10 +433,13 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod
 	private ResponseMessage handleEditCity(RequestMessage reqMsg)
 	{
+		StringFilter name = reqMsg.getEntity(StringFilter.class);
+		if(name == null)
+			return new ResponseMessage("No City specified");
 		CityInfo city = reqMsg.getEntity(CityInfo.class);
 		if (city == null)
-			return new ResponseMessage("No city selected.");
-		City savedCity = DBManager.session().load(City.class, city.getName(), 0);
+			return new ResponseMessage("No update for city " + name.getValue());
+		City savedCity = DBManager.session().load(City.class, name.getValue(), 0);
 		if(savedCity == null)
 			return new ResponseMessage("Can't find selected city " + city.getName() + ".");
 		
@@ -451,12 +454,15 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod
 	private ResponseMessage handleEditCuisine(RequestMessage reqMsg)
 	{
+		StringFilter name = reqMsg.getEntity(StringFilter.class);
+		if(name == null)
+			return new ResponseMessage("No cuisine selected");
 		CuisineInfo cuisine = reqMsg.getEntity(CuisineInfo.class);
 		if (cuisine == null)
-			return new ResponseMessage("No city selected.");
-		Cuisine saved = DBManager.session().load(Cuisine.class, cuisine.getName(), 0);
+			return new ResponseMessage("No update for cuisine" + name.getValue());
+		Cuisine saved = DBManager.session().load(Cuisine.class, name.getValue(), 0);
 		if(saved == null)
-			return new ResponseMessage("Can't find selected city " + cuisine.getName() + ".");
+			return new ResponseMessage("Can't find selected cuisine " + cuisine.getName() + ".");
 		
 		saved.setName(cuisine.getName());
 		
