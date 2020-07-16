@@ -23,10 +23,14 @@ public class CitiesPanel extends TablePanel
 		PagedTableView<CityBean> ptv = new PagedTableView<CityBean>(tv);
 		ptv.setFindHint("Search cuisines...");
 		ptv.setDeleteDisable(true);
-		controlBox.setOnClick((city) -> {
-			if (city == null || city.isEmpty())
+		controlBox.setOnClick((cityOld, cityNew) -> {
+			if (cityNew == null)
 				return;
-			ResponseMessage resMsg = Protocol.getInstance().addCity(new CityInfo(city));
+			ResponseMessage resMsg;
+			if (cityOld == null)
+				resMsg = Protocol.getInstance().addCity(cityNew);
+			else
+				resMsg = Protocol.getInstance().editCity(new StringFilter(cityOld.getName()), cityNew);
 			if (!resMsg.isSuccess()) {
 				new ErrorBox("Error", "An error has occured while trying to add the city.", resMsg.getErrorMsg()).showAndWait();
 				return;
@@ -36,9 +40,8 @@ public class CitiesPanel extends TablePanel
 		});
 		setControlBox(controlBox);
 		ptv.setOnSelect((item) -> {
-			controlBox.setButtonDisable(item == null);
 			if (item == null)
-				return;
+				controlBox.clearCity();
 			controlBox.setCity(new CityInfo(item.getName(), item.getLatitude(), item.getLongitude()));
 		});
 
@@ -51,6 +54,7 @@ public class CitiesPanel extends TablePanel
 			}
 			controlBox.setButtonDisable(true);
 			ptv.setDeleteDisable(true);
+			controlBox.clearCity();
 			ptv.refresh();
 		});
 		setTableView(ptv);

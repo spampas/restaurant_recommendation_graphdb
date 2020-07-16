@@ -250,6 +250,11 @@ public class Protocol implements AutoCloseable
 		return sendRequest(ActionRequest.ADD_CITY, city);
 	}
 
+	public ResponseMessage editCity(StringFilter nameFilter, CityInfo city)
+	{
+		return sendRequest(ActionRequest.EDIT_CITY, nameFilter, city);
+	}
+
 	public ResponseMessage deleteCity(StringFilter stringFilter)
 	{
 		return sendRequest(ActionRequest.DELETE_CITY, stringFilter);

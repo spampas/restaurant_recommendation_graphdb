@@ -94,6 +94,8 @@ public class DBManager
 
 	public void close()
 	{
+		if (session == null)
+			return;
 		session.clear();
 		session = null;
 	}
