@@ -96,7 +96,7 @@ public class Ristogo
 	private static void launchGUI(String[] args)
 	{
 		Logger.getLogger(Ristogo.class.getName()).entering(Ristogo.class.getName(), "launchGUI", args);
-		ristogo.ui.graphics.RistogoGUI.launch(args);
+		ristogo.ui.RistogoGUI.launch(args);
 		Logger.getLogger(Ristogo.class.getName()).exiting(Ristogo.class.getName(), "launchGUI", args);
 		close();
 	}

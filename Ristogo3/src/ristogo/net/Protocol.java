@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Logger;
 
+import ristogo.common.net.RequestMessage;
+import ristogo.common.net.ResponseMessage;
 import ristogo.common.net.entities.CityInfo;
 import ristogo.common.net.entities.CuisineInfo;
 import ristogo.common.net.entities.Entity;
@@ -15,8 +17,6 @@ import ristogo.common.net.entities.RecommendUserInfo;
 import ristogo.common.net.entities.RestaurantInfo;
 import ristogo.common.net.entities.StringFilter;
 import ristogo.common.net.entities.UserInfo;
-import ristogo.common.net.RequestMessage;
-import ristogo.common.net.ResponseMessage;
 import ristogo.common.net.enums.ActionRequest;
 import ristogo.config.Configuration;
 
