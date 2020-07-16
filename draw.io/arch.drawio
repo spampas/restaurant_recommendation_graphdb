@@ -1,1 +1,58 @@
-<mxfile host="app.diagrams.net" modified="2020-07-16T11:04:02.797Z" agent="5.0 (X11)" version="13.4.4" etag="VoSKfQ4X4TuITFDQq2dP" type="github"><diagram id="5sjWO_LFte0zwEboBOs5">UzV2zq1wL0osyPDNT0nNUTV2VTV2LsrPL4GwciucU3NyVI0MMlNUjV1UjYwMgFjVyA2HrCFY1qAgsSg1rwSLBiADYTaQg2Y1AA==</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2020-07-16T11:04:37.574Z" agent="5.0 (X11)" etag="zkgfTQBRGgGBLUBBqiBG" version="13.4.4" type="github">
+  <diagram id="5sjWO_LFte0zwEboBOs5" name="Page-1">
+    <mxGraphModel dx="1414" dy="758" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="690" pageHeight="980" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="RWKvOEL_Gqe2grvwg0vv-1" value="Network Layer" style="rounded=1;whiteSpace=wrap;html=1;imageAspect=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;" vertex="1" parent="1">
+          <mxGeometry y="130" width="210" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="RWKvOEL_Gqe2grvwg0vv-2" value="Presentation Layer (GUI)" style="shape=corner;whiteSpace=wrap;rounded=1;shadow=0;glass=0;comic=0;startSize=20;fillColor=#f8cecc;dx=210;dy=80;strokeColor=#b85450;verticalAlign=top;labelPosition=center;verticalLabelPosition=middle;align=center;horizontal=1;html=1;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry y="90" width="210" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="RWKvOEL_Gqe2grvwg0vv-3" value="Common Library" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="110" y="135" width="95" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="RWKvOEL_Gqe2grvwg0vv-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;startSize=6;endArrow=classic;endFill=1;" edge="1" parent="1" source="RWKvOEL_Gqe2grvwg0vv-5" target="RWKvOEL_Gqe2grvwg0vv-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RWKvOEL_Gqe2grvwg0vv-5" value="Network" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;rounded=1;shadow=0;glass=0;comic=0;startSize=20;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="45" y="230" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="RWKvOEL_Gqe2grvwg0vv-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startSize=6;endArrow=classic;endFill=1;startArrow=classic;startFill=1;" edge="1" parent="1" source="RWKvOEL_Gqe2grvwg0vv-1" target="RWKvOEL_Gqe2grvwg0vv-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RWKvOEL_Gqe2grvwg0vv-7" value="Network Layer" style="rounded=1;whiteSpace=wrap;html=1;imageAspect=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;" vertex="1" parent="1">
+          <mxGeometry y="370" width="210" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="RWKvOEL_Gqe2grvwg0vv-8" value="Data Access Layer" style="rounded=1;whiteSpace=wrap;html=1;imageAspect=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry y="450" width="210" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="RWKvOEL_Gqe2grvwg0vv-9" value="Business Logic" style="shape=corner;whiteSpace=wrap;rounded=1;shadow=0;glass=0;comic=0;startSize=20;fillColor=#ffe6cc;dx=200;dy=80;strokeColor=#d79b00;verticalAlign=top;labelPosition=center;verticalLabelPosition=middle;align=left;horizontal=1;html=1;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry y="410" width="210" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="RWKvOEL_Gqe2grvwg0vv-10" value="Common Library" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="110" y="375" width="95" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="RWKvOEL_Gqe2grvwg0vv-11" value="Database" style="swimlane;html=1;startSize=20;horizontal=0;childLayout=treeLayout;horizontalTree=1;resizable=1;containerType=tree;rounded=1;shadow=0;glass=0;comic=0;fillColor=#ffffff;arcSize=37;collapsible=0;" vertex="1" parent="1">
+          <mxGeometry x="5" y="690" width="200" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="RWKvOEL_Gqe2grvwg0vv-12" value="Neo4J" style="shape=datastore;whiteSpace=wrap;html=1;rounded=1;shadow=0;glass=0;comic=0;startSize=20;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="RWKvOEL_Gqe2grvwg0vv-11">
+          <mxGeometry x="60" y="11" width="100" height="118" as="geometry" />
+        </mxCell>
+        <mxCell id="RWKvOEL_Gqe2grvwg0vv-13" value="" style="image;html=1;labelBackgroundColor=#ffffff;image=img/lib/clip_art/people/Worker_Woman_128x128.png;rounded=1;shadow=0;glass=0;comic=0;startSize=20;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="60" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="RWKvOEL_Gqe2grvwg0vv-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;startSize=6;endArrow=classic;endFill=1;" edge="1" parent="1" source="RWKvOEL_Gqe2grvwg0vv-15" target="RWKvOEL_Gqe2grvwg0vv-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RWKvOEL_Gqe2grvwg0vv-15" value="Network" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;rounded=1;shadow=0;glass=0;comic=0;startSize=20;fillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="45" y="555" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="RWKvOEL_Gqe2grvwg0vv-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;startSize=6;endArrow=classic;endFill=1;" edge="1" parent="1" source="RWKvOEL_Gqe2grvwg0vv-8" target="RWKvOEL_Gqe2grvwg0vv-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
