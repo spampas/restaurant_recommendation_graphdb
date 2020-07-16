@@ -51,16 +51,20 @@ public class UsersPanel extends TablePanel
 			ptv.reset();
 		});
 		menuBar.addMenu("Recommend", () -> {
-			controlBox.setButtonDisable(true);
-			ptv.setDeleteDisable(true);
-			detailsBox.setText("");
 			UserRecommendDialog login = new UserRecommendDialog();
 			Optional<RecommendUserInfo> result = login.showAndWait();
 			result.ifPresentOrElse(
-				(data) -> { ptv.setFilterFunction(tv::filter); tv.filterRecommend(null, data); }, //TODO
+				(data) -> {
+					controlBox.setButtonDisable(true);
+					ptv.setDeleteDisable(true);
+					detailsBox.setText("");
+					ptv.setFilterFunction(tv::filterRecommend);
+					tv.setRecommendFilter(data);
+					tv.filterRecommend(null);
+					ptv.reset();
+				},
 				() -> { }
 			);
-			ptv.reset();
 		});
 		setMenuBar(menuBar);
 		controlBox.setOnClick(() -> {
