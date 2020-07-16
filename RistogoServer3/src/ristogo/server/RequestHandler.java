@@ -489,7 +489,7 @@ public class RequestHandler extends Thread
 		String name = restaurant == null ? null : restaurant.getValue();
 		if(name == null)
 			return new ResponseMessage("No restaurant specified.");
-		Restaurant savedRestaurant = DBManager.session().load(Restaurant.class, name, 0);
+		Restaurant savedRestaurant = DBManager.session().load(Restaurant.class, name, 1);
 		if(savedRestaurant == null)
 			return new ResponseMessage("Can't find the specified Restaurant.");
 		StatisticInfo stat = new StatisticInfo(savedRestaurant.getLikesCount(),

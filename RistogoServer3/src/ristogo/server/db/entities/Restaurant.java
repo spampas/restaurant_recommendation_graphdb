@@ -196,41 +196,38 @@ public class Restaurant
 	{
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
 			"MATCH (u:User)-[:LIKES]->(r:Restaurant)-[:LOCATED]->(city:City{name:$city}) "
-			+ "WITH r, count(u) as rank "
-			+ "RETURN (r)--(), rank)"
+			+ "RETURN r, count(u) as rank "
 			+ "ORDER BY rank DESC ",
 			Map.ofEntries(Map.entry("city", getCity().getName())));
 		List<Restaurant> ranking = new ArrayList<Restaurant>();
 		found.forEach(ranking::add);
-		return ranking.indexOf(this) + 1;
+		return ranking.indexOf(this) == -1 ? ranking.size() + 1 : ranking.indexOf(this) + 1 ;
 	}
 
 	public int getCuisineRank()
 	{
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
-			"MATCH (u:User)-[rel:LIKES]->(r:Restaurant)-[:SERVE]->(cuisine:Cuisine{name:$cuisine}) "	
-			+ "WITH r, count(u) as rank "
-			+ "RETURN (r)--(), rank"
+			"MATCH (u:User)-[:LIKES]->(r:Restaurant)-[:SERVES]->(cuisine:Cuisine{name:$cuisine}) "	
+			+ "RETURN r, count(u) as rank "
 			+ "ORDER BY rank DESC ",
 			Map.ofEntries(Map.entry("cuisine", getCuisine().getName())));
 		List<Restaurant> ranking = new ArrayList<Restaurant>();
 		found.forEach(ranking::add);
-		return ranking.indexOf(this) + 1;
+		return ranking.indexOf(this) == -1 ? ranking.size() + 1 : ranking.indexOf(this) + 1;
 	}
 
 	public int getCityCuisineRank()
 	{
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
-			"MATCH (city:City{name:$city})<-[:LOCATED]-(r:Restaurant)-[:SERVE]->(cuisine:Cuisine{name:$cuisine})"
+			"MATCH (city:City{name:$city})<-[:LOCATED]-(r:Restaurant)-[:SERVES]->(cuisine:Cuisine{name:$cuisine})"
 			+ ", (user:User)-[:LIKES]->(r) "
-			+ "WITH r, count(u) as rank "
-			+ "RETURN (r)--(), rank"
+			+ "RETURN r, count(user) as rank "
 			+ "ORDER BY rank DESC ",
 			Map.ofEntries(Map.entry("cuisine", getCuisine().getName()),
 					Map.entry("city", getCity().getName())));
 		List<Restaurant> ranking = new ArrayList<Restaurant>();
 		found.forEach(ranking::add);
-		return ranking.indexOf(this) + 1;
+		return ranking.indexOf(this) == -1 ? ranking.size() + 1 : ranking.indexOf(this) + 1;
 	}
 
 	public boolean equals(Object o)
