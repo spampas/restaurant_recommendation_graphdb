@@ -1,10 +1,5 @@
 package ristogo.common.net.entities;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 public class UserInfo extends Entity
 {
 	private static final long serialVersionUID = -1609868778409848632L;

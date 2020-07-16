@@ -1,7 +1,6 @@
 package ristogo.server.db.entities;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +11,6 @@ import org.neo4j.ogm.annotation.Relationship;
 
 import ristogo.common.net.entities.enums.Price;
 import ristogo.server.db.DBManager;
-import ristogo.server.db.entities.annotations.PreDelete;
 
 @NodeEntity
 public class Restaurant

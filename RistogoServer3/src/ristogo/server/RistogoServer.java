@@ -2,7 +2,6 @@ package ristogo.server;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
@@ -19,12 +18,9 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.neo4j.ogm.cypher.Filter;
-import org.neo4j.ogm.model.Result;
 
 import ristogo.server.db.DBManager;
-import ristogo.server.db.entities.City;
-import ristogo.server.db.entities.Cuisine;
+import ristogo.server.db.entities.Admin;
 import ristogo.server.db.entities.User;
 
 public class RistogoServer
@@ -46,21 +42,17 @@ public class RistogoServer
 		}
 
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-		
-		
+
 		createAdmin();
 		startServer();
-		
-		
+
 		Logger.getLogger(RistogoServer.class.getName()).exiting(RistogoServer.class.getName(), "main", args);
 	}
-	
+
 	private static void createAdmin()
 	{
-		List<User> adminsList = new ArrayList<User>();
-		Iterable<User> admins = DBManager.session().query(User.class, "MATCH (n:Admin) RETURN n", Collections.EMPTY_MAP);
-		admins.forEach(adminsList::add);
-		if(!adminsList.isEmpty())
+		boolean hasAdmin = DBManager.session().countEntitiesOfType(Admin.class) > 0;
+		if (hasAdmin)
 			return;
 		Scanner scanner = System.console() != null ?
 		new Scanner(System.console().reader()) : new Scanner(System.in);

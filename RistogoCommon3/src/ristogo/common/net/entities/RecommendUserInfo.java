@@ -1,12 +1,16 @@
 package ristogo.common.net.entities;
 
-public class RecommendUserInfo extends Entity {
+public class RecommendUserInfo extends Entity
+{
+	private static final long serialVersionUID = 5699873032923359538L;
+
 	private CuisineInfo cuisine;
 	private int distance;
 	private boolean airDistance;
 	private CityInfo city;
-	
-	public RecommendUserInfo(CuisineInfo cuisine, int distance, boolean airDistance, CityInfo city) {
+
+	public RecommendUserInfo(CuisineInfo cuisine, int distance, boolean airDistance, CityInfo city)
+	{
 		this.cuisine = cuisine;
 		this.distance = distance;
 		this.airDistance = airDistance;
