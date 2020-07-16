@@ -122,15 +122,16 @@ public class User
 					+ "RETURN restaurant", Map.ofEntries(Map.entry("username", getUsername())));
 			likedRestaurants = new ArrayList<Restaurant>();
 			if(restaurants != null)
-				restaurants.forEach(likedRestaurants::add);		
+				restaurants.forEach(likedRestaurants::add);
 		return likedRestaurants;
 	}
 
-	public List<Cuisine> getLikedCuisines(String regex){
+	public List<Cuisine> getLikedCuisines(String regex)
+	{
 		String regexFilter = "";
 		if (regex == null)
 			return getLikedCuisines();
-		
+
 		regexFilter = "AND cuisine.name =~ $regex ";
 		Iterable<Cuisine> cuisines = DBManager.session().query(Cuisine.class,
 				"MATCH (user:User)-[:LIKES]->(cuisine:Cuisine) "
@@ -141,7 +142,7 @@ public class User
 		cuisines.forEach(likedCuisines::add);
 		return likedCuisines;
 	}
-	
+
 	public List<Cuisine> getLikedCuisines()
 	{
 		Iterable<Cuisine> cuisines = DBManager.session().query(Cuisine.class,
@@ -152,12 +153,13 @@ public class User
 			cuisines.forEach(likedCuisines::add);
 			return likedCuisines;
 	}
-	
+
 	public void unlikeCuisine(Cuisine cuisine)
 	{
 		getLikedCuisines().remove(cuisine);
+		cuisine.removeLikedFrom(this);
 	}
-	
+
 	public void setUsername(String username)
 	{
 		validateUsername(username);
@@ -172,13 +174,16 @@ public class User
 	public void likeRestaurant(Restaurant restaurant)
 	{
 		getLikedRestaurants().add(restaurant);
+		restaurant.addLikedFrom(this);
 	}
-	
-	public void unlikeRestaurant(Restaurant restaurant) {
+
+	public void unlikeRestaurant(Restaurant restaurant)
+	{
 		ListIterator<Restaurant> iterator = getLikedRestaurants().listIterator();
 		while(iterator.hasNext())
 			if(iterator.next().equals(restaurant)) {
 				iterator.remove();
+				restaurant.removeLikedFrom(this);
 				return;
 			}
 	}
@@ -186,6 +191,7 @@ public class User
 	public void likeCuisine(Cuisine cuisine)
 	{
 		getLikedCuisines().add(cuisine);
+		cuisine.addLikedFrom(this);
 	}
 
 	public boolean checkPasswordHash(String passwordHash)
@@ -253,85 +259,63 @@ public class User
 
 	public void setCity(City city)
 	{
+		this.city.removeUser(this);
 		this.city = city;
+		city.addUser(this);
 	}
 
-	public List<User> getFollowedUsers()
+	public static List<User> loadFollowingOf(String filter, User startUser, int page, int perPage)
 	{
-		if (followedUsers == null) {
-			Iterable<User> users = DBManager.session().query(User.class,
-				"MATCH (user1:User)-[:FOLLOWS]->(user2:User) " +
-				"WHERE user1.username = $username " +
-				"RETURN user2",
-				Map.ofEntries(Map.entry("username", username)));
-			followedUsers = new ArrayList<User>();
-			users.forEach(followedUsers::add);
-		}
-		return followedUsers;
-	}
-	
-	public List<User> getFollowedUsers(String regex)
-	{
-		String regexFilter = "";
-		if (regex == null)
-			return getFollowingUsers();
-		
-		regexFilter = "AND user2.username =~ $regex ";
+		String filterQuery = "";
+		if (filter != null)
+			filterQuery = "AND u.username =~ $regex ";
+		else
+			filter = "";
 		Iterable<User> users = DBManager.session().query(User.class,
-			"MATCH (user1:User)-[:FOLLOWS]->(user2:User) " +
-			"WHERE user1.username = $username " + regexFilter +
-			"RETURN user2",
-			Map.ofEntries(Map.entry("username", username), Map.entry("regex", regex)));
+			"MATCH (user1:User)-[:FOLLOWS]->(user2:User)-[l:LOCATED]->(c:City) " +
+			"WHERE user1.username = $username " + filterQuery +
+			"RETURN (user2)-[l]->(c) " +
+			"ORDER BY user2.name " +
+			"SKIP $skip " +
+			"LIMIT $limit",
+			Map.ofEntries(
+				Map.entry("username", startUser.username),
+				Map.entry("regex", filter),
+				Map.entry("skip", page*perPage),
+				Map.entry("limit", perPage)
+			));
 		List<User> following = new ArrayList<User>();
 		users.forEach(following::add);
 		return following;
 	}
 
-	public List<User> getFollowingUsers(String regex)
+	public static List<User> loadFollowersOf(String filter, User startUser, int page, int perPage)
 	{
-		
-		String regexFilter = "";
-		if (regex == null)
-			return getFollowingUsers();
-		regexFilter = "AND user1.username =~ $regex ";
-		
+		String filterQuery = "";
+		if (filter != null)
+			filterQuery = "AND u.username =~ $regex ";
+		else
+			filter = "";
 		Iterable<User> users = DBManager.session().query(User.class,
-			"MATCH (user1:User)-[:FOLLOWS]->(user2:User) " +
-			"WHERE user2.username = $username " + regexFilter +
-			"RETURN user1",
-			Map.ofEntries(Map.entry("username", username), Map.entry("regex", regex)));
-		List<User> followers = new ArrayList<User>();
-		users.forEach(followers::add);
-	
-		return followers;
+			"MATCH (user1:User)<-[:FOLLOWS]-(user2:User)-[l:LOCATED]->(c:City) " +
+			"WHERE user1.username = $username " + filterQuery +
+			"RETURN (user2)-[l]->(c) " +
+			"ORDER BY user2.name " +
+			"SKIP $skip " +
+			"LIMIT $limit",
+			Map.ofEntries(
+				Map.entry("username", startUser.username),
+				Map.entry("regex", filter),
+				Map.entry("skip", page*perPage),
+				Map.entry("limit", perPage)
+			));
+		List<User> following = new ArrayList<User>();
+		users.forEach(following::add);
+		return following;
 	}
 
-	public List<User> getFollowingUsers()
+	public List<User> recommendUser(Cuisine cuisine, int distance, boolean airDistance, City city, int page, int perPage)
 	{
-		if (followingUsers == null) {
-			Iterable<User> users = DBManager.session().query(User.class,
-				"MATCH (user1:User)-[:FOLLOWS]->(user2:User) " +
-				"WHERE user2.username = $username " +
-				"RETURN user1",
-				Map.ofEntries(Map.entry("username", username)));
-			followingUsers = new ArrayList<User>();
-			users.forEach(followingUsers::add);
-		}
-		return followingUsers;
-	}
-	
-	/*
-	MATCH (city:City{name:$city}), (city1:City)<-[:LOCATED]-(u:User)-[:LIKES]->(c:Cuisine{name:$cuisine}) 
-	WITH city1, u, c, point({longitude: city.longitude, latitude:city.latitude}) as p1 ,
-	point({longitude: city1.longitude, latitude:city1.latitude}) as p2
-	WITH distance(p1,p2) as dist, city1, u, c 
-	WHERE dist <= $distance AND NOT EXISTS ((u)<-[:FOLLOWS]-(:User{username:$username}))
-	RETURN u ,distance(p1,p2) AS dist
-	ORDER BY dist
-	SKIP $skip
-	LIMIT $limit
-	*/
-	public List<User> recommendUser(Cuisine cuisine, int distance, boolean airDistance, City city, int page, int perPage){
 		City targetCity = city == null ? getCity() : city;
 		Map<String,Object> parameters = new HashMap<String,Object>();
 		parameters.put("city", targetCity.getName());
@@ -344,24 +328,50 @@ public class User
 			parameters.put("cuisine", cuisine.getName());
 			cuisineQuery = "-[:LIKES]->(c:Cuisine{name:$cuisine}) ";
 		}
-			
-		
-		Iterable<User> recommended = DBManager.session().query(User.class, "MATCH (city:City{name:$city}), (city1:City)<-[:LOCATED]-(u:User)"+ cuisineQuery+ 
-				"WITH city1, u, point({longitude: city.longitude, latitude:city.latitude}) as p1, " + 
-				"point({longitude: city1.longitude, latitude:city1.latitude}) as p2 " + 
-				"WITH distance(p1,p2) as dist, city1, u " + 
+
+		Iterable<User> recommended = DBManager.session().query(User.class, "MATCH (city:City{name:$city}), (city1:City)<-[:LOCATED]-(u:User)" + cuisineQuery +
+				"WITH city1, u, point({longitude: city.longitude, latitude:city.latitude}) as p1, " +
+				"point({longitude: city1.longitude, latitude:city1.latitude}) as p2 " +
+				"WITH distance(p1,p2) as dist, city1, u " +
 				"WHERE dist <= $distance AND NOT EXISTS ((u)<-[:FOLLOWS]-(:User{username:$username})) "
-				+ "AND (u.username <> $username)" + 
-				"RETURN (u)-[:LOCATED]->(:City), dist "+
-				"ORDER BY dist " + 
-				"SKIP $skip " + 
+				+ "AND (u.username <> $username)" +
+				"RETURN (u)-[:LOCATED]->(:City), dist " +
+				"ORDER BY dist " +
+				"SKIP $skip " +
 				"LIMIT $limit", parameters);
-				
+
 		List<User> users = new ArrayList<User>();
 		recommended.forEach(users::add);
 		return users;
 	}
 
+	public List<User> getFollowedUsers()
+	{
+		if (followedUsers == null) {
+			Iterable<User> users = DBManager.session().query(User.class,
+			"MATCH (user1:User)-[:FOLLOWS]->(user2:User)-[l:LOCATED]->(c:City) " +
+			"WHERE user1.username = $username " +
+			"RETURN (user2)-[l]->(c)",
+			Map.ofEntries(Map.entry("username", username)));
+			followedUsers = new ArrayList<User>();
+			users.forEach(followedUsers::add);
+		}
+		return followedUsers;
+	}
+
+	public List<User> getFollowingUsers()
+	{
+		if (followingUsers == null) {
+			Iterable<User> users = DBManager.session().query(User.class,
+			"MATCH (user1:User)<-[:FOLLOWS]-(user2:User)-[l:LOCATED]->(c:City) " +
+			"WHERE user1.username = $username " +
+			"RETURN (user2)-[l]->(c)",
+			Map.ofEntries(Map.entry("username", username)));
+			followingUsers = new ArrayList<User>();
+			users.forEach(followingUsers::add);
+		}
+		return followingUsers;
+	}
 
 	public boolean isFollowing(User user)
 	{
@@ -386,6 +396,7 @@ public class User
 		if (followedUsers == null)
 			followedUsers = new ArrayList<User>();
 		followedUsers.add(user);
+		user.addFollower(this);
 	}
 
 	public void addFollower(User user)
@@ -400,6 +411,7 @@ public class User
 		while (iterator.hasNext())
 			if (iterator.next().equals(user)) {
 				iterator.remove();
+				user.removeFollower(this);
 				return;
 			}
 	}
@@ -424,6 +436,31 @@ public class User
 			return false;
 		User u = (User)o;
 		return username.equals(u.username);
+	}
+
+	public static List<User> loadAll(String filter, User me, int page, int perPage)
+	{
+		String filterQuery = "";
+		if (filter != null)
+			filterQuery = "AND u.username =~ $regex ";
+		else
+			filter = "";
+		Iterable<User> users = DBManager.session().query(User.class,
+			"MATCH (u:User)-[l:LOCATED]->(c:City) " +
+			"WHERE u.username <> $username " + filterQuery +
+			"RETURN (u)-[l]->(c) " +
+			"ORDER BY u.username " +
+			"SKIP $skip " +
+			"LIMIT $limit",
+			Map.ofEntries(
+				Map.entry("username", me.username),
+				Map.entry("regex", filter),
+				Map.entry("skip", page*perPage),
+				Map.entry("limit", perPage)
+			));
+		List<User> list = new ArrayList<User>();
+		users.forEach(list::add);
+		return list;
 	}
 
 	

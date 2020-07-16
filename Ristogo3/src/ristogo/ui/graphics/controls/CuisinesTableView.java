@@ -49,11 +49,12 @@ public class CuisinesTableView extends RistogoTableView<CuisineBean>
 		}
 		items.clear();
 		List<CuisineInfo> cuisines = resMsg.getEntities(CuisineInfo.class);
+		hasNext = cuisines.size() >= GUIConfig.getMaxRowDisplayable();
 		if (cuisines.isEmpty())
-			return false;
+			return true;
 		for (CuisineInfo cuisine: cuisines)
 			items.add(new CuisineBean(cuisine.getName()));
-		return items.size() >= GUIConfig.getMaxRowDisplayable();
+		return true;
 	}
 
 	@Override

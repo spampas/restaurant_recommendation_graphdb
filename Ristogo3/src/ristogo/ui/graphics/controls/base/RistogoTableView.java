@@ -14,6 +14,7 @@ public abstract class RistogoTableView<S> extends TableView<S>
 {
 	protected String filter;
 	protected final ObservableList<S> items;
+	protected boolean hasNext = true;
 
 	public RistogoTableView()
 	{
@@ -32,6 +33,11 @@ public abstract class RistogoTableView<S> extends TableView<S>
 
 	protected abstract Collection<TableColumn<S, ?>> generateColumns();
 	public abstract boolean populateTable(int page);
+
+	public boolean hasNext()
+	{
+		return hasNext;
+	}
 
 	public void filter(String filter)
 	{

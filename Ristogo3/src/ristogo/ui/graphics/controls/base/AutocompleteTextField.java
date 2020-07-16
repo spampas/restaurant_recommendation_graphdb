@@ -79,4 +79,11 @@ public class AutocompleteTextField extends TextField
 	{
 		this.disabled = value;
 	}
+
+	public void setValue(String value)
+	{
+		setAutocompleteDisable(true);
+		setText(value);
+		setAutocompleteDisable(false);
+	}
 }

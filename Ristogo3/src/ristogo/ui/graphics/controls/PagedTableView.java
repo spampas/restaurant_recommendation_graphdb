@@ -35,10 +35,10 @@ public class PagedTableView<T> extends VBox
 			pageBar.setPreviousVisible(false);
 		});
 		pageBar.setOnPrevious(() -> {
-			if (tableView.populateTable(page - 1)) {
+			if (tableView.populateTable(page - 1))
 				page--;
+			if (tableView.hasNext())
 				pageBar.setNextVisible(true);
-			}
 			if (page == 0)
 				pageBar.setPreviousVisible(false);
 		});
@@ -46,9 +46,9 @@ public class PagedTableView<T> extends VBox
 			if (tableView.populateTable(page + 1)) {
 				page++;
 				pageBar.setPreviousVisible(true);
-			} else {
-				pageBar.setNextVisible(false);
 			}
+			if (!tableView.hasNext())
+				pageBar.setNextVisible(false);
 		});
 		HBox controlBox = new HBox(10);
 		controlBox.getChildren().addAll(findField, findButton, deleteButton);
@@ -113,6 +113,16 @@ public class PagedTableView<T> extends VBox
 		tableView.getSelectionModel().clearSelection();
 		deleteButton.setDisable(true);
 		pageBar.setPreviousVisible(page > 0);
-		pageBar.setNextVisible(tableView.populateTable(page));
+		tableView.populateTable(page);
+		pageBar.setNextVisible(tableView.hasNext());
+	}
+
+	public void reset()
+	{
+		page = 0;
+		tableView.getSelectionModel().clearSelection();
+		deleteButton.setDisable(true);
+		pageBar.setPreviousVisible(false);
+		pageBar.setNextVisible(tableView.hasNext());
 	}
 }

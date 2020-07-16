@@ -31,18 +31,21 @@ public class UsersPanel extends TablePanel
 			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
 			tv.filter(null);
+			ptv.reset();
 		});
 		menuBar.addMenu("Followers", () -> {
 			controlBox.setButtonDisable(true);
 			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
 			tv.filterFollowers(null);
+			ptv.reset();
 		});
 		menuBar.addMenu("Following", () -> {
 			controlBox.setButtonDisable(true);
 			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
 			tv.filterFollowing(null);
+			ptv.reset();
 		});
 		menuBar.addMenu("Recommend", () -> {
 			controlBox.setButtonDisable(true);
@@ -54,6 +57,7 @@ public class UsersPanel extends TablePanel
 				(data) -> { tv.filterRecommend(null, data); },
 				() -> { tv.filterRecommend(null, null); }
 			);
+			ptv.reset();
 		});
 		setMenuBar(menuBar);
 		controlBox.setOnClick(() -> {

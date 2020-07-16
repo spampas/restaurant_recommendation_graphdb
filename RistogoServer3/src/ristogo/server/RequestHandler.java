@@ -86,11 +86,16 @@ public class RequestHandler extends Thread
 			return;
 		}
 
+		System.out.println("--- RECEIVED ---");
+		System.out.println(reqMsg.toXML());
+
 		ResponseMessage resMsg = dispatchMessage(reqMsg);
-		if (resMsg == null)
-			new ResponseMessage("Request handler returned NULL (Action: " + reqMsg.getAction().toString() + ").").send(outputStream);
-		else
-			resMsg.send(outputStream);
+
+		System.out.println("--- RESPONSE ---");
+		System.out.println(resMsg.toXML());
+		System.out.println("----------------");
+
+		resMsg.send(outputStream);
 		DBManager.session().clear();
 		if (reqMsg.getAction() == ActionRequest.LOGOUT)
 			Thread.currentThread().interrupt();
@@ -166,6 +171,7 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod
 	private ResponseMessage handleListOwnRestaurants(RequestMessage reqMsg)
 	{
+		//TODO: StringFilter and PageFilter
 		List<Restaurant> savedRestaurants = loggedUser.getOwnedRestaurants();
 		List<RestaurantInfo> restaurants = new ArrayList<RestaurantInfo>();
 		for (Restaurant restaurant: savedRestaurants)
@@ -175,66 +181,6 @@ public class RequestHandler extends Thread
 				new CityInfo(restaurant.getCity().getName())));
 		return new ResponseMessage(restaurants.toArray(new RestaurantInfo[0]));
 	}
-
-	/*private boolean hasRestaurant(UserInfo user, int restaurantId)
-	{
-		RestaurantInfo restaurant = DBManager.getRestaurantByOwner(user);
-		if (restaurant == null)
-			return false;
-		return restaurant.getOwner().getId() == user.getId();
-	}
-
-	@RequestHandlerMethod(requiresOwnership=true)
-	private ResponseMessage handleEditRestaurant(RequestMessage reqMsg)
-	{
-		RestaurantInfo restaurant = reqMsg.getEntity(RestaurantInfo.class);
-		if (!hasRestaurant(loggedUser, restaurant.getId()))
-			return new ResponseMessage("You can only edit restaurants that you own.");
-		RestaurantInfo savedRestaurant = DBManager.getRestaurant(restaurant.getId());
-		if (!restaurant_.merge(restaurant))
-			return new ResponseMessage("Some restaurant's fields are invalid.");
-		savedRestaurant.setOwner(loggedUser);
-		try {
-			DBManager.update(savedRestaurant);
-		} catch (PersistenceException ex) {
-			return new ResponseMessage("Error while saving the restaurant to the database.");
-		}
-		return new ResponseMessage(savedRestaurant);
-	}
-
-	@RequestHandlerMethod
-	private ResponseMessage handleListRestaurants(RequestMessage reqMsg)
-	{
-		List<RestaurantInfo> restaurants;
-		if (reqMsg.getEntityCount() > 0) {
-			RestaurantInfo restaurant = reqMsg.getEntity(RestaurantInfo.class);
-			restaurants = DBManager.getRestaurantsByCity(restaurant.getCity());
-		} else {
-			restaurants = DBManager.getAllRestaurants();
-		}
-		ResponseMessage resMsg = new ResponseMessage();
-		for (RestaurantInfo restaurant: restaurants)
-			resMsg.addEntity(restaurant);
-		return resMsg;
-	}
-
-
-	@RequestHandlerMethod(requiresOwnership=true)
-	private ResponseMessage handleDeleteRestaurant(RequestMessage reqMsg)
-	{
-		RestaurantInfo restaurant = reqMsg.getEntity(RestaurantInfo.class);
-		if (!hasRestaurant(loggedUser, restaurant.getId()))
-			return new ResponseMessage("You can only delete restaurants that you own.");
-		RestaurantInfo savedRestaurant = DBManager.getRestaurant(restaurant.getId());
-		if (savedRestaurant == null)
-			return new ResponseMessage("Can not find the specified restaurant.");
-		try {
-			DBManager.deleteRestaurant(restaurant.getId());
-		} catch (PersistenceException ex) {
-			return new ResponseMessage("Error while deleting the restaurant from the database.");
-		}
-		return new ResponseMessage();
-	}*/
 
 	@RequestHandlerMethod
 	private ResponseMessage handleAddRestaurant(RequestMessage reqMsg)
@@ -286,8 +232,8 @@ public class RequestHandler extends Thread
 				restaurants = DBManager.session().loadAll(Restaurant.class,
 					new Filter("name", ComparisonOperator.MATCHES, regex),
 					new SortOrder().add("name"),
-					new Pagination(pageFilter.getPage(), pageFilter.getPerPage()), 1);		
-		
+					new Pagination(pageFilter.getPage(), pageFilter.getPerPage()), 1);
+
 		List<RestaurantInfo> infos = new ArrayList<RestaurantInfo>();
 		if(restaurants == null)
 			return new ResponseMessage();
@@ -311,7 +257,7 @@ public class RequestHandler extends Thread
 		StringFilter filter = reqMsg.getEntity(StringFilter.class);
 		PageFilter pageFilter = reqMsg.getEntity(PageFilter.class);
 		String regex = filter == null ? null : "(?i).*" + filter.getValue() + ".*";
-			
+
 		List<Restaurant> restaurants = Restaurant.loadRestaurantsLikedBy(
 			loggedUser,
 			regex,
@@ -382,24 +328,11 @@ public class RequestHandler extends Thread
 		StringFilter filter = reqMsg.getEntity(StringFilter.class);
 		PageFilter pageFilter = reqMsg.getEntity(PageFilter.class);
 		String regex = filter == null ? null : "(?i).*" + filter.getValue() + ".*";
-		Collection<User> users;
-		if (regex == null)
-			users = DBManager.session().loadAll(User.class,
-				new SortOrder().add("username"),
-				new Pagination(pageFilter.getPage(), pageFilter.getPerPage()), 0);
-		else
-			users = DBManager.session().loadAll(User.class,
-				new Filter("username", ComparisonOperator.MATCHES, regex),
-				new SortOrder().add("username"),
-				new Pagination(pageFilter.getPage(), pageFilter.getPerPage()), 0);
+		List<User> users = User.loadAll(regex, loggedUser, pageFilter.getPage(), pageFilter.getPerPage());
 		List<UserInfo> infos = new ArrayList<UserInfo>();
-		try {users.forEach((User u) -> {
-			if(!u.equals(loggedUser) && !(u.isAdmin()))	
-				infos.add(new UserInfo(u.getUsername(), new CityInfo(u.getCity().getName()), u.isFollowedBy(loggedUser)));
-			});
-		} catch (NullPointerException ex) {
-			return new ResponseMessage();
-		}
+		users.forEach((User u) -> {
+			infos.add(new UserInfo(u.getUsername(), new CityInfo(u.getCity().getName()), u.isFollowedBy(loggedUser)));
+		});
 		return new ResponseMessage(infos.toArray(new UserInfo[0]));
 	}
 
@@ -409,29 +342,21 @@ public class RequestHandler extends Thread
 		StringFilter filter = reqMsg.getEntity(StringFilter.class);
 		PageFilter pageFilter = reqMsg.getEntity(PageFilter.class);
 		String regex = filter == null ? null : "(?i).*" + filter.getValue() + ".*";
-		Collection<User> users;
-		if (regex == null)
-			users = loggedUser.getFollowingUsers();
-		else
-			users = loggedUser.getFollowingUsers(regex);
+		Collection<User> users = User.loadFollowersOf(regex, loggedUser, pageFilter.getPage(), pageFilter.getPerPage());
 		List<UserInfo> infos = new ArrayList<UserInfo>();
 		users.forEach((User u) -> {
 			infos.add(new UserInfo(u.getUsername(), new CityInfo(u.getCity().getName()), true));
 		});
 		return new ResponseMessage(infos.toArray(new UserInfo[0]));
 	}
-	
+
 	@RequestHandlerMethod
 	private ResponseMessage handleListFollowing(RequestMessage reqMsg)
 	{
 		StringFilter filter = reqMsg.getEntity(StringFilter.class);
 		PageFilter pageFilter = reqMsg.getEntity(PageFilter.class);
 		String regex = filter == null ? null : "(?i).*" + filter.getValue() + ".*";
-		Collection<User> users;
-		if (regex == null)
-			users = loggedUser.getFollowedUsers();
-		else
-			users = loggedUser.getFollowedUsers(regex);
+		Collection<User> users = User.loadFollowingOf(regex, loggedUser, pageFilter.getPage(), pageFilter.getPerPage());
 		List<UserInfo> infos = new ArrayList<UserInfo>();
 		users.forEach((User u) -> {
 			infos.add(new UserInfo(u.getUsername(), new CityInfo(u.getCity().getName()), true));
@@ -457,8 +382,6 @@ public class RequestHandler extends Thread
 		DBManager.session().save(loggedUser);
 		return new ResponseMessage();
 	}
-	
-	
 
 	@RequestHandlerMethod
 	private ResponseMessage handleUnfollowUser(RequestMessage reqMsg)
@@ -476,35 +399,35 @@ public class RequestHandler extends Thread
 		if (!loggedUser.isFollowing(user))
 			return new ResponseMessage("You are not following this user.");
 		loggedUser.unfollow(user);
-		user.removeFollower(loggedUser);
 		DBManager.session().save(loggedUser);
 		return new ResponseMessage();
 	}
 
 	@RequestHandlerMethod
-	private ResponseMessage handleGetCity(RequestMessage reqMsg) {
+	private ResponseMessage handleGetCity(RequestMessage reqMsg)
+	{
 		CityInfo city = new CityInfo(loggedUser.getCity().getName(), loggedUser.getCity().getLatitude(), loggedUser.getCity().getLongitude());
 		return new ResponseMessage(city);
 	}
 
 	@RequestHandlerMethod
-	private ResponseMessage handleSetCity(RequestMessage reqMsg) {
+	private ResponseMessage handleSetCity(RequestMessage reqMsg)
+	{
 		CityInfo city = reqMsg.getEntity(CityInfo.class);
 		if (city == null)
-			return new ResponseMessage("No city selected");
+			return new ResponseMessage("No city selected.");
 		City savedCity = DBManager.session().load(City.class, city.getName(), 0);
 		if(savedCity == null)
-			return new ResponseMessage("Can't find selected city " + city.getName());
+			return new ResponseMessage("Can't find selected city " + city.getName() + ".");
 		loggedUser.setCity(savedCity);
 		return new ResponseMessage();
 	}
-	
+
 	@RequestHandlerMethod(true)
 	private ResponseMessage handleDeleteUser(RequestMessage reqMsg)
 	{
-		
 		UserInfo user = (UserInfo)reqMsg.getEntity();
-		
+
 		try {
 			User.validateUsername(user.getUsername());
 		} catch (IllegalArgumentException ex) {
@@ -525,16 +448,15 @@ public class RequestHandler extends Thread
 		StringFilter restaurant = reqMsg.getEntity(StringFilter.class);
 		String name = restaurant == null ? null : restaurant.getValue();
 		if(name == null)
-			return new ResponseMessage("No restaurant specified");		
+			return new ResponseMessage("No restaurant specified.");
 		Restaurant toBeLikedRestaurant = DBManager.session().load(Restaurant.class, name, 0);
 		if(toBeLikedRestaurant == null)
-			return new ResponseMessage("Can't find specified Restaurant");
+			return new ResponseMessage("Can't find the specified Restaurant.");
 		if(loggedUser.getLikedRestaurants().contains(toBeLikedRestaurant))
-			return new ResponseMessage("You already like this restaurant");
+			return new ResponseMessage("You already like this restaurant.");
 		loggedUser.likeRestaurant(toBeLikedRestaurant);
 		DBManager.session().save(loggedUser);
 		return new ResponseMessage(restaurant);
-		
 	}
 
 	@RequestHandlerMethod
@@ -543,16 +465,15 @@ public class RequestHandler extends Thread
 		StringFilter restaurant = reqMsg.getEntity(StringFilter.class);
 		String name = restaurant == null ? null : restaurant.getValue();
 		if(name == null)
-			return new ResponseMessage("No restaurant specified");		
+			return new ResponseMessage("No restaurant specified.");
 		Restaurant toBeUnlikedRestaurant = DBManager.session().load(Restaurant.class, name, 0);
 		if(toBeUnlikedRestaurant == null)
-			return new ResponseMessage("Can't find specified Restaurant");
+			return new ResponseMessage("Can't find the specified Restaurant.");
 		if(!loggedUser.getLikedRestaurants().contains(toBeUnlikedRestaurant))
-			return new ResponseMessage("You already unliked this restaurant");
+			return new ResponseMessage("You already unliked this restaurant.");
 		loggedUser.unlikeRestaurant(toBeUnlikedRestaurant);
 		DBManager.session().save(loggedUser);
 		return new ResponseMessage(restaurant);
-		
 	}
 
 	@RequestHandlerMethod
@@ -562,17 +483,17 @@ public class RequestHandler extends Thread
 		StringFilter restaurant = reqMsg.getEntity(StringFilter.class);
 		String name = restaurant == null ? null : restaurant.getValue();
 		if(name == null)
-			return new ResponseMessage("No restaurant specified");		
+			return new ResponseMessage("No restaurant specified.");
 		Restaurant savedRestaurant = DBManager.session().load(Restaurant.class, name, 0);
 		if(savedRestaurant == null)
-			return new ResponseMessage("Can't find specified Restaurant");
+			return new ResponseMessage("Can't find the specified Restaurant.");
 		StatisticInfo stat = new StatisticInfo(savedRestaurant.getLikesCount(),
 				savedRestaurant.getCityRank(),
 				savedRestaurant.getCuisineRank(),
 				savedRestaurant.getCityCuisineRank());
 		return new ResponseMessage(stat);
 	}
-	
+
 	@RequestHandlerMethod
 	private ResponseMessage handleGetUser(RequestMessage reqMsg)
 	{
@@ -583,12 +504,11 @@ public class RequestHandler extends Thread
 		User user = DBManager.session().load(User.class, username, 0);
 		if (user == null)
 			return new ResponseMessage("Can not find the specified user.");
-		List<CuisineInfo> cuisineInfo = new ArrayList<CuisineInfo>(); 
+		List<CuisineInfo> cuisineInfo = new ArrayList<CuisineInfo>();
 		user.getLikedCuisines().forEach((Cuisine cuisine) -> {
 			cuisineInfo.add(new CuisineInfo(cuisine.getName()));
-			
 		});
-		
+
 		/*
 		List<RestaurantInfo> restaurantInfo = new ArrayList<RestaurantInfo>();
 		user.getLikedRestaurants().forEach((Restaurant restaurant) -> {
@@ -599,40 +519,40 @@ public class RequestHandler extends Thread
 					restaurant.getDescription()));
 		});
 		*/
-		
+
 		UserInfo userInfo = new UserInfo(user.getUsername(), 
 				new CityInfo(user.getCity().getName(), 
 				user.getCity().getLatitude(), 
 				user.getCity().getLongitude()), 
 				loggedUser.isFollowing(user)); 
-		
+
 		List<Entity> entities = new ArrayList<Entity>();
-		
+
 		entities.add(userInfo);
 		cuisineInfo.forEach(entities::add);
 		return new ResponseMessage(entities);
 	}
-	
+
 	@RequestHandlerMethod
 	private ResponseMessage handleGetRestaurant(RequestMessage reqMsg)
 	{
 		StringFilter filter = reqMsg.getEntity(StringFilter.class);
 		String name = filter == null ? null : filter.getValue();
-		
+
 		Restaurant restaurant = DBManager.session().load(Restaurant.class, name, 1);
 		if (restaurant == null)
 			return new ResponseMessage("Can not find the specified restaurant.");
-		
-		RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant.getName(), 
+
+		RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant.getName(),
 				new UserInfo(restaurant.getOwner().getUsername()),
 				new CuisineInfo(restaurant.getCuisine().getName()),
 				restaurant.getPrice(),
 				new CityInfo(restaurant.getCity().getName(),
 						restaurant.getCity().getLatitude(),
-						restaurant.getCity().getLongitude()),				
+						restaurant.getCity().getLongitude()),
 				restaurant.getDescription(),
 				loggedUser.getLikedRestaurants().contains(restaurant));
-				
+
 		return new ResponseMessage(restaurantInfo);
 	}
 
@@ -652,7 +572,7 @@ public class RequestHandler extends Thread
 				cuisines = DBManager.session().loadAll(Cuisine.class,
 						new Filter("name", ComparisonOperator.MATCHES, regex),
 						new SortOrder().add("name"),1);
-		else 
+		else
 			if (filter == null)
 				cuisines = DBManager.session().loadAll(Cuisine.class,
 						new SortOrder().add("name"),
@@ -664,13 +584,11 @@ public class RequestHandler extends Thread
 					new Pagination(pageFilter.getPage(), pageFilter.getPerPage()), 1);
 		List<CuisineInfo> infos = new ArrayList<CuisineInfo>();
 		cuisines.forEach((Cuisine c) -> {
-			infos.add(new CuisineInfo(
-				c.getName()			
-				));
+			infos.add(new CuisineInfo(c.getName()));
 		});
 		return new ResponseMessage(infos.toArray(new CuisineInfo[0]));
 	}
-	
+
 	@RequestHandlerMethod
 	private ResponseMessage handleListLikedCuisines(RequestMessage reqMsg)
 	{
@@ -681,9 +599,7 @@ public class RequestHandler extends Thread
 		List<Cuisine> cuisines = Cuisine.loadCuisinesLikedBy(loggedUser, regex, pageFilter.getPage(), pageFilter.getPerPage() );
 		List<CuisineInfo> infos = new ArrayList<CuisineInfo>();
 		cuisines.forEach((Cuisine c) -> {
-			infos.add(new CuisineInfo(
-				c.getName()			
-				));
+			infos.add(new CuisineInfo(c.getName()));
 		});
 		return new ResponseMessage(infos.toArray(new CuisineInfo[0]));
 	}
@@ -698,8 +614,7 @@ public class RequestHandler extends Thread
 			DBManager.session().save(savedCuisine);
 			return new ResponseMessage();
 		}
-		return new ResponseMessage("This cuisine is already present");
-			
+		return new ResponseMessage("This cuisine is already present.");
 	}
 
 	@RequestHandlerMethod(true)
@@ -714,17 +629,16 @@ public class RequestHandler extends Thread
 		DBManager.session().delete(savedCuisine);
 		return new ResponseMessage(cuisine);
 	}
-	
+
 	@RequestHandlerMethod
 	private ResponseMessage handleRecommendRestaurant(RequestMessage reqMsg)
 	{
 		RecommendRestaurantInfo info = reqMsg.getEntity(RecommendRestaurantInfo.class);
 		if(info == null)
-			return new ResponseMessage("Recommendation info is null");
-		
+			return new ResponseMessage("Recommendation info is null.");
 		return null;
 	}
-	
+
 	@RequestHandlerMethod
 	private ResponseMessage handleRecommendUser(RequestMessage reqMsg)
 	{
@@ -733,12 +647,12 @@ public class RequestHandler extends Thread
 		Cuisine cuisine = null;
 		City city = null;
 		if(info == null)
-			return new ResponseMessage("Recommendation info is null");
+			return new ResponseMessage("Recommendation info is null.");
 		if(info.getCuisine() != null)
 			cuisine = DBManager.session().load(Cuisine.class, info.getCuisine().getName(), 0);
 		if(info.getCity() == null)
-			return new ResponseMessage("No city specified");
-		
+			return new ResponseMessage("No city specified.");
+
 		city = DBManager.session().load(City.class, info.getCity().getName(), 0);
 		List<User> recommended = loggedUser.recommendUser(cuisine, info.getDistance(), info.isAirDistance(), city, pageFilter.getPage(), pageFilter.getPerPage());
 		List<UserInfo> recommendedInfo = new ArrayList<UserInfo>();
@@ -746,24 +660,22 @@ public class RequestHandler extends Thread
 			CityInfo cityInfo = new CityInfo(u.getCity().getName());
 			recommendedInfo.add(new UserInfo(u.getUsername(), cityInfo));
 		});
-		
+
 		return new ResponseMessage(recommendedInfo.toArray(new UserInfo[0]));
 	}
-	
-	
-	
+
 	@RequestHandlerMethod
 	private ResponseMessage handleLikeCuisine(RequestMessage reqMsg)
 	{
 		StringFilter cuisine = reqMsg.getEntity(StringFilter.class);
 		String name = cuisine == null ? null : cuisine.getValue();
 		if(name == null)
-			return new ResponseMessage("No cuisine specified");
+			return new ResponseMessage("No cuisine specified.");
 		Cuisine toBeLikedCuisine = DBManager.session().load(Cuisine.class, name, 0);
 		if(toBeLikedCuisine == null)
-			return new ResponseMessage("Can't find specified cuisine");
+			return new ResponseMessage("Can't find the specified cuisine.");
 		if(loggedUser.getLikedCuisines().contains(toBeLikedCuisine))
-			return new ResponseMessage("You already like this cuisine");
+			return new ResponseMessage("You already like this cuisine.");
 		loggedUser.likeCuisine(toBeLikedCuisine);
 		DBManager.session().save(loggedUser);
 		return new ResponseMessage();
@@ -775,13 +687,13 @@ public class RequestHandler extends Thread
 		StringFilter cuisine = reqMsg.getEntity(StringFilter.class);
 		String name = cuisine == null ? null : cuisine.getValue();
 		if(name == null)
-			return new ResponseMessage("No cuisine specified");
+			return new ResponseMessage("No cuisine specified.");
 		Session session = DBManager.session();
 		Cuisine toBeUnlikedCuisine = session.load(Cuisine.class, name, 1);
 		if(toBeUnlikedCuisine == null)
-			return new ResponseMessage("Can't find specified cuisine");
+			return new ResponseMessage("Can't find the specified cuisine.");
 		if(!loggedUser.getLikedCuisines().contains(toBeUnlikedCuisine))
-			return new ResponseMessage("You already unlike this cuisine");
+			return new ResponseMessage("You already unlike this cuisine.");
 		loggedUser.unlikeCuisine(toBeUnlikedCuisine);
 		session.save(loggedUser);
 		return new ResponseMessage();
@@ -817,7 +729,7 @@ public class RequestHandler extends Thread
 			DBManager.session().save(savedCity);
 			return new ResponseMessage();
 		}
-		return new ResponseMessage("This city is already present");
+		return new ResponseMessage("This city is already present.");
 	}
 
 	@RequestHandlerMethod(true)

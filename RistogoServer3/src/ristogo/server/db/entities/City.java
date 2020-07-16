@@ -2,11 +2,14 @@ package ristogo.server.db.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
+
+import ristogo.server.db.DBManager;
 
 @NodeEntity
 public class City
@@ -54,11 +57,29 @@ public class City
 
 	public List<Restaurant> getRestaurants()
 	{
+		if (restaurants == null) {
+			Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
+			"MATCH (r:Restaurant)-[l:LOCATED]->(c:City) " +
+			"WHERE c.name = $name " +
+			"RETURN (r)-[l]->(c)",
+			Map.ofEntries(Map.entry("name", name)));
+			restaurants = new ArrayList<Restaurant>();
+			found.forEach(restaurants::add);
+		}
 		return restaurants;
 	}
 
 	public List<User> getUsers()
 	{
+		if (users == null) {
+			Iterable<User> found = DBManager.session().query(User.class,
+			"MATCH (user:User)-[l:LOCATED]->(c:City) " +
+			"WHERE c.name = $name " +
+			"RETURN (user)-[l]->(c)",
+			Map.ofEntries(Map.entry("name", name)));
+			users = new ArrayList<User>();
+			found.forEach(users::add);
+		}
 		return users;
 	}
 
@@ -69,16 +90,22 @@ public class City
 
 	public void addRestaurant(Restaurant restaurant)
 	{
-		if (restaurants == null)
-			restaurants = new ArrayList<Restaurant>();
-		restaurants.add(restaurant);
+		getRestaurants().add(restaurant);
+	}
+
+	public void removeRestaurant(Restaurant restaurant)
+	{
+		getRestaurants().remove(restaurant);
 	}
 
 	public void addUser(User user)
 	{
-		if (users == null)
-			users = new ArrayList<User>();
-		users.add(user);
+		getUsers().add(user);
+	}
+
+	public void removeUser(User user)
+	{
+		getUsers().remove(user);
 	}
 
 	public void addRoad(Road road)
@@ -112,4 +139,16 @@ public class City
 	{
 		return longitude;
 	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if (o == this)
+			return true;
+		if (!(o instanceof City))
+			return false;
+		City c = (City)o;
+		return name.equals(c.name);
+	}
+
 }

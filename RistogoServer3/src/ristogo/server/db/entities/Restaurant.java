@@ -64,12 +64,16 @@ public class Restaurant
 
 	public void setCuisine(Cuisine cuisine)
 	{
+		this.cuisine.removeRestaurant(this);
 		this.cuisine = cuisine;
+		cuisine.addRestaurant(this);
 	}
 
 	public void setCity(City city)
 	{
+		this.city.removeRestaurant(this);
 		this.city = city;
+		city.addRestaurant(this);
 	}
 
 	public void setOwner(User owner)
@@ -109,10 +113,21 @@ public class Restaurant
 
 	public List<User> getUsersWhoLike()
 	{
+		if (usersWhoLike == null) {
+			Iterable<User> users = DBManager.session().query(User.class,
+			"MATCH (c:City)<-[l:LOCATED]-(user:User)-[li:LIKES]->(r:Restaurant) " +
+			"WHERE r.name = $name " +
+			"RETURN (r)<-[li]-(user)-[l]->(c)",
+			Map.ofEntries(Map.entry("name", name)));
+			usersWhoLike = new ArrayList<User>();
+			users.forEach(usersWhoLike::add);
+		}
 		return usersWhoLike;
 	}
-	
-	public int getLikesCount() {
+
+	public int getLikesCount()
+	{
+		getUsersWhoLike();
 		return usersWhoLike == null ? 0 : usersWhoLike.size();
 	}
 
@@ -124,6 +139,16 @@ public class Restaurant
 			if (u.equals(user))
 				return true;
 		return false;
+	}
+
+	public void addLikedFrom(User user)
+	{
+		getUsersWhoLike().add(user);
+	}
+
+	public void removeLikedFrom(User user)
+	{
+		getUsersWhoLike().remove(user);
 	}
 
 	public static List<Restaurant> loadRestaurantsLikedBy(User user, String nameRegex, int page, int perPage)
@@ -148,10 +173,9 @@ public class Restaurant
 		found.forEach(restaurants::add);
 		return restaurants;
 	}
-	
+
 	public static List<Restaurant> loadRestaurantsLikedBy(User user, int page, int perPage)
 	{
-		
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
 			"MATCH (u:User)-[like:LIKES]->(r:Restaurant)<-[own:OWNS]-(o:User) " +
 			"OPTIONAL MATCH (c:Cuisine)<-[serve:SERVES]-(r)-[located:LOCATED]->(ci:City) " +
@@ -168,11 +192,6 @@ public class Restaurant
 		return restaurants;
 	}
 
-	@PreDelete
-	private void preDelete()
-	{
-	}
-
 	public int getCityRank()
 	{
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
@@ -183,10 +202,9 @@ public class Restaurant
 			Map.ofEntries(Map.entry("city", getCity().getName())));
 		List<Restaurant> ranking = new ArrayList<Restaurant>();
 		found.forEach(ranking::add);
-		
-		return ranking.indexOf(getName()) + 1;
+		return ranking.indexOf(this) + 1;
 	}
-	
+
 	public int getCuisineRank()
 	{
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
@@ -197,10 +215,9 @@ public class Restaurant
 			Map.ofEntries(Map.entry("cuisine", getCuisine().getName())));
 		List<Restaurant> ranking = new ArrayList<Restaurant>();
 		found.forEach(ranking::add);
-				
 		return ranking.indexOf(this) + 1;
 	}
-	
+
 	public int getCityCuisineRank()
 	{
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
@@ -213,13 +230,15 @@ public class Restaurant
 					Map.entry("city", getCity().getName())));
 		List<Restaurant> ranking = new ArrayList<Restaurant>();
 		found.forEach(ranking::add);
-		
 		return ranking.indexOf(this) + 1;
 	}
-	
-	public boolean equals(Object o) {
-		if(o == this) return true;
-		if(!(o instanceof Restaurant)) return false;
+
+	public boolean equals(Object o)
+	{
+		if(o == this)
+			return true;
+		if(!(o instanceof Restaurant))
+			return false;
 		Restaurant r = (Restaurant) o;
 		return name.equals(r.name);
 	}

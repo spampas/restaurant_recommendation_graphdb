@@ -67,7 +67,7 @@ public class AddCityControlBox extends ControlBox
 
 	public void setCity(CityInfo city)
 	{
-		nameField.setText(city.getName());
+		nameField.setValue(city.getName());
 		latField.setText(Double.toString(city.getLatitude()));
 		lonField.setText(Double.toString(city.getLongitude()));
 		addButton.setDisable(false);

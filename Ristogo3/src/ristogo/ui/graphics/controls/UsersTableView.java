@@ -55,11 +55,12 @@ public class UsersTableView extends RistogoTableView<UserBean>
 		}
 		items.clear();
 		List<UserInfo> users = resMsg.getEntities(UserInfo.class);
+		hasNext = users.size() >= GUIConfig.getMaxRowDisplayable();
 		if (users.isEmpty())
-			return false;
+			return true;
 		for (UserInfo user: users)
 			items.add(new UserBean(user.getUsername(), user.getCity().getName(), user.isFollowing()));
-		return items.size() >= GUIConfig.getMaxRowDisplayable();
+		return true;
 	}
 
 	@Override

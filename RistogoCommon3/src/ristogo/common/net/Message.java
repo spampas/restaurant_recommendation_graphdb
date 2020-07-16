@@ -37,7 +37,7 @@ public class Message implements Serializable
 				this.entities.add(entity);
 	}
 
-	protected String toXML()
+	public String toXML()
 	{
 		XStream xs = new XStream();
 		return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + xs.toXML(this);

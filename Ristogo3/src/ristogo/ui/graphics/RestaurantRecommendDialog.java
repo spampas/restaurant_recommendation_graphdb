@@ -84,7 +84,7 @@ public class RestaurantRecommendDialog extends Dialog<RecommendRestaurantInfo>
 		if (!resMsg.isSuccess())
 			showError(resMsg.getErrorMsg());
 		else
-			citySelector.setText(resMsg.getEntity(CityInfo.class).getName());
+			citySelector.setValue(resMsg.getEntity(CityInfo.class).getName());
 
 		distanceField.setPromptText("Distance(Km)");
 

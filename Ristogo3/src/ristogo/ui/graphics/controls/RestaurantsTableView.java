@@ -80,11 +80,12 @@ public class RestaurantsTableView extends RistogoTableView<RestaurantBean>
 		}
 		items.clear();
 		List<RestaurantInfo> restaurants = resMsg.getEntities(RestaurantInfo.class);
+		hasNext = restaurants.size() >= GUIConfig.getMaxRowDisplayable();
 		if (restaurants.isEmpty())
-			return false;
+			return true;
 		for (RestaurantInfo restaurant: restaurants)
 			items.add(new RestaurantBean(restaurant.getName(), restaurant.getCuisine().getName(), restaurant.getPrice(), restaurant.getCity().getName(), restaurant.isLiked()));
-		return items.size() >= GUIConfig.getMaxRowDisplayable();
+		return true;
 	}
 
 	@Override

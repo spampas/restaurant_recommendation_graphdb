@@ -38,9 +38,12 @@ public class Cuisine
 
 	public void addRestaurant(Restaurant restaurant)
 	{
-		if (restaurants == null)
-			restaurants = new ArrayList<Restaurant>();
-		restaurants.add(restaurant);
+		getRestaurants().add(restaurant);
+	}
+
+	public void removeRestaurant(Restaurant restaurant)
+	{
+		getRestaurants().remove(restaurant);
 	}
 
 	public String getName()
@@ -50,26 +53,43 @@ public class Cuisine
 
 	public List<Restaurant> getRestaurants()
 	{
+		if (restaurants == null) {
+			Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
+			"MATCH (r:Restaurant)-[s:SERVES]->(c:Cuisine) " +
+			"WHERE c.name = $name " +
+			"RETURN (r)-[s]->(c)",
+			Map.ofEntries(Map.entry("name", name)));
+			restaurants = new ArrayList<Restaurant>();
+			found.forEach(restaurants::add);
+		}
 		return restaurants;
+
 	}
 
 	public List<User> getUsersWhoLike()
 	{
 		if(usersWhoLike == null) {
 			Iterable<User> users = DBManager.session().query(User.class,
-					"MATCH (user:User)-[:LIKE]->(cuisine:Cuisine{name: $cuisine}) "
-					+ "RETURN user", Map.ofEntries(Map.entry("cuisine", getName())));
+					"MATCH (user:User)-[l:LIKES]->(cuisine:Cuisine{name: $cuisine}) "
+					+ "RETURN (user)-[l]->(cuisine)",
+					Map.ofEntries(Map.entry("cuisine", getName())));
 			usersWhoLike = new ArrayList<User>();
 			users.forEach(usersWhoLike::add);
 		}
-			
+
 		return usersWhoLike;
 	}
-	
-	public void addUserWhoLike(User user) {
+
+	public void addLikedFrom(User user)
+	{
 		getUsersWhoLike().add(user);
 	}
-	
+
+	public void removeLikedFrom(User user)
+	{
+		getUsersWhoLike().remove(user);
+	}
+
 	public static List<Cuisine> loadCuisinesLikedBy(User user, String nameRegex, int page, int perPage)
 	{
 		if (nameRegex == null || nameRegex.isEmpty() )
@@ -77,9 +97,9 @@ public class Cuisine
 		String regexFilter = "";
 		regexFilter = "AND c.name =~ $regex ";
 		Iterable<Cuisine> found = DBManager.session().query(Cuisine.class,
-			"MATCH (u:User)-[:LIKES]->(c:Cuisine) " +
+			"MATCH (u:User)-[l:LIKES]->(c:Cuisine) " +
 			"WHERE u.username = $username " + regexFilter +
-			"RETURN c " +
+			"RETURN (c)<-[l]-(u) " +
 			"ORDER BY c.name " +
 			"SKIP $skip " +
 			"LIMIT $limit ",
@@ -91,14 +111,13 @@ public class Cuisine
 		found.forEach(cuisines::add);
 		return cuisines;
 	}
-	
+
 	public static List<Cuisine> loadCuisinesLikedBy(User user, int page, int perPage)
 	{
-		
 		Iterable<Cuisine> found = DBManager.session().query(Cuisine.class,
-				"MATCH (u:User)-[:LIKES]->(c:Cuisine) " +
+				"MATCH (u:User)-[l:LIKES]->(c:Cuisine) " +
 				"WHERE u.username = $username " +
-				"RETURN c " +
+				"RETURN (c)<-[l]-(u) " +
 				"ORDER BY c.name " +
 				"SKIP $skip " +
 				"LIMIT $limit ",
@@ -109,10 +128,13 @@ public class Cuisine
 			found.forEach(cuisines::add);
 			return cuisines;
 	}
-	
-	public boolean equals(Object o) {
-		if(o == this) return true;
-		if(!(o instanceof Cuisine)) return false;
+
+	public boolean equals(Object o)
+	{
+		if(o == this)
+			return true;
+		if(!(o instanceof Cuisine))
+			return false;
 		Cuisine c = (Cuisine) o;
 		return name.equals(c.name);
 	}

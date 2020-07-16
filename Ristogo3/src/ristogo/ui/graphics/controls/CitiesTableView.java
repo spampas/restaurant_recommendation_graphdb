@@ -53,11 +53,12 @@ public class CitiesTableView extends RistogoTableView<CityBean>
 		}
 		items.clear();
 		List<CityInfo> cities = resMsg.getEntities(CityInfo.class);
+		hasNext = cities.size() >= GUIConfig.getMaxRowDisplayable();
 		if (cities.isEmpty())
-			return false;
+			return true;
 		for (CityInfo city: cities)
 			items.add(new CityBean(city.getName(), city.getLatitude(), city.getLongitude()));
-		return items.size() >= GUIConfig.getMaxRowDisplayable();
+		return true;
 	}
 
 	@Override

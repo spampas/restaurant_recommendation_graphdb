@@ -33,17 +33,20 @@ public class RestaurantsPanel extends TablePanel
 			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
 			tv.filter(null);
+			ptv.reset();
 		});
 		menuBar.addMenu("Liked", () -> {
 			controlBox.setButtonDisable(true);
 			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
 			tv.filterLiked(null);
+			ptv.reset();
 		});
 		menuBar.addMenu("Recommend", () -> {
 			controlBox.setButtonDisable(true);
 			ptv.setDeleteDisable(true);
 			detailsBox.setText("");
+			ptv.reset();
 			RestaurantRecommendDialog login = new RestaurantRecommendDialog();
 			Optional<RecommendRestaurantInfo> result = login.showAndWait();
 			result.ifPresentOrElse(

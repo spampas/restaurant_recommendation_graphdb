@@ -111,9 +111,9 @@ public class RestaurantFormPanel extends BasePanel
 			return;
 		}
 		nameField.setText(restaurant.getName());
-		cuisineSelector.setText(restaurant.getCuisine().getName());
+		cuisineSelector.setValue(restaurant.getCuisine().getName());
 		priceField.setValue(restaurant.getPrice());
-		citySelector.setText(restaurant.getCity().getName());
+		citySelector.setValue(restaurant.getCity().getName());
 		descriptionField.setText(restaurant.getDescription());
 		commitButton.setDisable(false);
 		commitButton.setText("Commit");

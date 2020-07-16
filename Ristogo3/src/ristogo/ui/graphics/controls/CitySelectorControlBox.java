@@ -31,7 +31,7 @@ public class CitySelectorControlBox extends ControlBox
 
 	public void setCity(String city)
 	{
-		addField.setText(city);
+		addField.setValue(city);
 	}
 
 	public void setButtonText(String text)
