@@ -97,7 +97,7 @@ public class RequestHandler extends Thread
 		System.out.println("----------------");
 
 		resMsg.send(outputStream);
-		DBManager.session().clear();
+		DBManager.getInstance().close();
 		if (reqMsg.getAction() == ActionRequest.LOGOUT)
 			Thread.currentThread().interrupt();
 	}
@@ -320,7 +320,7 @@ public class RequestHandler extends Thread
 		String name = filter == null ? null : filter.getValue();
 		if (name == null)
 			return new ResponseMessage("Invalid restaurant specified.");
-		Restaurant savedRestaurant = DBManager.session().load(Restaurant.class, name);
+		Restaurant savedRestaurant = DBManager.session().load(Restaurant.class, name ,1);
 		if (savedRestaurant == null)
 			return new ResponseMessage("The specified restaurant can not be found.");
 		if (!loggedUser.isAdmin() && !savedRestaurant.getOwner().equals(loggedUser))
@@ -427,6 +427,40 @@ public class RequestHandler extends Thread
 		if(savedCity == null)
 			return new ResponseMessage("Can't find selected city " + city.getName() + ".");
 		loggedUser.setCity(savedCity);
+		return new ResponseMessage();
+	}
+	
+	@RequestHandlerMethod
+	private ResponseMessage handleEditCity(RequestMessage reqMsg)
+	{
+		CityInfo city = reqMsg.getEntity(CityInfo.class);
+		if (city == null)
+			return new ResponseMessage("No city selected.");
+		City savedCity = DBManager.session().load(City.class, city.getName(), 0);
+		if(savedCity == null)
+			return new ResponseMessage("Can't find selected city " + city.getName() + ".");
+		
+		savedCity.setName(city.getName());
+		savedCity.setLatitude(city.getLatitude());
+		savedCity.setLongitude(city.getLongitude());
+		
+		DBManager.session().save(savedCity);
+		return new ResponseMessage();
+	}
+	
+	@RequestHandlerMethod
+	private ResponseMessage handleEditCuisine(RequestMessage reqMsg)
+	{
+		CuisineInfo cuisine = reqMsg.getEntity(CuisineInfo.class);
+		if (cuisine == null)
+			return new ResponseMessage("No city selected.");
+		Cuisine saved = DBManager.session().load(Cuisine.class, cuisine.getName(), 0);
+		if(saved == null)
+			return new ResponseMessage("Can't find selected city " + cuisine.getName() + ".");
+		
+		saved.setName(cuisine.getName());
+		
+		DBManager.session().save(saved);
 		return new ResponseMessage();
 	}
 
@@ -627,14 +661,12 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod(true)
 	private ResponseMessage handleDeleteCuisine(RequestMessage reqMsg)
 	{
-		CuisineInfo cuisine = reqMsg.getEntity(CuisineInfo.class);
-		Cuisine savedCuisine = DBManager.session().load(Cuisine.class, cuisine.getName(), 0 );
+		StringFilter cuisine = reqMsg.getEntity(StringFilter.class);
+		Cuisine savedCuisine = DBManager.session().load(Cuisine.class, cuisine.getValue(), 0 );
 		if(savedCuisine == null)
-			return new ResponseMessage("No such Cuisine " + cuisine.getName());
-		if (!loggedUser.isAdmin())
-			return new ResponseMessage("You can edit only restaurants that you own.");
+			return new ResponseMessage("No such Cuisine " + cuisine.getValue());
 		DBManager.session().delete(savedCuisine);
-		return new ResponseMessage(cuisine);
+		return new ResponseMessage();
 	}
 
 	@RequestHandlerMethod
@@ -732,17 +764,18 @@ public class RequestHandler extends Thread
 	private ResponseMessage handleListCities(RequestMessage reqMsg)
 	{
 		StringFilter filter = reqMsg.getEntity(StringFilter.class);
+		PageFilter pageFilter = reqMsg.getEntity(PageFilter.class);
 		String regex = filter == null ? null : "(?i).*" + filter.getValue() + ".*";
 		Collection<City> cities;
 		if (filter == null)
 			cities = DBManager.session().loadAll(City.class,
 				new SortOrder().add("name"),
-				new Pagination(0, 10), 0);
+				new Pagination(pageFilter.getPage(), pageFilter.getPerPage()), 0);
 		else
 			cities = DBManager.session().loadAll(City.class,
 				new Filter("name", ComparisonOperator.MATCHES, regex),
 				new SortOrder().add("name"),
-				new Pagination(0, 10), 0);
+				new Pagination(pageFilter.getPage(), pageFilter.getPerPage()), 0);
 		List<CityInfo> infos = new ArrayList<CityInfo>();
 		cities.forEach((City c) -> { infos.add(new CityInfo(c.getName(), c.getLatitude(), c.getLongitude())); });
 		return new ResponseMessage(infos.toArray(new CityInfo[0]));
@@ -764,12 +797,12 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod(true)
 	private ResponseMessage handleDeleteCity(RequestMessage reqMsg)
 	{
-		CityInfo city = reqMsg.getEntity(CityInfo.class);
-		City savedCity = DBManager.session().load(City.class, city.getName(), 0 );
+		StringFilter city = reqMsg.getEntity(StringFilter.class);
+		if(city == null)
+			return new ResponseMessage("No city selected");
+		City savedCity = DBManager.session().load(City.class, city.getValue(), 0 );
 		if(savedCity == null)
-			return new ResponseMessage("No such City:  " + city.getName());
-		if (!loggedUser.isAdmin())
-			return new ResponseMessage("You need administrator privileges.");
+			return new ResponseMessage("No such City:  " + city.getValue());
 		DBManager.session().delete(savedCity);
 		return new ResponseMessage();
 	}

@@ -19,7 +19,7 @@ public class CuisinesPanel extends TablePanel
 		super("Cuisines");
 
 		AddCuisineControlBox controlBox = new AddCuisineControlBox(false);
-		CuisinesTableView tv = new CuisinesTableView(true);
+		CuisinesTableView tv = new CuisinesTableView(false);
 		PagedTableView<CuisineBean> ptv = new PagedTableView<CuisineBean>(tv);
 		ptv.setFindHint("Search cuisines...");
 		ptv.setDeleteDisable(true);
