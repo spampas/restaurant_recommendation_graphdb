@@ -114,10 +114,14 @@ public class UsersTableView extends RistogoTableView<UserBean>
 		super.filter(filter);
 	}
 
-	public void filterRecommend(String filter, RecommendUserInfo recommend)
+	public void setRecommendFilter(RecommendUserInfo filter)
+	{
+		this.recommendFilter = filter;
+	}
+
+	public void filterRecommend(String filter)
 	{
 		filterType = FilterType.RECOMMEND;
-		recommendFilter = recommend;
 		super.filter(filter);
 	}
 }

@@ -45,14 +45,18 @@ public class RestaurantsPanel extends TablePanel
 			ptv.reset();
 		});
 		menuBar.addMenu("Recommend", () -> {
-			controlBox.setButtonDisable(true);
-			ptv.setDeleteDisable(true);
-			detailsBox.setText("");
-			ptv.reset();
 			RestaurantRecommendDialog login = new RestaurantRecommendDialog();
 			Optional<RecommendRestaurantInfo> result = login.showAndWait();
 			result.ifPresentOrElse(
-				(data) -> { ptv.setFilterFunction(tv::filter); tv.filterRecommend(null, data); }, //TODO
+				(data) -> {
+					controlBox.setButtonDisable(true);
+					ptv.setDeleteDisable(true);
+					detailsBox.setText("");
+					ptv.setFilterFunction(tv::filterRecommend);
+					tv.setRecommendFilter(data);
+					tv.filterRecommend(null);
+					ptv.reset();
+				},
 				() -> { }
 			);
 		});

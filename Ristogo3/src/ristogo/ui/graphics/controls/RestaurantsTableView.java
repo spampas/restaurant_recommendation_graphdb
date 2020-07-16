@@ -133,10 +133,14 @@ public class RestaurantsTableView extends RistogoTableView<RestaurantBean>
 		super.filter(filter);
 	}
 
-	public void filterRecommend(String filter, RecommendRestaurantInfo recommend) //TODO
+	public void setRecommendFilter(RecommendRestaurantInfo filter)
+	{
+		this.recommendFilter = filter;
+	}
+
+	public void filterRecommend(String filter)
 	{
 		filterType = FilterType.RECOMMEND;
-		recommendFilter = recommend;
 		super.filter(filter);
 	}
 }
