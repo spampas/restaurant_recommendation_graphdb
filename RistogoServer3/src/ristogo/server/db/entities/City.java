@@ -16,6 +16,7 @@ public class City
 {
 	@Id
 	private String name;
+	private transient String oldName;
 	@Property
 	private double latitude;
 	@Property
@@ -47,7 +48,16 @@ public class City
 
 	public void setName(String name)
 	{
+		this.oldName = this.name;
 		this.name = name;
+	}
+	
+	public void save() {
+		DBManager.session().query("MATCH (n:City{name:$oldName}) SET n = {name : $name, n.latitude : $latitude, n.longitude : $longitude}", 
+				Map.ofEntries(Map.entry("name", name), 
+						Map.entry("oldName", oldName),
+						Map.entry("latitude", latitude),
+						Map.entry("longitude", longitude)));
 	}
 
 	public String getName()

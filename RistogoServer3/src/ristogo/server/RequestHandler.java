@@ -309,7 +309,7 @@ public class RequestHandler extends Thread
 		savedRestaurant.setCuisine(cuisine);
 		savedRestaurant.setPrice(restaurant.getPrice());
 		savedRestaurant.setDescription(restaurant.getDescription());
-		DBManager.session().save(savedRestaurant);
+		savedRestaurant.save();
 		return new ResponseMessage();
 	}
 
@@ -447,7 +447,7 @@ public class RequestHandler extends Thread
 		savedCity.setLatitude(city.getLatitude());
 		savedCity.setLongitude(city.getLongitude());
 		
-		DBManager.session().save(savedCity);
+		savedCity.save();
 		return new ResponseMessage();
 	}
 	
@@ -465,8 +465,7 @@ public class RequestHandler extends Thread
 			return new ResponseMessage("Can't find selected cuisine " + cuisine.getName() + ".");
 		
 		saved.setName(cuisine.getName());
-		
-		DBManager.session().save(saved);
+		saved.save();
 		return new ResponseMessage();
 	}
 

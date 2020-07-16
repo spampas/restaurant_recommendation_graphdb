@@ -21,6 +21,7 @@ public class Restaurant
 {
 	@Id
 	private String name;
+	private transient String oldName;
 	@Property
 	private Price price;
 	@Property
@@ -51,9 +52,22 @@ public class Restaurant
 
 	public void setName(String name)
 	{
+		this.oldName = this.name;
 		this.name = name;
 	}
-
+	
+	public void save() {
+		DBManager.session().query("MATCH (newCity:City{name:$city}), (newCuisine:Cuisine{name:$cuisine}), (:City)<-[loc:LOCATED]-(r:Restaurant{name:$oldName})-[ser:SERVES]->(:Cuisine) "
+				+ "SET n = {name : $name, description : $description, price: $price} "
+				+ "DELETE loc, ser "
+				+ "CREATE (newCuisine)<-[:SERVES]-(r)-[:LOCATED]->(newCity)", 
+				Map.ofEntries(Map.entry("name", name), 
+						Map.entry("oldName", oldName),
+						Map.entry("description", description),
+						Map.entry("price", price),
+						Map.entry("city", city.getName()),
+						Map.entry("cuisine", cuisine.getName())));
+	}
 	public void setPrice(Price price)
 	{
 		this.price = price;

@@ -15,7 +15,7 @@ public class Cuisine
 {
 	@Id
 	private String name;
-
+	private transient String oldName;
 	@Relationship(type = "SERVES", direction = Relationship.INCOMING)
 	private List<Restaurant> restaurants;
 	@Relationship(type = "LIKES", direction = Relationship.INCOMING)
@@ -33,6 +33,7 @@ public class Cuisine
 
 	public void setName(String name)
 	{
+		this.oldName = this.name;
 		this.name = name;
 	}
 
@@ -46,6 +47,9 @@ public class Cuisine
 		getRestaurants().remove(restaurant);
 	}
 
+	public void save() {
+		DBManager.session().query("MATCH (n:Cuisine{name:$oldName}) SET n.name = $name", Map.ofEntries(Map.entry("name", name), Map.entry("oldName", oldName)));
+	}
 	public String getName()
 	{
 		return name;
