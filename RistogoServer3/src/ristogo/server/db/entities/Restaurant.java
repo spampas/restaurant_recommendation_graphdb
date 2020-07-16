@@ -255,7 +255,7 @@ public class Restaurant
 	ORDER BY likes DESC
 	*/
 	
-	public static List<Restaurant> recommendRestaurant(Cuisine cuisine, City city, int distance, LikesFrom depth, Price price,
+	public static List<Restaurant> recommendRestaurant(User user, Cuisine cuisine, City city, int distance, LikesFrom depth, Price price,
 			int page, int perPage)
 	{
 		Map<String, Object> parameters = new HashMap<String,Object>();
@@ -265,21 +265,22 @@ public class Restaurant
 		parameters.put("price", price.toString());
 		parameters.put("skip", page*perPage);
 		parameters.put("limit", perPage);
+		parameters.put("username", user.getUsername());
 		String cuisineFilter = "";
-		
+		String depthFilter =  depth == LikesFrom.FRIENDS_OF_FRIENDS ? "*1..2" : "";
 		if(cuisine != null) {
 			cuisineFilter = "-[:SERVES]->(c:Cuisine{name:$cuisine})";
 			parameters.put("cuisine", cuisine.getName());
 		}
 		
-		String query = "MATCH (c_target:City{name:$city}), (c:City)<-[:LOCATED]-(r:Restaurant{price:$price})"+cuisineFilter+", " + 
-				"(me:User{username:$username})-[:FOLLOWS*1..$depth]->(f:User)-[:LIKES]->(r) " + 
-				"WHERE f.name <> $username " + 
-				"WITH  c_target, c, r, DISTINCT f, point({longitude: c_target.longitude, latitude:c_target.latitude}) as p1, " + 
+		String query = "MATCH (ctarget:City{name:$city}), (c:City)<-[:LOCATED]-(r:Restaurant{price:$price})"+cuisineFilter+", " + 
+				"(me:User{username:$username})-[:FOLLOWS" + depthFilter +"]->(f:User)-[:LIKES]->(r) " + 
+				"WHERE f.username <> $username " + 
+				"WITH ctarget, c, r, f, point({longitude: ctarget.longitude, latitude:ctarget.latitude}) as p1, " + 
 				"	point({longitude: c.longitude, latitude:c.latitude}) as p2 " + 
-				"WITH distance(p1,p2) as dist, r,f " + 
+				"WITH distance(p1,p2) as dist, r, f " + 
 				"WHERE dist <= $distance AND NOT EXISTS ((r)-[:LIKES|OWNS]-(:User{username:$username})) " + 
-				"RETURN r, count(f) as likes " + 
+				"RETURN r, count(DISTINCT f) as likes " + 
 				"ORDER BY likes DESC "
 				+ "SKIP $skip "
 				+ "LIMIT $limit ";

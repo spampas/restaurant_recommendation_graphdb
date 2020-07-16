@@ -653,7 +653,7 @@ public class RequestHandler extends Thread
 		if(info.getPrice() == null)
 			return new ResponseMessage("No price specified");
 		
-		List<Restaurant> recommended = Restaurant.recommendRestaurant(cuisine, city, info.getDistance(), info.getDepth(), info.getPrice(), pageFilter.getPage(), pageFilter.getPerPage());
+		List<Restaurant> recommended = Restaurant.recommendRestaurant(loggedUser, cuisine, city, info.getDistance(), info.getDepth(), info.getPrice(), pageFilter.getPage(), pageFilter.getPerPage());
 		List<RestaurantInfo> restaurants = new ArrayList<RestaurantInfo>();
 		recommended.forEach((Restaurant r) -> {
 			CityInfo cityInfo = new CityInfo(r.getCity().getName());
