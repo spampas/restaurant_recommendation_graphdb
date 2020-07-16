@@ -172,8 +172,10 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod
 	private ResponseMessage handleListOwnRestaurants(RequestMessage reqMsg)
 	{
-		//TODO: StringFilter and PageFilter
-		List<Restaurant> savedRestaurants = loggedUser.getOwnedRestaurants();
+		StringFilter filter = reqMsg.getEntity(StringFilter.class);
+		PageFilter pageFilter = reqMsg.getEntity(PageFilter.class);
+		String regex = filter == null ? null : "(?i).*" + filter.getValue() + ".*";
+		List<Restaurant> savedRestaurants = Restaurant.loadRestaurantsOwnedBy(loggedUser, regex, pageFilter.getPage(), pageFilter.getPerPage());
 		List<RestaurantInfo> restaurants = new ArrayList<RestaurantInfo>();
 		for (Restaurant restaurant: savedRestaurants)
 			restaurants.add(new RestaurantInfo(restaurant.getName(),
@@ -186,14 +188,17 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod
 	private ResponseMessage handleAddRestaurant(RequestMessage reqMsg)
 	{
+		//TODO SOLITO RISTORANTE AGGIUNTO DUE VOLTE NON FA
 		RestaurantInfo restaurant = reqMsg.getEntity(RestaurantInfo.class);
-		City city = DBManager.session().load(City.class, restaurant.getCity().getName(), 0);
+		City city = DBManager.session().load(City.class, restaurant.getCity().getName(), 1);
 		if (city == null)
 			return new ResponseMessage("The specified city can not be found.");
-		Cuisine cuisine = DBManager.session().load(Cuisine.class, restaurant.getCuisine().getName(), 0);
+		Cuisine cuisine = DBManager.session().load(Cuisine.class, restaurant.getCuisine().getName(), 1);
 		if (cuisine == null)
 			return new ResponseMessage("The specified cuisine can not be found.");
 		Restaurant savedRestaurant = new Restaurant(restaurant.getName(), loggedUser, restaurant.getPrice(), cuisine, city, restaurant.getDescription());
+		city.addRestaurant(savedRestaurant);
+		cuisine.addRestaurant(savedRestaurant);
 		DBManager.session().save(savedRestaurant);
 		return new ResponseMessage();
 	}
@@ -490,8 +495,8 @@ public class RequestHandler extends Thread
 		if(savedRestaurant == null)
 			return new ResponseMessage("Can't find the specified Restaurant.");
 		StatisticInfo stat = new StatisticInfo(savedRestaurant.getLikesCount(),
-				savedRestaurant.getCityRank(),
 				savedRestaurant.getCuisineRank(),
+				savedRestaurant.getCityRank(),
 				savedRestaurant.getCityCuisineRank());
 		return new ResponseMessage(stat);
 	}
@@ -660,7 +665,7 @@ public class RequestHandler extends Thread
 			CuisineInfo cuisineInfo = new CuisineInfo(r.getCuisine().getName());
 			restaurants.add(new RestaurantInfo(r.getName(), cuisineInfo , r.getPrice(), cityInfo));
 		});
-		return new ResponseMessage(recommended.toArray(new RestaurantInfo[0]));
+		return new ResponseMessage(restaurants.toArray(new RestaurantInfo[0]));
 	}
 
 	@RequestHandlerMethod
