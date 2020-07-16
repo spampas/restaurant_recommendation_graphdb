@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-07-16T09:39:50.857Z" agent="5.0 (X11)" etag="5YbGYSoPVJ86FvXfJJll" version="13.4.4" type="github" pages="3">
+<mxfile host="app.diagrams.net" modified="2020-07-16T09:45:13.244Z" agent="5.0 (X11)" etag="ApK5gblGWEslySo8fd78" version="13.4.4" type="github" pages="3">
   <diagram id="7zDVnnWjsR-BoNhKVwcQ" name="Page-1">
     <mxGraphModel dx="2241" dy="1927" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -215,13 +215,13 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="qz7VxkIkBpoKN-4RH5xL-3" value="Follow User" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;" parent="5zPHV9qzRJgmZAfULTGl-1" vertex="1">
-          <mxGeometry x="650" y="358.5" width="140" height="70" as="geometry" />
+          <mxGeometry x="677" y="336.04" width="140" height="70" as="geometry" />
         </mxCell>
         <mxCell id="0Nx5tK7zfX6LpTETbN9F-7" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" parent="5zPHV9qzRJgmZAfULTGl-1" source="qz7VxkIkBpoKN-4RH5xL-4" target="qz7VxkIkBpoKN-4RH5xL-1" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="qz7VxkIkBpoKN-4RH5xL-4" value="Unfollow User" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;" parent="5zPHV9qzRJgmZAfULTGl-1" vertex="1">
-          <mxGeometry x="590" y="437" width="140" height="70" as="geometry" />
+          <mxGeometry x="677" y="410" width="140" height="70" as="geometry" />
         </mxCell>
         <mxCell id="0Nx5tK7zfX6LpTETbN9F-17" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="5zPHV9qzRJgmZAfULTGl-1" source="qz7VxkIkBpoKN-4RH5xL-10" target="qz7VxkIkBpoKN-4RH5xL-11" edge="1">
           <mxGeometry relative="1" as="geometry" />
@@ -431,6 +431,15 @@
         </mxCell>
         <mxCell id="5zPHV9qzRJgmZAfULTGl-4" value="User" style="shape=umlActor;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;html=1;" parent="5zPHV9qzRJgmZAfULTGl-1" vertex="1">
           <mxGeometry x="-120" y="410" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="upjh4GOMq2cTHDHJRV5o-2" value="Delete User" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="5zPHV9qzRJgmZAfULTGl-1">
+          <mxGeometry x="520" y="450" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="upjh4GOMq2cTHDHJRV5o-3" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="5zPHV9qzRJgmZAfULTGl-1" source="upjh4GOMq2cTHDHJRV5o-2" target="qz7VxkIkBpoKN-4RH5xL-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="689.7194252644954" y="445.3391995251584" as="sourcePoint" />
+            <mxPoint x="527.3066763348465" y="421.61523947640626" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
