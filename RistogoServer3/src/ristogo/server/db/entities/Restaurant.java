@@ -2,6 +2,7 @@ package ristogo.server.db.entities;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
 
+import ristogo.common.net.entities.enums.LikesFrom;
 import ristogo.common.net.entities.enums.Price;
 import ristogo.server.db.DBManager;
 import ristogo.server.db.entities.annotations.PreDelete;
@@ -238,5 +240,20 @@ public class Restaurant
 			return false;
 		Restaurant r = (Restaurant) o;
 		return name.equals(r.name);
+	}
+
+	public static List<Restaurant> recommendRestaurant(Cuisine cuisine, City city, LikesFrom depth, Price price,
+			int page, int perPage)
+	{
+		Map<String, Object> parameters = new HashMap<String,Object>();
+		parameters.put("city", city.getName());
+		
+		String cuisineFilter = "";
+		if(cuisine != null) {
+			cuisineFilter = "";
+			parameters.put("cuisine", cuisine.getName());
+		}
+			
+		return null;
 	}
 }

@@ -31,6 +31,8 @@ import ristogo.common.net.entities.RestaurantInfo;
 import ristogo.common.net.entities.StatisticInfo;
 import ristogo.common.net.entities.StringFilter;
 import ristogo.common.net.entities.UserInfo;
+import ristogo.common.net.entities.enums.LikesFrom;
+import ristogo.common.net.entities.enums.Price;
 import ristogo.common.net.enums.ActionRequest;
 import ristogo.server.annotations.RequestHandlerMethod;
 import ristogo.server.db.DBManager;
@@ -251,11 +253,7 @@ public class RequestHandler extends Thread
 		return new ResponseMessage(infos.toArray(new RestaurantInfo[0]));
 	}
 
-	@RequestHandlerMethod
-	private ResponseMessage handleRecommendRestaurants(RequestMessage reqMsg) {
-		
-		return null;
-	}
+	
 	@RequestHandlerMethod
 	private ResponseMessage handleListLikedRestaurants(RequestMessage reqMsg)
 	{
@@ -638,9 +636,26 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod
 	private ResponseMessage handleRecommendRestaurant(RequestMessage reqMsg)
 	{
-		RecommendRestaurantInfo info = reqMsg.getEntity(RecommendRestaurantInfo.class);
+		RecommendRestaurantInfo info = reqMsg.getEntity(RecommendRestaurantInfo.class);	
+		PageFilter pageFilter = reqMsg.getEntity(PageFilter.class);
+		Cuisine cuisine = null;
+		City city = null;
+		
+		
 		if(info == null)
 			return new ResponseMessage("Recommendation info is null.");
+		if(info.getCuisine() != null)
+			cuisine = DBManager.session().load(Cuisine.class, info.getCuisine().getName(), 0);
+		if(info.getCity() == null)
+			return new ResponseMessage("No city specified.");
+		city = DBManager.session().load(City.class, info.getCity().getName(), 0);
+		if(info.getDepth() == null)
+			return new ResponseMessage("No depth of search specified");
+		if(info.getPrice() == null)
+			return new ResponseMessage("No price specified");
+		
+		List<Restaurant> recommended = Restaurant.recommendRestaurant(cuisine, city, info.getDepth(), info.getPrice(), pageFilter.getPage(), pageFilter.getPerPage())
+		
 		return null;
 	}
 
