@@ -25,6 +25,7 @@ import ristogo.common.net.entities.CuisineInfo;
 import ristogo.common.net.entities.Entity;
 import ristogo.common.net.entities.RecommendRestaurantInfo;
 import ristogo.common.net.entities.RestaurantInfo;
+import ristogo.common.net.entities.enums.LikesFrom;
 import ristogo.common.net.entities.enums.Price;
 import ristogo.common.net.ResponseMessage;
 import ristogo.net.Protocol;
@@ -40,11 +41,11 @@ import ristogo.ui.graphics.controls.base.PriceSelector;;
 public class RestaurantRecommendDialog extends Dialog<RecommendRestaurantInfo>
 {
 	private final Button searchButton;
-	private final DialogLabel likeFilterLabel = new DialogLabel("Consider likes coming from: ");
-	private final DialogLabel cityLabel = new DialogLabel("City where they are placed: ");
-	private final DialogLabel distanceLabel = new DialogLabel("Distance from the city selected (by default is you city)");
-	private final DialogLabel cuisineLabel = new DialogLabel("Cuisine that you like: ");
-	private final DialogLabel priceFilterLabel = new DialogLabel("Price:");
+	private final DialogLabel likeFilterLabel = new DialogLabel("Order by likes from:");
+	private final DialogLabel cityLabel = new DialogLabel("City of restaurants:");
+	private final DialogLabel distanceLabel = new DialogLabel("Max distance from the city selected (km):");
+	private final DialogLabel cuisineLabel = new DialogLabel("Cuisine:");
+	private final DialogLabel priceFilterLabel = new DialogLabel("Maximum price:");
 	private final DialogLabel errorLabel = new DialogLabel("Fill out the form.");
 	private final LikesFromSelector likeFilterSelector = new LikesFromSelector();
 	private final TextField distanceField = new TextField();
@@ -86,7 +87,14 @@ public class RestaurantRecommendDialog extends Dialog<RecommendRestaurantInfo>
 		else
 			citySelector.setValue(resMsg.getEntity(CityInfo.class).getName());
 
-		distanceField.setPromptText("Distance(Km)");
+		distanceField.setPromptText("Distance (km)...");
+		distanceField.setText("0");
+		likeFilterSelector.setValue(LikesFrom.FRIENDS);
+		priceFilterSelector.setValue(Price.LUXURY);
+		airDistanceField.setSelected(true);
+
+		distanceField.textProperty().addListener(this::textChangeListener);
+		citySelector.textProperty().addListener(this::textChangeListener);
 
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
@@ -114,9 +122,31 @@ public class RestaurantRecommendDialog extends Dialog<RecommendRestaurantInfo>
 		});
 	}
 
+	private void textChangeListener(ObservableValue<? extends String> observable, String oldValue, String newValue)
+	{
+		validate();
+	}
+
+	private void validate()
+	{
+		String distance = distanceField.getText();
+		String city = citySelector.getText();
+		if (distance == null || distance.isEmpty())
+			showError("Distance can not be empty.");
+		else if (city == null || city.isEmpty())
+			showError("City can not be empty.");
+		else try {
+			Integer.parseInt(distance);
+		} catch (NumberFormatException ex) {
+			showError("Distance must be an integer.");
+			return;
+		}
+		hideError();
+
+	}
+
 	private void filterOkButtonAction(ActionEvent event)
 	{
-		//TODO: check empty values
 		filter = new RecommendRestaurantInfo(
 			new CuisineInfo(cuisineSelector.getText()),
 			new CityInfo(citySelector.getText()),

@@ -39,9 +39,9 @@ import ristogo.ui.graphics.controls.base.DialogTextField;
 public class UserRecommendDialog extends Dialog<RecommendUserInfo>
 {
 	private final Button searchButton;
-	private final DialogLabel cityLabel = new DialogLabel("City where they live: ");
-	private final DialogLabel distanceLabel = new DialogLabel("Distance from the city selected (by default is you city)");
-	private final DialogLabel cuisineLabel = new DialogLabel("Cuisine that they like: ");
+	private final DialogLabel cityLabel = new DialogLabel("City of users:");
+	private final DialogLabel distanceLabel = new DialogLabel("Max distance from the city selected (km):");
+	private final DialogLabel cuisineLabel = new DialogLabel("Cuisine liked by users:");
 	private final DialogLabel errorLabel = new DialogLabel("Fill out the form.");
 	private final CuisineSelector cuisineSelector = new CuisineSelector();
 	private final TextField distanceField = new TextField();
@@ -81,7 +81,12 @@ public class UserRecommendDialog extends Dialog<RecommendUserInfo>
 		else
 			citySelector.setValue(resMsg.getEntity(CityInfo.class).getName());
 
-		distanceField.setPromptText("Distance (Km)");
+		distanceField.setPromptText("Distance (km)...");
+		distanceField.setText("0");
+		airDistanceField.setSelected(true);
+		
+		distanceField.textProperty().addListener(this::textChangeListener);
+		cityField.textProperty().addListener(this::textChangeListener);
 
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
@@ -105,6 +110,28 @@ public class UserRecommendDialog extends Dialog<RecommendUserInfo>
 				return filter;
 			return null;
 		});
+	}
+
+	private void textChangeListener(ObservableValue<? extends String> observable, String oldValue, String newValue)
+	{
+		validate();
+	}
+
+	private void validate()
+	{
+		String distance = distanceField.getText();
+		String city = citySelector.getText();
+		if (distance == null || distance.isEmpty())
+			showError("Distance can not be empty.");
+		else if (city == null || city.isEmpty())
+			showError("City can not be empty.");
+		else try {
+			Integer.parseInt(distance);
+		} catch (NumberFormatException ex) {
+			showError("Distance must be an integer.");
+			return;
+		}
+		hideError();
 	}
 
 	private void filterOkButtonAction(ActionEvent event)

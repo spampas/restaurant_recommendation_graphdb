@@ -11,9 +11,9 @@ public enum LikesFrom
 	{
 		switch (this) {
 		case FRIENDS:
-			return "Friends";
+			return "Users you follow";
 		case FRIENDS_OF_FRIENDS:
-			return "Friends of Friends";
+			return "Users followed by users you follow";
 		default:
 			Logger.getLogger(Price.class.getName()).severe("Invalid enum value.");
 			return "Unknown";
