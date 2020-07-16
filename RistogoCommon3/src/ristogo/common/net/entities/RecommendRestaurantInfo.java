@@ -3,15 +3,19 @@ package ristogo.common.net.entities;
 import ristogo.common.net.entities.enums.LikesFrom;
 import ristogo.common.net.entities.enums.Price;
 
-public class RecommendRestaurantInfo extends Entity {
+public class RecommendRestaurantInfo extends Entity
+{
+	private static final long serialVersionUID = -8007294141944742604L;
+
 	private CuisineInfo cuisine;
 	private CityInfo city;
 	private int distance;
 	private boolean airDistance;
 	private LikesFrom depth;
 	private Price price;
-	
-	public RecommendRestaurantInfo(CuisineInfo cuisine, CityInfo city, int distance, boolean airDistance, LikesFrom depth, Price price ) {
+
+	public RecommendRestaurantInfo(CuisineInfo cuisine, CityInfo city, int distance, boolean airDistance, LikesFrom depth, Price price)
+	{
 		this.cuisine = cuisine;
 		this.city = city;
 		this.distance = distance;

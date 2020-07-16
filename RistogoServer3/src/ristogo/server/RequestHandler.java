@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.neo4j.ogm.cypher.ComparisonOperator;
 import org.neo4j.ogm.cypher.Filter;
 import org.neo4j.ogm.cypher.query.Pagination;
@@ -654,7 +653,7 @@ public class RequestHandler extends Thread
 		if(info.getPrice() == null)
 			return new ResponseMessage("No price specified");
 		
-		List<Restaurant> recommended = Restaurant.recommendRestaurant(cuisine, city, info.getDepth(), info.getPrice(), pageFilter.getPage(), pageFilter.getPerPage())
+		List<Restaurant> recommended = Restaurant.recommendRestaurant(cuisine, city, info.getDepth(), info.getPrice(), pageFilter.getPage(), pageFilter.getPerPage());
 		
 		return null;
 	}
