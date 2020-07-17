@@ -101,7 +101,6 @@ public class ResponseMessage extends Message
 			return getEntityCount() == 1 && getEntity(UserInfo.class) != null;
 		case LIKE_RESTAURANT:
 		case UNLIKE_RESTAURANT:
-			return getEntityCount() == 1 && getEntity(RestaurantInfo.class) != null;
 		case LIKE_CUISINE:
 		case FOLLOW_USER:
 		case EDIT_RESTAURANT:

@@ -501,7 +501,7 @@ public class RequestHandler extends Thread
 			return new ResponseMessage("You already like this restaurant.");
 		loggedUser.likeRestaurant(toBeLikedRestaurant);
 		DBManager.session().save(loggedUser);
-		return new ResponseMessage(restaurant);
+		return new ResponseMessage();
 	}
 
 	@RequestHandlerMethod
@@ -518,7 +518,7 @@ public class RequestHandler extends Thread
 			return new ResponseMessage("You already unliked this restaurant.");
 		loggedUser.unlikeRestaurant(toBeUnlikedRestaurant);
 		DBManager.session().save(loggedUser);
-		return new ResponseMessage(restaurant);
+		return new ResponseMessage();
 	}
 
 	@RequestHandlerMethod
