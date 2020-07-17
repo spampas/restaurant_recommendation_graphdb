@@ -21,7 +21,7 @@ public class CitiesPanel extends TablePanel
 		AddCityControlBox controlBox = new AddCityControlBox();
 		CitiesTableView tv = new CitiesTableView();
 		PagedTableView<CityBean> ptv = new PagedTableView<CityBean>(tv);
-		ptv.setFindHint("Search cuisines...");
+		ptv.setFindHint("Search cities...");
 		ptv.setDeleteDisable(true);
 		controlBox.setOnClick((cityOld, cityNew) -> {
 			if (cityNew == null)
@@ -42,7 +42,8 @@ public class CitiesPanel extends TablePanel
 		ptv.setOnSelect((item) -> {
 			if (item == null)
 				controlBox.clearCity();
-			controlBox.setCity(new CityInfo(item.getName(), item.getLatitude(), item.getLongitude()));
+			else
+				controlBox.setCity(new CityInfo(item.getName(), item.getLatitude(), item.getLongitude()));
 		});
 
 		ptv.setDeletable(true);
@@ -52,7 +53,6 @@ public class CitiesPanel extends TablePanel
 				new ErrorBox("Error", "An error has occured while trying to delete the city.", resMsg.getErrorMsg()).showAndWait();
 				return;
 			}
-			controlBox.setButtonDisable(true);
 			ptv.setDeleteDisable(true);
 			controlBox.clearCity();
 			ptv.refresh();
