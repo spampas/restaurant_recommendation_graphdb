@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 
 import org.neo4j.ogm.cypher.ComparisonOperator;
 import org.neo4j.ogm.cypher.Filter;
+import org.neo4j.ogm.cypher.Filters;
 import org.neo4j.ogm.cypher.query.Pagination;
 import org.neo4j.ogm.cypher.query.SortOrder;
 import org.neo4j.ogm.session.Session;
@@ -87,7 +88,10 @@ public class RequestHandler extends Thread
 
 		System.out.println("--- RECEIVED ---");
 		System.out.println(reqMsg.toXML());
-
+		
+		if (loggedUser != null)
+			     loggedUser = DBManager.session().load(User.class, loggedUser.getUsername(), 1);
+		
 		ResponseMessage resMsg = dispatchMessage(reqMsg);
 
 		System.out.println("--- RESPONSE ---");
@@ -331,7 +335,18 @@ public class RequestHandler extends Thread
 		StringFilter filter = reqMsg.getEntity(StringFilter.class);
 		PageFilter pageFilter = reqMsg.getEntity(PageFilter.class);
 		String regex = filter == null ? null : "(?i).*" + filter.getValue() + ".*";
-		List<User> users = User.loadAll(regex, loggedUser, pageFilter.getPage(), pageFilter.getPerPage());
+		
+		Iterable<User> users = null;
+		if (filter == null)
+				users = DBManager.session().loadAll(User.class,
+					new SortOrder().add("username"),
+					new Pagination(pageFilter.getPage(), pageFilter.getPerPage()), 1);
+			else
+				users = DBManager.session().loadAll(User.class,
+					new Filter("username", ComparisonOperator.MATCHES, regex),
+					new SortOrder().add("username"),
+					new Pagination(pageFilter.getPage(), pageFilter.getPerPage()), 1);
+
 		List<UserInfo> infos = new ArrayList<UserInfo>();
 		users.forEach((User u) -> {
 			infos.add(new UserInfo(u.getUsername(), new CityInfo(u.getCity().getName()), u.isFollowedBy(loggedUser)));

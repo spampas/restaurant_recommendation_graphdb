@@ -271,7 +271,7 @@ public class User
 	{
 		String filterQuery = "";
 		if (filter != null)
-			filterQuery = "AND u.username =~ $regex ";
+			filterQuery = "AND user2.username =~ $regex ";
 		else
 			filter = "";
 		Iterable<User> users = DBManager.session().query(User.class,
@@ -296,7 +296,7 @@ public class User
 	{
 		String filterQuery = "";
 		if (filter != null)
-			filterQuery = "AND u.username =~ $regex ";
+			filterQuery = "AND user2.username =~ $regex ";
 		else
 			filter = "";
 		Iterable<User> users = DBManager.session().query(User.class,
@@ -449,7 +449,7 @@ public class User
 		else
 			filter = "";
 		Iterable<User> users = DBManager.session().query(User.class,
-			"MATCH (u:User)" +
+			"MATCH (u:User) " +
 			"WHERE u.username <> $username " + filterQuery +
 			"RETURN (u)--() " +
 			"ORDER BY u.username " +
