@@ -100,6 +100,8 @@ public class ResponseMessage extends Message
 		case LOGIN:
 			return getEntityCount() == 1 && getEntity(UserInfo.class) != null;
 		case LIKE_RESTAURANT:
+		case UNLIKE_RESTAURANT:
+			return getEntityCount() == 1 && getEntity(RestaurantInfo.class) != null;
 		case LIKE_CUISINE:
 		case FOLLOW_USER:
 		case EDIT_RESTAURANT:
@@ -113,7 +115,6 @@ public class ResponseMessage extends Message
 		case ADD_CUISINE:
 		case ADD_CITY:
 		case SET_CITY:
-		case UNLIKE_RESTAURANT:
 		case UNLIKE_CUISINE:
 		case UNFOLLOW_USER:
 		case LOGOUT:
