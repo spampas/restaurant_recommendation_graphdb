@@ -58,7 +58,7 @@ public class Restaurant
 	
 	public void save() {
 		DBManager.session().query("MATCH (newCity:City{name:$city}), (newCuisine:Cuisine{name:$cuisine}), (:City)<-[loc:LOCATED]-(r:Restaurant{name:$oldName})-[ser:SERVES]->(:Cuisine) "
-				+ "SET n = {name : $name, description : $description, price: $price} "
+				+ "SET r = {name : $name, description : $description, price: $price} "
 				+ "DELETE loc, ser "
 				+ "CREATE (newCuisine)<-[:SERVES]-(r)-[:LOCATED]->(newCity)", 
 				Map.ofEntries(Map.entry("name", name), 
@@ -80,14 +80,16 @@ public class Restaurant
 
 	public void setCuisine(Cuisine cuisine)
 	{
-		this.cuisine.removeRestaurant(this);
+		if(this.cuisine != null)
+			this.cuisine.removeRestaurant(this);
 		this.cuisine = cuisine;
 		cuisine.addRestaurant(this);
 	}
 
 	public void setCity(City city)
 	{
-		this.city.removeRestaurant(this);
+		if(this.city != null)
+			this.city.removeRestaurant(this);
 		this.city = city;
 		city.addRestaurant(this);
 	}
@@ -114,11 +116,25 @@ public class Restaurant
 
 	public Cuisine getCuisine()
 	{
+		if(cuisine == null)
+		cuisine = DBManager.session().queryForObject(Cuisine.class,
+				"MATCH (c:Cuisine)<-[:SERVES]-(r:Restaurant) " +
+				"WHERE r.name = $name " +
+				"RETURN c",
+				Map.ofEntries(Map.entry("name", name)));
+		if(cuisine == null)
+			return new Cuisine("N.D.");
 		return cuisine;
 	}
 
 	public City getCity()
 	{
+		if (city == null)
+			city = DBManager.session().queryForObject(City.class,
+				"MATCH (c:City)<-[:LOCATED]-(r:Restaurant) " +
+				"WHERE r.name = $name " +
+				"RETURN c",
+				Map.ofEntries(Map.entry("name", name)));
 		return city;
 	}
 

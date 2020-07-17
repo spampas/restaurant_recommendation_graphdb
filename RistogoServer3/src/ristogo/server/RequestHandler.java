@@ -537,7 +537,15 @@ public class RequestHandler extends Thread
 				savedRestaurant.getCuisineRank(),
 				savedRestaurant.getCityRank(),
 				savedRestaurant.getCityCuisineRank());
-		return new ResponseMessage(stat);
+		RestaurantInfo res = new RestaurantInfo(savedRestaurant.getName(), 
+				null,
+				new CuisineInfo(savedRestaurant.getCuisine().getName()),
+				savedRestaurant.getPrice(),
+				new CityInfo(savedRestaurant.getCity().getName(),
+						savedRestaurant.getCity().getLatitude(),
+						savedRestaurant.getCity().getLongitude()),
+				savedRestaurant.getDescription());
+		return new ResponseMessage(stat, res);
 	}
 
 	@RequestHandlerMethod

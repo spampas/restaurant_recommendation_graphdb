@@ -254,12 +254,15 @@ public class User
 				"WHERE u.username = $username " +
 				"RETURN c",
 				Map.ofEntries(Map.entry("username", username)));
+		if(city == null)
+			city = new City("nd", 0, 0);
 		return city;
 	}
 
 	public void setCity(City city)
 	{
-		this.city.removeUser(this);
+		if(this.city != null)
+			this.city.removeUser(this);
 		this.city = city;
 		city.addUser(this);
 	}
