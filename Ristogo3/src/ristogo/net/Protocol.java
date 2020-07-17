@@ -210,6 +210,11 @@ public class Protocol implements AutoCloseable
 		return sendRequest(ActionRequest.ADD_CUISINE, cuisine);
 	}
 
+	public ResponseMessage editCuisine(StringFilter nameFilter, CuisineInfo cuisine)
+	{
+		return sendRequest(ActionRequest.EDIT_CUISINE, nameFilter, cuisine);
+	}
+
 	public ResponseMessage deleteCuisine(StringFilter nameFilter)
 	{
 		return sendRequest(ActionRequest.DELETE_CUISINE, nameFilter);
@@ -312,4 +317,5 @@ public class Protocol implements AutoCloseable
 		outputStream.close();
 		socket.close();
 	}
+
 }

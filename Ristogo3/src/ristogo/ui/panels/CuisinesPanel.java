@@ -23,10 +23,14 @@ public class CuisinesPanel extends TablePanel
 		PagedTableView<CuisineBean> ptv = new PagedTableView<CuisineBean>(tv);
 		ptv.setFindHint("Search cuisines...");
 		ptv.setDeleteDisable(true);
-		controlBox.setOnClick((cuisine) -> {
-			if (cuisine == null || cuisine.isEmpty())
+		controlBox.setOnClick((cuisineOld, cuisineNew) -> {
+			if (cuisineNew == null)
 				return;
-			ResponseMessage resMsg = Protocol.getInstance().addCuisine(new CuisineInfo(cuisine));
+			ResponseMessage resMsg;
+			if (cuisineOld == null)
+				resMsg = Protocol.getInstance().addCuisine(cuisineNew);
+			else
+				resMsg = Protocol.getInstance().editCuisine(new StringFilter(cuisineOld.getName()), cuisineNew);
 			if (!resMsg.isSuccess()) {
 				new ErrorBox("Error", "An error has occured while trying to add the cuisine.", resMsg.getErrorMsg()).showAndWait();
 				return;
@@ -36,6 +40,10 @@ public class CuisinesPanel extends TablePanel
 		});
 		setControlBox(controlBox);
 		ptv.setOnSelect((item) -> {
+			if (item == null)
+				controlBox.clearCuisine();
+			else
+				controlBox.setCuisine(new CuisineInfo(item.getCuisine()));
 		});
 		ptv.setDeletable(true);
 		ptv.setOnDelete((item) -> {
@@ -44,8 +52,8 @@ public class CuisinesPanel extends TablePanel
 				new ErrorBox("Error", "An error has occured while trying to delete the cuisine.", resMsg.getErrorMsg()).showAndWait();
 				return;
 			}
-			controlBox.setButtonDisable(true);
 			ptv.setDeleteDisable(true);
+			controlBox.clearCuisine();
 			ptv.refresh();
 		});
 		setTableView(ptv);
