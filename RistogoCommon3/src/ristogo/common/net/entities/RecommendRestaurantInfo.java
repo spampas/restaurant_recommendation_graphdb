@@ -10,16 +10,14 @@ public class RecommendRestaurantInfo extends Entity
 	private CuisineInfo cuisine;
 	private CityInfo city;
 	private int distance;
-	private boolean airDistance;
 	private LikesFrom depth;
 	private Price price;
 
-	public RecommendRestaurantInfo(CuisineInfo cuisine, CityInfo city, int distance, boolean airDistance, LikesFrom depth, Price price)
+	public RecommendRestaurantInfo(CuisineInfo cuisine, CityInfo city, int distance, LikesFrom depth, Price price)
 	{
 		this.cuisine = cuisine;
 		this.city = city;
 		this.distance = distance;
-		this.airDistance = airDistance;
 		this.depth = depth;
 		this.price = price;
 	}
@@ -42,16 +40,6 @@ public class RecommendRestaurantInfo extends Entity
 	public void setDistance(int distance)
 	{
 		this.distance = distance;
-	}
-
-	public boolean isAirDistance()
-	{
-		return airDistance;
-	}
-
-	public void setAirDistance(boolean airDistance)
-	{
-		this.airDistance = airDistance;
 	}
 
 	public LikesFrom getDepth()

@@ -96,7 +96,8 @@ public class RestaurantsPanel extends TablePanel
 				new ErrorBox("Error", "An error has occured while trying to get restaurant's description.", resMsg.getErrorMsg()).showAndWait();
 				return;
 			}
-			controlBox.setText(item.isLiked() ? "Unlike" : "Like");
+			item.setLiked(resMsg.getEntity(RestaurantInfo.class).isLiked());
+			controlBox.setText(resMsg.getEntity(RestaurantInfo.class).isLiked() ? "Unlike" : "Like");
 			detailsBox.setText(resMsg.getEntity(RestaurantInfo.class).getDescription());
 		});
 		ptv.setDeletable(deletable);

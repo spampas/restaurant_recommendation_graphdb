@@ -26,24 +26,16 @@ public class City
 	private List<Restaurant> restaurants;
 	@Relationship(type = "LOCATED", direction = Relationship.INCOMING)
 	private List<User> users;
-	@Relationship(type = "ROAD", direction = Relationship.UNDIRECTED)
-	private List<Road> roads;
 
 	public City()
 	{
 	}
 
-	public City(String name, double latitude, double longitude, List<Road> roads)
+	public City(String name, double latitude, double longitude)
 	{
 		this.name = name;
 		this.latitude = latitude;
 		this.longitude = longitude;
-		this.roads = roads;
-	}
-
-	public City(String name, double latitude, double longitude)
-	{
-		this(name, latitude, longitude, null);
 	}
 
 	public void setName(String name)
@@ -51,10 +43,11 @@ public class City
 		this.oldName = this.name;
 		this.name = name;
 	}
-	
-	public void save() {
-		DBManager.session().query("MATCH (n:City{name:$oldName}) SET n = {name : $name, latitude : $latitude, longitude : $longitude}", 
-				Map.ofEntries(Map.entry("name", name), 
+
+	public void save()
+	{
+		DBManager.session().query("MATCH (n:City{name:$oldName}) SET n = {name : $name, latitude : $latitude, longitude : $longitude}",
+				Map.ofEntries(Map.entry("name", name),
 						Map.entry("oldName", oldName),
 						Map.entry("latitude", latitude),
 						Map.entry("longitude", longitude)));
@@ -93,11 +86,6 @@ public class City
 		return users;
 	}
 
-	public List<Road> getRoads()
-	{
-		return roads;
-	}
-
 	public void addRestaurant(Restaurant restaurant)
 	{
 		getRestaurants().add(restaurant);
@@ -116,18 +104,6 @@ public class City
 	public void removeUser(User user)
 	{
 		getUsers().remove(user);
-	}
-
-	public void addRoad(Road road)
-	{
-		if (roads == null)
-			roads = new ArrayList<Road>();
-		roads.add(road);
-	}
-
-	public void addRoad(City endCity, int distance)
-	{
-		addRoad(new Road(this, endCity, distance));
 	}
 
 	public void setLatitude(double latitude)

@@ -15,8 +15,6 @@ public abstract class TableDetailsBox extends DetailsBox
 	public TableDetailsBox(String title)
 	{
 		super(title);
-		//setMinSize(600, 600);
-		//setMaxSize(900, 800);
 	}
 
 	public void setMenuBar(MenuBar menuBar)

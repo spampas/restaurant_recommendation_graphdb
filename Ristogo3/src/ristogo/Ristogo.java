@@ -84,7 +84,7 @@ public class Ristogo
 			}
 			setLogLevel(logLevel);
 		}
-	
+
 		if (cmd.hasOption("gui")) {
 			Logger.getLogger(Ristogo.class.getName()).config("Forcing GUI by command line argument.");
 			launchGUI(cmd.getArgs());

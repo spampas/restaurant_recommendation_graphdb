@@ -38,17 +38,14 @@ public abstract class BasePane extends BorderPane
 			setTop(node);
 		}
 		node = createLeft();
-		if (node != null) {
+		if (node != null)
 			setLeft(node);
-		}
 		node = createCenter();
-		if (node != null) {
+		if (node != null)
 			setCenter(node);
-		}
 		node = createRight();
-		if (node != null) {
+		if (node != null)
 			setRight(node);
-		}
 		node = createFooter();
 		if (node != null) {
 			HBox footerBox = new HBox(10);

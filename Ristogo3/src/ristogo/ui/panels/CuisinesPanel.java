@@ -13,7 +13,6 @@ import ristogo.ui.tables.base.PagedTableView;
 
 public class CuisinesPanel extends TablePanel
 {
-
 	public CuisinesPanel()
 	{
 		super("Cuisines");
@@ -59,5 +58,4 @@ public class CuisinesPanel extends TablePanel
 		setTableView(ptv);
 		showContent();
 	}
-
 }

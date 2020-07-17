@@ -78,5 +78,4 @@ public class RestaurantBean
 	{
 		return liked.get();
 	}
-
 }

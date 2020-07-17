@@ -13,7 +13,6 @@ import ristogo.ui.tables.base.PagedTableView;
 
 public class CitiesPanel extends TablePanel
 {
-
 	public CitiesPanel()
 	{
 		super("Cities");
@@ -60,5 +59,4 @@ public class CitiesPanel extends TablePanel
 		setTableView(ptv);
 		showContent();
 	}
-
 }

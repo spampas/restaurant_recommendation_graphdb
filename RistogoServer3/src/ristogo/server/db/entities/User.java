@@ -317,7 +317,7 @@ public class User
 		return following;
 	}
 
-	public List<User> recommendUser(Cuisine cuisine, int distance, boolean airDistance, City city, int page, int perPage)
+	public List<User> recommendUser(Cuisine cuisine, int distance, City city, int page, int perPage)
 	{
 		City targetCity = city == null ? getCity() : city;
 		Map<String,Object> parameters = new HashMap<String,Object>();
@@ -465,6 +465,4 @@ public class User
 		users.forEach(list::add);
 		return list;
 	}
-
-	
 }

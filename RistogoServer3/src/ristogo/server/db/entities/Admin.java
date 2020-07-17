@@ -14,8 +14,9 @@ public class Admin extends User // used just for admins count on first start
 	{
 		super(username, password, city);
 	}
-	
-	public boolean isAdmin() {
+
+	public boolean isAdmin()
+	{
 		return true;
-	} 
+	}
 }

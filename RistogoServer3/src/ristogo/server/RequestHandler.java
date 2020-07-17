@@ -85,14 +85,14 @@ public class RequestHandler extends Thread
 			return;
 		}
 
-		System.out.println("--- RECEIVED ---");
-		System.out.println(reqMsg.toXML());
+		//System.out.println("--- RECEIVED ---");
+		//System.out.println(reqMsg.toXML());
 
 		ResponseMessage resMsg = dispatchMessage(reqMsg);
 
-		System.out.println("--- RESPONSE ---");
-		System.out.println(resMsg.toXML());
-		System.out.println("----------------");
+		//System.out.println("--- RESPONSE ---");
+		//System.out.println(resMsg.toXML());
+		//System.out.println("----------------");
 
 		resMsg.send(outputStream);
 		DBManager.getInstance().close();
@@ -186,7 +186,6 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod
 	private ResponseMessage handleAddRestaurant(RequestMessage reqMsg)
 	{
-		//TODO SOLITO RISTORANTE AGGIUNTO DUE VOLTE NON FA
 		RestaurantInfo restaurant = reqMsg.getEntity(RestaurantInfo.class);
 		City city = DBManager.session().load(City.class, restaurant.getCity().getName(), 1);
 		if (city == null)
@@ -255,7 +254,6 @@ public class RequestHandler extends Thread
 		return new ResponseMessage(infos.toArray(new RestaurantInfo[0]));
 	}
 
-	
 	@RequestHandlerMethod
 	private ResponseMessage handleListLikedRestaurants(RequestMessage reqMsg)
 	{
@@ -412,7 +410,6 @@ public class RequestHandler extends Thread
 	private ResponseMessage handleGetCity(RequestMessage reqMsg)
 	{
 		loggedUser = DBManager.session().load(User.class, loggedUser.getUsername(), 1);
-		
 		CityInfo city = new CityInfo(loggedUser.getCity().getName(), loggedUser.getCity().getLatitude(), loggedUser.getCity().getLongitude());
 		return new ResponseMessage(city);
 	}
@@ -431,7 +428,7 @@ public class RequestHandler extends Thread
 		DBManager.session().save(loggedUser);
 		return new ResponseMessage();
 	}
-	
+
 	@RequestHandlerMethod
 	private ResponseMessage handleEditCity(RequestMessage reqMsg)
 	{
@@ -444,15 +441,15 @@ public class RequestHandler extends Thread
 		City savedCity = DBManager.session().load(City.class, name.getValue(), 0);
 		if(savedCity == null)
 			return new ResponseMessage("Can't find selected city " + city.getName() + ".");
-		
+
 		savedCity.setName(city.getName());
 		savedCity.setLatitude(city.getLatitude());
 		savedCity.setLongitude(city.getLongitude());
-		
+
 		savedCity.save();
 		return new ResponseMessage();
 	}
-	
+
 	@RequestHandlerMethod
 	private ResponseMessage handleEditCuisine(RequestMessage reqMsg)
 	{
@@ -465,7 +462,7 @@ public class RequestHandler extends Thread
 		Cuisine saved = DBManager.session().load(Cuisine.class, name.getValue(), 0);
 		if(saved == null)
 			return new ResponseMessage("Can't find selected cuisine " + cuisine.getName() + ".");
-		
+
 		saved.setName(cuisine.getName());
 		saved.save();
 		return new ResponseMessage();
@@ -539,7 +536,7 @@ public class RequestHandler extends Thread
 				savedRestaurant.getCuisineRank(),
 				savedRestaurant.getCityRank(),
 				savedRestaurant.getCityCuisineRank());
-		RestaurantInfo res = new RestaurantInfo(savedRestaurant.getName(), 
+		RestaurantInfo res = new RestaurantInfo(savedRestaurant.getName(),
 				null,
 				new CuisineInfo(savedRestaurant.getCuisine().getName()),
 				savedRestaurant.getPrice(),
@@ -565,22 +562,11 @@ public class RequestHandler extends Thread
 			cuisineInfo.add(new CuisineInfo(cuisine.getName()));
 		});
 
-		/*
-		List<RestaurantInfo> restaurantInfo = new ArrayList<RestaurantInfo>();
-		user.getLikedRestaurants().forEach((Restaurant restaurant) -> {
-			restaurantInfo.add(new RestaurantInfo(restaurant.getName(), 
-					new CuisineInfo(restaurant.getCuisine().getName()), 
-					restaurant.getPrice(), 
-					new CityInfo(restaurant.getCity().getName(), restaurant.getCity().getLatitude(), restaurant.getCity().getLongitude()), 
-					restaurant.getDescription()));
-		});
-		*/
-
-		UserInfo userInfo = new UserInfo(user.getUsername(), 
-				new CityInfo(user.getCity().getName(), 
-				user.getCity().getLatitude(), 
-				user.getCity().getLongitude()), 
-				loggedUser.isFollowing(user)); 
+		UserInfo userInfo = new UserInfo(user.getUsername(),
+				new CityInfo(user.getCity().getName(),
+				user.getCity().getLatitude(),
+				user.getCity().getLongitude()),
+				loggedUser.isFollowing(user));
 
 		List<Entity> entities = new ArrayList<Entity>();
 
@@ -677,7 +663,7 @@ public class RequestHandler extends Thread
 	private ResponseMessage handleDeleteCuisine(RequestMessage reqMsg)
 	{
 		StringFilter cuisine = reqMsg.getEntity(StringFilter.class);
-		Cuisine savedCuisine = DBManager.session().load(Cuisine.class, cuisine.getValue(), 0 );
+		Cuisine savedCuisine = DBManager.session().load(Cuisine.class, cuisine.getValue(), 0);
 		if(savedCuisine == null)
 			return new ResponseMessage("No such Cuisine " + cuisine.getValue());
 		DBManager.session().delete(savedCuisine);
@@ -687,24 +673,21 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod
 	private ResponseMessage handleRecommendRestaurant(RequestMessage reqMsg)
 	{
-		RecommendRestaurantInfo info = reqMsg.getEntity(RecommendRestaurantInfo.class);	
+		RecommendRestaurantInfo info = reqMsg.getEntity(RecommendRestaurantInfo.class);
 		PageFilter pageFilter = reqMsg.getEntity(PageFilter.class);
-		Cuisine cuisine = null;
-		City city = null;
-		
-		
 		if(info == null)
 			return new ResponseMessage("Recommendation info is null.");
+		Cuisine cuisine = null;
 		if(info.getCuisine() != null)
 			cuisine = DBManager.session().load(Cuisine.class, info.getCuisine().getName(), 0);
 		if(info.getCity() == null)
 			return new ResponseMessage("No city specified.");
-		city = DBManager.session().load(City.class, info.getCity().getName(), 0);
+		City city = DBManager.session().load(City.class, info.getCity().getName(), 0);
 		if(info.getDepth() == null)
 			return new ResponseMessage("No depth of search specified");
 		if(info.getPrice() == null)
 			return new ResponseMessage("No price specified");
-		
+
 		List<Restaurant> recommended = Restaurant.recommendRestaurant(loggedUser, cuisine, city, info.getDistance(), info.getDepth(), info.getPrice(), pageFilter.getPage(), pageFilter.getPerPage());
 		List<RestaurantInfo> restaurants = new ArrayList<RestaurantInfo>();
 		recommended.forEach((Restaurant r) -> {
@@ -720,17 +703,16 @@ public class RequestHandler extends Thread
 	{
 		RecommendUserInfo info = reqMsg.getEntity(RecommendUserInfo.class);
 		PageFilter pageFilter = reqMsg.getEntity(PageFilter.class);
-		Cuisine cuisine = null;
-		City city = null;
 		if(info == null)
 			return new ResponseMessage("Recommendation info is null.");
+		Cuisine cuisine = null;
 		if(info.getCuisine() != null)
 			cuisine = DBManager.session().load(Cuisine.class, info.getCuisine().getName(), 0);
 		if(info.getCity() == null)
 			return new ResponseMessage("No city specified.");
 
-		city = DBManager.session().load(City.class, info.getCity().getName(), 0);
-		List<User> recommended = loggedUser.recommendUser(cuisine, info.getDistance(), info.isAirDistance(), city, pageFilter.getPage(), pageFilter.getPerPage());
+		City city = DBManager.session().load(City.class, info.getCity().getName(), 0);
+		List<User> recommended = loggedUser.recommendUser(cuisine, info.getDistance(), city, pageFilter.getPage(), pageFilter.getPerPage());
 		List<UserInfo> recommendedInfo = new ArrayList<UserInfo>();
 		recommended.forEach((User u) -> {
 			CityInfo cityInfo = new CityInfo(u.getCity().getName());

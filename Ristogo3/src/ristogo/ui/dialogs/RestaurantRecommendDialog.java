@@ -43,7 +43,6 @@ public class RestaurantRecommendDialog extends Dialog<RecommendRestaurantInfo>
 	private final CitySelector citySelector = new CitySelector();
 	private final CuisineSelector cuisineSelector = new CuisineSelector();
 	private final PriceSelector priceFilterSelector = new PriceSelector();
-	private final CheckBox airDistanceField = new CheckBox("Air distance");
 	private RecommendRestaurantInfo filter;
 
 	public RestaurantRecommendDialog()
@@ -82,7 +81,6 @@ public class RestaurantRecommendDialog extends Dialog<RecommendRestaurantInfo>
 		distanceField.setText("0");
 		likeFilterSelector.setValue(LikesFrom.FRIENDS);
 		priceFilterSelector.setValue(Price.LUXURY);
-		airDistanceField.setSelected(true);
 
 		distanceField.textProperty().addListener(this::textChangeListener);
 		citySelector.textProperty().addListener(this::textChangeListener);
@@ -94,10 +92,9 @@ public class RestaurantRecommendDialog extends Dialog<RecommendRestaurantInfo>
 		grid.add(likeFilterLabel, 0, 0); grid.add(likeFilterSelector, 1, 0);
 		grid.add(cityLabel, 0, 1); grid.add(citySelector, 1, 1);
 		grid.add(distanceLabel, 0, 2); grid.add(distanceField, 1, 2);
-		grid.add(airDistanceField, 1, 3);
-		grid.add(cuisineLabel, 0, 4); grid.add(cuisineSelector, 1, 4);
-		grid.add(priceFilterLabel, 0, 5); grid.add(priceFilterSelector, 1, 5);
-		grid.add(errorLabel, 0, 6, 2, 1);
+		grid.add(cuisineLabel, 0, 3); grid.add(cuisineSelector, 1, 3);
+		grid.add(priceFilterLabel, 0, 4); grid.add(priceFilterSelector, 1, 4);
+		grid.add(errorLabel, 0, 5, 2, 1);
 
 		searchButton.addEventFilter(ActionEvent.ACTION, this::filterOkButtonAction);
 
@@ -142,7 +139,6 @@ public class RestaurantRecommendDialog extends Dialog<RecommendRestaurantInfo>
 			new CuisineInfo(cuisineSelector.getText()),
 			new CityInfo(citySelector.getText()),
 			Integer.parseInt(distanceField.getText()),
-			airDistanceField.isSelected(),
 			likeFilterSelector.getValue(),
 			priceFilterSelector.getValue()
 		);

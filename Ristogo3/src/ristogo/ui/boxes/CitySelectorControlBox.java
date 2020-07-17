@@ -10,7 +10,6 @@ import ristogo.ui.controls.base.FormLabel;
 
 public class CitySelectorControlBox extends ControlBox
 {
-
 	private final CitySelector addField = new CitySelector();
 	private final FormButton addButton;
 

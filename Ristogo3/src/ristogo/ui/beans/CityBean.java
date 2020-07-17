@@ -35,18 +35,14 @@ public class CityBean
 	{
 		this.latitude.set(latitude);
 	}
-	
+
 	public void setLongitude(double longitude)
 	{
 		this.longitude.set(longitude);
 	}
-	
+
 	public void setName(String name)
 	{
 		this.name.set(name);
 	}
-	
-
-	
-
 }

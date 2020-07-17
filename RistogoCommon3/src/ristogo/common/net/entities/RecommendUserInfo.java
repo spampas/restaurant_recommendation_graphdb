@@ -6,14 +6,12 @@ public class RecommendUserInfo extends Entity
 
 	private CuisineInfo cuisine;
 	private int distance;
-	private boolean airDistance;
 	private CityInfo city;
 
-	public RecommendUserInfo(CuisineInfo cuisine, int distance, boolean airDistance, CityInfo city)
+	public RecommendUserInfo(CuisineInfo cuisine, int distance, CityInfo city)
 	{
 		this.cuisine = cuisine;
 		this.distance = distance;
-		this.airDistance = airDistance;
 		this.city = city;
 	}
 
@@ -35,16 +33,6 @@ public class RecommendUserInfo extends Entity
 	public void setDistance(int distance)
 	{
 		this.distance = distance;
-	}
-
-	public boolean isAirDistance()
-	{
-		return airDistance;
-	}
-
-	public void setAirDistance(boolean airDistance)
-	{
-		this.airDistance = airDistance;
 	}
 
 	public CityInfo getCity()

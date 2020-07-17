@@ -53,12 +53,13 @@ public class Restaurant
 		this.oldName = this.name;
 		this.name = name;
 	}
-	
-	public void save() {
+
+	public void save()
+	{
 		DBManager.session().query("MATCH (newCity:City{name:$city}), (newCuisine:Cuisine{name:$cuisine}), (:City)<-[loc:LOCATED]-(r:Restaurant{name:$oldName})-[ser:SERVES]->(:Cuisine) "
 				+ "SET r = {name : $name, description : $description, price: $price} "
 				+ "DELETE loc, ser "
-				+ "CREATE (newCuisine)<-[:SERVES]-(r)-[:LOCATED]->(newCity)", 
+				+ "CREATE (newCuisine)<-[:SERVES]-(r)-[:LOCATED]->(newCity)",
 				Map.ofEntries(Map.entry("name", name), 
 						Map.entry("oldName", oldName),
 						Map.entry("description", description),
@@ -183,8 +184,8 @@ public class Restaurant
 
 	public static List<Restaurant> loadRestaurantsLikedBy(User user, String nameRegex, int page, int perPage)
 	{
-		if (nameRegex == null || nameRegex.isEmpty() )
-			 return loadRestaurantsLikedBy(user,page,perPage);
+		if (nameRegex == null || nameRegex.isEmpty())
+			return loadRestaurantsLikedBy(user,page,perPage);
 		String regexFilter = "";
 		regexFilter = "AND r.name =~ $regex ";
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
@@ -203,11 +204,11 @@ public class Restaurant
 		found.forEach(restaurants::add);
 		return restaurants;
 	}
-	
 
-	public static List<Restaurant> loadRestaurantsOwnedBy(User user, String nameRegex, int page, int perPage){
-		if (nameRegex == null || nameRegex.isEmpty() )
-			 return loadRestaurantsOwnedBy(user,page,perPage);
+	public static List<Restaurant> loadRestaurantsOwnedBy(User user, String nameRegex, int page, int perPage)
+	{
+		if (nameRegex == null || nameRegex.isEmpty())
+			return loadRestaurantsOwnedBy(user,page,perPage);
 		String regexFilter = "";
 		regexFilter = "AND r.name =~ $regex ";
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
@@ -225,11 +226,11 @@ public class Restaurant
 		found.forEach(restaurants::add);
 		return restaurants;
 	}
-	
-	public static List<Restaurant> loadRestaurantsOwnedBy(User user, int page, int perPage){
+
+	public static List<Restaurant> loadRestaurantsOwnedBy(User user, int page, int perPage)
+	{
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
 				"MATCH (r:Restaurant)<-[own:OWNS]-(u:User) " +
-				
 				"WHERE u.username = $username " +
 				"RETURN (r)--() " +
 				"ORDER BY r.name " +
@@ -299,6 +300,7 @@ public class Restaurant
 		return ranking.indexOf(this) == -1 ? ranking.size() + 1 : ranking.indexOf(this) + 1;
 	}
 
+	@Override
 	public boolean equals(Object o)
 	{
 		if(o == this)
@@ -309,19 +311,6 @@ public class Restaurant
 		return name.equals(r.name);
 	}
 
-	
-	/*
-	MATCH (c_target:City{name:$city}), (c:City)<-[:LOCATED]-(r:Restaurant{price:$price})-[:SERVES]->(c:Cuisine{name:$cuisine}), 
-	(me:User{username:$username})-[:FOLLOWS*1..$depth]->(f:User)-[:LIKES]->(r)
-	WHERE f.name <> $username //AVOID CYCLES!!
-	WITH  c_target, c, r, DISTINCT f, point({longitude: c_target.longitude, latitude:c_target.latitude}) as p1,
-		point({longitude: c.longitude, latitude:c.latitude}) as p2
-	WITH distance(p1,p2) as dist, r,f
-	WHERE dist <= $distance AND NOT EXISTS ((r)-[:LIKES|OWNS]-(:User{username:$username}))
-	RETURN r, count(f) as likes
-	ORDER BY likes DESC
-	*/
-	
 	public static List<Restaurant> recommendRestaurant(User user, Cuisine cuisine, City city, int distance, LikesFrom depth, Price price,
 			int page, int perPage)
 	{
@@ -333,28 +322,26 @@ public class Restaurant
 		parameters.put("skip", page*perPage);
 		parameters.put("limit", perPage);
 		parameters.put("username", user.getUsername());
-		
-		
-		
+
 		String cuisineFilter = "";
 		String depthFilter =  depth == LikesFrom.FRIENDS_OF_FRIENDS ? "*1..2" : "";
 		if(cuisine != null) {
 			cuisineFilter = "-[:SERVES]->(:Cuisine{name:$cuisine})";
 			parameters.put("cuisine", cuisine.getName());
 		}
-		
-		String query = "MATCH (ctarget:City{name:$city}), (c:City)<-[:LOCATED]-(r:Restaurant)"+cuisineFilter+", " + 
-				"(me:User{username:$username})-[:FOLLOWS" + depthFilter +"]->(f:User)-[:LIKES]->(r) " + 
-				"WHERE f.username <> $username AND r.price IN $price " + 
-				"WITH ctarget, c, r, f, point({longitude: ctarget.longitude, latitude:ctarget.latitude}) as p1, " + 
-				"	point({longitude: c.longitude, latitude:c.latitude}) as p2 " + 
-				"WITH distance(p1,p2) as dist, r, f " + 
-				"WHERE dist <= $distance AND NOT EXISTS ((r)-[:LIKES|OWNS]-(:User{username:$username})) " + 
-				"RETURN (r)--(), count(DISTINCT f) as likes " + 
-				"ORDER BY likes DESC "
-				+ "SKIP $skip "
-				+ "LIMIT $limit ";
-		
+
+		String query = "MATCH (ctarget:City{name:$city}), (c:City)<-[:LOCATED]-(r:Restaurant)" + cuisineFilter + ", " +
+				"(me:User{username:$username})-[:FOLLOWS" + depthFilter + "]->(f:User)-[:LIKES]->(r) " +
+				"WHERE f.username <> $username AND r.price IN $price " +
+				"WITH ctarget, c, r, f, point({longitude: ctarget.longitude, latitude:ctarget.latitude}) as p1, " +
+				"	point({longitude: c.longitude, latitude:c.latitude}) as p2 " +
+				"WITH distance(p1,p2) as dist, r, f " +
+				"WHERE dist <= $distance AND NOT EXISTS ((r)-[:LIKES|OWNS]-(:User{username:$username})) " +
+				"RETURN (r)--(), count(DISTINCT f) as likes " +
+				"ORDER BY likes DESC " +
+				"SKIP $skip " +
+				"LIMIT $limit ";
+
 		Iterable<Restaurant> recommended = DBManager.session().query(Restaurant.class, query ,parameters);
 		List<Restaurant> restaurants = new ArrayList<Restaurant>();
 		recommended.forEach(restaurants::add);

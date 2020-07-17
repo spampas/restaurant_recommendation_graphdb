@@ -133,6 +133,7 @@ public class Cuisine
 			return cuisines;
 	}
 
+	@Override
 	public boolean equals(Object o)
 	{
 		if(o == this)

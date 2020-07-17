@@ -1,7 +1,5 @@
 package ristogo.ui.controls.bars;
 
-import java.awt.Font;
-
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.HBox;

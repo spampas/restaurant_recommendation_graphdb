@@ -16,8 +16,6 @@ public class PreferencesPanel extends TablePanel
 	public PreferencesPanel()
 	{
 		super("Your Preferences");
-		//setMinSize(350, 600);
-		//setMaxSize(400, 800);
 		CitySelectorControlBox controlBox = new CitySelectorControlBox();
 		CuisinesDetailsBox detailsBox = new CuisinesDetailsBox();
 		ResponseMessage resMsg = Protocol.getInstance().getCity();

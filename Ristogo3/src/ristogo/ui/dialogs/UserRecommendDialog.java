@@ -35,7 +35,6 @@ public class UserRecommendDialog extends Dialog<RecommendUserInfo>
 	private final CuisineSelector cuisineSelector = new CuisineSelector();
 	private final TextField distanceField = new TextField();
 	private final CitySelector citySelector = new CitySelector();
-	private final CheckBox airDistanceField = new CheckBox("Air distance");
 	private RecommendUserInfo filter;
 
 	public UserRecommendDialog()
@@ -72,8 +71,7 @@ public class UserRecommendDialog extends Dialog<RecommendUserInfo>
 
 		distanceField.setPromptText("Distance (km)...");
 		distanceField.setText("0");
-		airDistanceField.setSelected(true);
-		
+
 		distanceField.textProperty().addListener(this::textChangeListener);
 		citySelector.textProperty().addListener(this::textChangeListener);
 
@@ -83,9 +81,8 @@ public class UserRecommendDialog extends Dialog<RecommendUserInfo>
 		grid.setPadding(new Insets(20, 150, 10, 10));
 		grid.add(cityLabel, 0, 0); grid.add(citySelector, 1, 0);
 		grid.add(distanceLabel, 0, 1); grid.add(distanceField, 1, 1);
-		grid.add(airDistanceField, 1, 2);
-		grid.add(cuisineLabel, 0, 3); grid.add(cuisineSelector, 1, 3);
-		grid.add(errorLabel, 0, 4, 2, 1);
+		grid.add(cuisineLabel, 0, 2); grid.add(cuisineSelector, 1, 2);
+		grid.add(errorLabel, 0, 3, 2, 1);
 
 		searchButton.addEventFilter(ActionEvent.ACTION, this::filterOkButtonAction);
 
@@ -125,11 +122,9 @@ public class UserRecommendDialog extends Dialog<RecommendUserInfo>
 
 	private void filterOkButtonAction(ActionEvent event)
 	{
-		//TODO: check for empty fields
 		filter = new RecommendUserInfo(
 			new CuisineInfo(cuisineSelector.getText()),
 			Integer.parseInt(distanceField.getText()),
-			airDistanceField.isSelected(),
 			new CityInfo(citySelector.getText()));
 	}
 

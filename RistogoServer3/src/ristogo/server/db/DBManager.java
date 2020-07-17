@@ -16,7 +16,6 @@ public class DBManager
 	private static String databaseName;
 
 	private static SessionFactory factory;
-	private static EventListener eventListener;
 
 	private Session session;
 
@@ -36,8 +35,6 @@ public class DBManager
 			.connectionPoolSize(150)
 			.build();
 		factory = new SessionFactory(configuration, "ristogo.server.db.entities");
-		eventListener = new EntityEventListener();
-		factory.register(eventListener);
 	}
 
 	public static DBManager getInstance()
@@ -106,7 +103,6 @@ public class DBManager
 			instance.get().close();
 		if (factory == null)
 			return;
-		factory.deregister(eventListener);
 		factory.close();
 	}
 }

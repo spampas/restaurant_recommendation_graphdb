@@ -12,7 +12,6 @@ import ristogo.ui.controls.base.AutocompleteTextField;
 
 public class CitySelector extends AutocompleteTextField
 {
-
 	public CitySelector()
 	{
 		super(CitySelector::loadCities);
@@ -26,5 +25,4 @@ public class CitySelector extends AutocompleteTextField
 			resMsg.getEntities(CityInfo.class).forEach((CityInfo c) -> { result.add(c.getName()); });
 		return result;
 	}
-
 }

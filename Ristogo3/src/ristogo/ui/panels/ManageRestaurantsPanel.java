@@ -16,7 +16,6 @@ import ristogo.ui.tables.base.PagedTableView;
 
 public class ManageRestaurantsPanel extends TablePanel
 {
-
 	public ManageRestaurantsPanel(Consumer<RestaurantInfo> onSelect)
 	{
 		super("Your Restaurants");

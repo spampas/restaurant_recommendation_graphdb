@@ -302,5 +302,4 @@ public class Protocol implements AutoCloseable
 		outputStream.close();
 		socket.close();
 	}
-
 }
