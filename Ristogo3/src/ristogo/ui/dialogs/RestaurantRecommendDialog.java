@@ -128,11 +128,11 @@ public class RestaurantRecommendDialog extends Dialog<RecommendRestaurantInfo>
 			showError("City can not be empty.");
 		else try {
 			Integer.parseInt(distance);
+			hideError();
 		} catch (NumberFormatException ex) {
 			showError("Distance must be an integer.");
 			return;
 		}
-		hideError();
 
 	}
 
