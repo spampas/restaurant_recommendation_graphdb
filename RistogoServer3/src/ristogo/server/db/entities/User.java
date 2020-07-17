@@ -449,9 +449,9 @@ public class User
 		else
 			filter = "";
 		Iterable<User> users = DBManager.session().query(User.class,
-			"MATCH (u:User)-[l:LOCATED]->(c:City) " +
+			"MATCH (u:User)" +
 			"WHERE u.username <> $username " + filterQuery +
-			"RETURN (u)-[l]->(c) " +
+			"RETURN (u)--() " +
 			"ORDER BY u.username " +
 			"SKIP $skip " +
 			"LIMIT $limit",
