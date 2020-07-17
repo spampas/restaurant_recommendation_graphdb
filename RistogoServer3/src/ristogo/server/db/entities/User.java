@@ -278,7 +278,7 @@ public class User
 			"MATCH (user1:User)-[:FOLLOWS]->(user2:User)-[l:LOCATED]->(c:City) " +
 			"WHERE user1.username = $username " + filterQuery +
 			"RETURN (user2)-[l]->(c) " +
-			"ORDER BY user2.name " +
+			"ORDER BY user2.username " +
 			"SKIP $skip " +
 			"LIMIT $limit",
 			Map.ofEntries(
@@ -303,7 +303,7 @@ public class User
 			"MATCH (user1:User)<-[:FOLLOWS]-(user2:User)-[l:LOCATED]->(c:City) " +
 			"WHERE user1.username = $username " + filterQuery +
 			"RETURN (user2)-[l]->(c) " +
-			"ORDER BY user2.name " +
+			"ORDER BY user2.username " +
 			"SKIP $skip " +
 			"LIMIT $limit",
 			Map.ofEntries(
