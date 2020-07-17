@@ -66,7 +66,7 @@ public class ResponseMessage extends Message
 			return getEntityCount() == 2 && getEntity(RestaurantInfo.class) != null && getEntity(StatisticInfo.class) != null;
 		case GET_USER:
 			for (Entity entity: entities)
-				if (!(entity instanceof UserInfo) || !(entity instanceof CuisineInfo))
+				if (!(entity instanceof UserInfo) && !(entity instanceof CuisineInfo))
 					return false;
 			return getEntity(UserInfo.class) != null;
 		case LIST_CITIES:
