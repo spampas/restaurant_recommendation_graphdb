@@ -524,7 +524,6 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod
 	private ResponseMessage handleGetStatisticRestaurant(RequestMessage reqMsg)
 	{
-		//Rank by Likes for restaurant 
 		StringFilter restaurant = reqMsg.getEntity(StringFilter.class);
 		String name = restaurant == null ? null : restaurant.getValue();
 		if(name == null)

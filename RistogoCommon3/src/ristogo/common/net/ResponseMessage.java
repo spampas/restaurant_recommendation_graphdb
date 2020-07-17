@@ -5,7 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ristogo.common.net.entities.CityInfo;
+import ristogo.common.net.entities.CuisineInfo;
 import ristogo.common.net.entities.Entity;
+import ristogo.common.net.entities.RestaurantInfo;
+import ristogo.common.net.entities.StatisticInfo;
+import ristogo.common.net.entities.UserInfo;
 import ristogo.common.net.enums.ActionRequest;
 
 public class ResponseMessage extends Message
@@ -49,64 +54,73 @@ public class ResponseMessage extends Message
 
 	public boolean isValid(ActionRequest actionRequest)
 	{
-		return true;
-		/*// TODO: Gestire azioni
 		if (!isSuccess())
 			return getEntityCount() == 0;
-		switch(actionRequest)
-		{
-		case LOGIN:
-			return getEntityCount() == 1 && getEntity() instanceof User;
-		case LOGOUT:
-		case REGISTER_USER:
-		case REGISTER_RESTAURANT:
-		case LIST_USERS:
-			if (getEntityCount() > 0)
-				for (Entity entity: getEntities())
-					if (!(entity instanceof User))
-						return false;
-			return true;
-		case LIST_FRIENDS:
-			if (getEntityCount() > 0)
-				for (Entity entity: getEntities())
-					if (!(entity instanceof User))
-						return false;
-			return true;
-		case FOLLOW_USER:
-		case UNFOLLOW_USER:
-		case GET_OWN_RESTAURANT:
-		case EDIT_RESTAURANT:
-			return getEntityCount() == 1 && getEntity() instanceof Restaurant;
-		case LIST_RESTAURANTS:
-			if (getEntityCount() > 0)
-				for (Entity entity: getEntities())
-					if (!(entity instanceof Restaurant))
-						return false;
-			return true;
-		case DELETE_RESTAURANT:
-			return getEntityCount() == 0;
-		case PUT_LIKE_RESTAURANT:
-		case REMOVE_LIKE_RESTAURANT:
+		List<Entity> entities = getEntities();
+		switch (actionRequest) {
+		case GET_CITY:
+			return getEntityCount() == 1 && getEntity(CityInfo.class) != null;
+		case GET_RESTAURANT:
+			return getEntityCount() == 1 && getEntity(RestaurantInfo.class) != null;
 		case GET_STATISTIC_RESTAURANT:
-		case LIST_CUISINES:
-			if (getEntityCount() > 0)
-				for (Entity entity: getEntities())
-					if (!(entity instanceof Cuisine))
-						return false;
-			return true;
-		case ADD_CUISINE:
-		case DELETE_CUISINE:
+			return getEntityCount() == 2 && getEntity(RestaurantInfo.class) != null && getEntity(StatisticInfo.class) != null;
+		case GET_USER:
+			for (Entity entity: entities)
+				if (!(entity instanceof UserInfo) || !(entity instanceof CuisineInfo))
+					return false;
+			return getEntity(UserInfo.class) != null;
 		case LIST_CITIES:
-			if (getEntityCount() > 0)
-				for (Entity entity: getEntities())
-					if (!(entity instanceof City))
-						return false;
+			for (Entity entity: entities)
+				if (!(entity instanceof CityInfo))
+					return false;
 			return true;
-		case ADD_CITY:
+		case LIST_CUISINES:
+		case LIST_LIKED_CUISINES:
+			for (Entity entity: entities)
+				if (!(entity instanceof CuisineInfo))
+					return false;
+			return true;
+		case LIST_LIKED_RESTAURANTS:
+		case LIST_OWN_RESTAURANTS:
+		case LIST_RESTAURANTS:
+		case RECOMMEND_RESTAURANT:
+			for (Entity entity: entities)
+				if (!(entity instanceof RestaurantInfo))
+					return false;
+			return true;
+		case LIST_FOLLOWING:
+		case LIST_FOLLOWERS:
+		case LIST_USERS:
+		case RECOMMEND_USER:
+			for (Entity entity: entities)
+				if (!(entity instanceof UserInfo))
+					return false;
+			return true;
+		case REGISTER_USER:
+		case LOGIN:
+			return getEntityCount() == 1 && getEntity(UserInfo.class) != null;
+		case LIKE_RESTAURANT:
+		case LIKE_CUISINE:
+		case FOLLOW_USER:
+		case EDIT_RESTAURANT:
+		case EDIT_CUISINE:
+		case EDIT_CITY:
+		case DELETE_USER:
+		case DELETE_RESTAURANT:
+		case DELETE_CUISINE:
 		case DELETE_CITY:
+		case ADD_RESTAURANT:
+		case ADD_CUISINE:
+		case ADD_CITY:
+		case SET_CITY:
+		case UNLIKE_RESTAURANT:
+		case UNLIKE_CUISINE:
+		case UNFOLLOW_USER:
+		case LOGOUT:
+			return getEntityCount() == 0;
 		default:
 			return false;
-		}*/
+		}
 	}
 
 	public static ResponseMessage receive(DataInputStream input)

@@ -4,7 +4,15 @@ import java.io.DataInputStream;
 import java.util.Arrays;
 import java.util.List;
 
+import ristogo.common.net.entities.CityInfo;
+import ristogo.common.net.entities.CuisineInfo;
 import ristogo.common.net.entities.Entity;
+import ristogo.common.net.entities.PageFilter;
+import ristogo.common.net.entities.RecommendRestaurantInfo;
+import ristogo.common.net.entities.RecommendUserInfo;
+import ristogo.common.net.entities.RestaurantInfo;
+import ristogo.common.net.entities.StringFilter;
+import ristogo.common.net.entities.UserInfo;
 import ristogo.common.net.enums.ActionRequest;
 
 public class RequestMessage extends Message
@@ -36,48 +44,59 @@ public class RequestMessage extends Message
 
 	public boolean isValid()
 	{
-		return true;
-		/*//TODO: Gestire azioni
-		boolean hasOwner = false;
-		boolean hasRestaurant = false;
-		switch(action) {
-		case LOGIN:
-			return getEntityCount() == 1 && getEntity() instanceof User;
-		case LOGOUT:
-		case REGISTER_USER:
-		case REGISTER_RESTAURANT:
-		case LIST_USERS:
-			return (getEntityCount() == 0) || (getEntityCount() == 1 && getEntity() instanceof User);
-		case LIST_FRIENDS:
-			return (getEntityCount() == 0) || (getEntityCount() == 1 && getEntity() instanceof User);
-		case FOLLOW_USER:
-		case UNFOLLOW_USER:
-		case DELETE_USER:
-			return getEntityCount() == 1 && getEntity() instanceof User;
-		case EDIT_RESTAURANT:
-		case DELETE_RESTAURANT:
-			return getEntityCount() == 1 && getEntity() instanceof Restaurant;
-		case LIST_RESTAURANTS:
-			return (getEntityCount() == 0) || (getEntityCount() == 1 && getEntity() instanceof Restaurant);
-		case GET_OWN_RESTAURANT:
-			return getEntityCount() == 0;
-		case PUT_LIKE_RESTAURANT:
-		case REMOVE_LIKE_RESTAURANT:
-		case GET_STATISTIC_RESTAURANT:
-		case LIST_CUISINES:
-			return (getEntityCount() == 0) || (getEntityCount() == 1 && getEntity() instanceof Cuisine);
-		case ADD_CUISINE:
-		case DELETE_CUISINE:
-			return getEntityCount() == 1 && getEntity() instanceof Cuisine;
-		case PUT_LIKE_CUISINE:
-		case REMOVE_LIKE_CUISINE:
-		case LIST_CITIES:
-			return (getEntityCount() == 0) || (getEntityCount() == 1 && getEntity() instanceof City);
+		switch (action) {
 		case ADD_CITY:
+			return getEntityCount() == 1 && getEntity(CityInfo.class) != null;
+		case ADD_CUISINE:
+			return getEntityCount() == 1 && getEntity(CuisineInfo.class) != null;
+		case ADD_RESTAURANT:
+			return getEntityCount() == 1 && getEntity(RestaurantInfo.class) != null;
+		case DELETE_USER:
+		case DELETE_RESTAURANT:
+		case DELETE_CUISINE:
 		case DELETE_CITY:
-			return getEntityCount() == 1 && getEntity() instanceof City;
+		case FOLLOW_USER:
+		case GET_RESTAURANT:
+		case GET_USER:
+		case GET_STATISTIC_RESTAURANT:
+		case LIKE_CUISINE:
+		case LIKE_RESTAURANT:
+		case UNFOLLOW_USER:
+		case UNLIKE_CUISINE:
+		case UNLIKE_RESTAURANT:
+		case SET_CITY:
+			return getEntityCount() == 1 && getEntity(StringFilter.class) != null;
+		case EDIT_CITY:
+			return getEntityCount() == 2 && getEntity(StringFilter.class) != null && getEntity(CityInfo.class) != null;
+		case EDIT_CUISINE:
+			return getEntityCount() == 2 && getEntity(StringFilter.class) != null && getEntity(CuisineInfo.class) != null;
+		case EDIT_RESTAURANT:
+			return getEntityCount() == 2 && getEntity(StringFilter.class) != null && getEntity(RestaurantInfo.class) != null;
+		case LIST_CITIES:
+		case LIST_CUISINES:
+		case LIST_LIKED_CUISINES:
+		case LIST_LIKED_RESTAURANTS:
+		case LIST_OWN_RESTAURANTS:
+		case LIST_RESTAURANTS:
+		case LIST_FOLLOWING:
+		case LIST_FOLLOWERS:
+		case LIST_USERS:
+			return getEntity(PageFilter.class) != null
+				&& (getEntityCount() == 1 || (getEntityCount() == 2 && getEntity(StringFilter.class) != null));
+		case RECOMMEND_RESTAURANT:
+			return getEntity(RecommendRestaurantInfo.class) != null && getEntity(PageFilter.class) != null
+				&& (getEntityCount() == 2 || (getEntityCount() == 3 && getEntity(StringFilter.class) != null));
+		case RECOMMEND_USER:
+			return getEntity(RecommendUserInfo.class) != null && getEntity(PageFilter.class) != null
+				&& (getEntityCount() == 2 || (getEntityCount() == 3 && getEntity(StringFilter.class) != null));
+		case LOGIN:
+		case REGISTER_USER:
+			return getEntityCount() == 1 && getEntity(UserInfo.class) != null;
+		case GET_CITY:
+		case LOGOUT:
+			return getEntityCount() == 0;
 		default:
 			return false;
-		}*/
+		}
 	}
 }
