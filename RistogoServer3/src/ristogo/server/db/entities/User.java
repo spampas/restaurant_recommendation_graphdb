@@ -255,7 +255,7 @@ public class User
 				"RETURN c",
 				Map.ofEntries(Map.entry("username", username)));
 		if(city == null)
-			city = new City("nd", 0, 0);
+			return new City("nd", 0, 0);
 		return city;
 	}
 
@@ -352,9 +352,9 @@ public class User
 	{
 		if (followedUsers == null) {
 			Iterable<User> users = DBManager.session().query(User.class,
-			"MATCH (user1:User)-[:FOLLOWS]->(user2:User)-[l:LOCATED]->(c:City) " +
+			"MATCH (user1:User)-[:FOLLOWS]->(user2:User) " +
 			"WHERE user1.username = $username " +
-			"RETURN (user2)-[l]->(c)",
+			"RETURN (user2)--()",
 			Map.ofEntries(Map.entry("username", username)));
 			followedUsers = new ArrayList<User>();
 			users.forEach(followedUsers::add);

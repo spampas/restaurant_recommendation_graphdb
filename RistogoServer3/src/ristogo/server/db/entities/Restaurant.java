@@ -122,7 +122,7 @@ public class Restaurant
 				"RETURN c",
 				Map.ofEntries(Map.entry("name", name)));
 		if(cuisine == null)
-			return new Cuisine("N.D.");
+			return new Cuisine("nd");
 		return cuisine;
 	}
 
@@ -134,6 +134,8 @@ public class Restaurant
 				"WHERE r.name = $name " +
 				"RETURN c",
 				Map.ofEntries(Map.entry("name", name)));
+		if(cuisine == null)
+			return new City("nd",Double.NaN,Double.NaN);
 		return city;
 	}
 
