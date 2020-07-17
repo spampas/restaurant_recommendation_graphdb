@@ -45,6 +45,8 @@ public class PagedTableView<T> extends VBox
 			if (!tableView.hasNext())
 				pageBar.setNextVisible(false);
 		});
+		pageBar.setMaxWidth(getMaxWidth());
+		pageBar.setMinWidth(getMinWidth());
 		HBox controlBox = new HBox(10);
 		controlBox.getChildren().addAll(findField, findButton, deleteButton);
 		getChildren().addAll(controlBox, tableView, pageBar);
