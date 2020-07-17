@@ -196,7 +196,7 @@ public class User
 
 	public boolean checkPasswordHash(String passwordHash)
 	{
-		return passwordHash.equalsIgnoreCase(passwordHash);
+		return this.passwordHash.equalsIgnoreCase(passwordHash);
 	}
 
 	public boolean checkPassword(String password)
