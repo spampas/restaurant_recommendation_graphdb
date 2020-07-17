@@ -53,7 +53,7 @@ public class City
 	}
 	
 	public void save() {
-		DBManager.session().query("MATCH (n:City{name:$oldName}) SET n = {name : $name, n.latitude : $latitude, n.longitude : $longitude}", 
+		DBManager.session().query("MATCH (n:City{name:$oldName}) SET n = {name : $name, latitude : $latitude, longitude : $longitude}", 
 				Map.ofEntries(Map.entry("name", name), 
 						Map.entry("oldName", oldName),
 						Map.entry("latitude", latitude),
