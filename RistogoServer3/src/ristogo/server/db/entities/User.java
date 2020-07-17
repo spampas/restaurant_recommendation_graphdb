@@ -248,21 +248,21 @@ public class User
 
 	public City getCity()
 	{
-		if (city == null)
+		if (city == null) {
 			city = DBManager.session().queryForObject(City.class,
 				"MATCH (c:City)<-[:LOCATED]-(u:User) " +
 				"WHERE u.username = $username " +
 				"RETURN c",
 				Map.ofEntries(Map.entry("username", username)));
-		if(city == null)
-			return new City("nd", 0, 0);
+				if(city == null)
+					return new City("nd", 0, 0);
+		}
 		return city;
 	}
 
 	public void setCity(City city)
 	{
-		if(this.city != null)
-			this.city.removeUser(this);
+		getCity().removeUser(this);
 		this.city = city;
 		city.addUser(this);
 	}

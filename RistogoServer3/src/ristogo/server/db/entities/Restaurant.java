@@ -79,16 +79,14 @@ public class Restaurant
 
 	public void setCuisine(Cuisine cuisine)
 	{
-		if(this.cuisine != null)
-			this.cuisine.removeRestaurant(this);
+		getCuisine().removeRestaurant(this);
 		this.cuisine = cuisine;
 		cuisine.addRestaurant(this);
 	}
 
 	public void setCity(City city)
 	{
-		if(this.city != null)
-			this.city.removeRestaurant(this);
+		getCity().removeRestaurant(this);
 		this.city = city;
 		city.addRestaurant(this);
 	}
@@ -115,27 +113,30 @@ public class Restaurant
 
 	public Cuisine getCuisine()
 	{
-		if(cuisine == null)
-		cuisine = DBManager.session().queryForObject(Cuisine.class,
-				"MATCH (c:Cuisine)<-[:SERVES]-(r:Restaurant) " +
-				"WHERE r.name = $name " +
-				"RETURN c",
-				Map.ofEntries(Map.entry("name", name)));
-		if(cuisine == null)
-			return new Cuisine("nd");
+		if(cuisine == null) {
+			cuisine = DBManager.session().queryForObject(Cuisine.class,
+					"MATCH (c:Cuisine)<-[:SERVES]-(r:Restaurant) " +
+					"WHERE r.name = $name " +
+					"RETURN c",
+					Map.ofEntries(Map.entry("name", name)));
+			if(cuisine == null)
+				return new Cuisine("nd");
+		}
+		
 		return cuisine;
 	}
 
 	public City getCity()
 	{
-		if (city == null)
+		if (city == null) {
 			city = DBManager.session().queryForObject(City.class,
-				"MATCH (c:City)<-[:LOCATED]-(r:Restaurant) " +
-				"WHERE r.name = $name " +
-				"RETURN c",
-				Map.ofEntries(Map.entry("name", name)));
-		if(cuisine == null)
-			return new City("nd",Double.NaN,Double.NaN);
+					"MATCH (c:City)<-[:LOCATED]-(r:Restaurant) " +
+					"WHERE r.name = $name " +
+					"RETURN c",
+					Map.ofEntries(Map.entry("name", name)));
+				if(city == null)
+					return new City("nd",Double.NaN,Double.NaN);
+		}
 		return city;
 	}
 
