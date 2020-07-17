@@ -7,6 +7,7 @@ import ristogo.common.net.ResponseMessage;
 import ristogo.common.net.entities.CuisineInfo;
 import ristogo.common.net.entities.RecommendUserInfo;
 import ristogo.common.net.entities.StringFilter;
+import ristogo.common.net.entities.UserInfo;
 import ristogo.net.Protocol;
 import ristogo.ui.ErrorBox;
 import ristogo.ui.beans.UserBean;
@@ -104,7 +105,8 @@ public class UsersPanel extends TablePanel
 				new ErrorBox("Error", "An error has occured while trying to get user's liked cuisines.", resMsg.getErrorMsg()).showAndWait();
 				return;
 			}
-			controlBox.setText(item.isFollowing() ? "Unfollow" : "Follow");
+			item.setFollowing(resMsg.getEntity(UserInfo.class).isFollowing());
+			controlBox.setText(resMsg.getEntity(UserInfo.class).isFollowing() ? "Unfollow" : "Follow");
 			List<CuisineInfo> cuisines = resMsg.getEntities(CuisineInfo.class);
 			StringBuilder sb = new StringBuilder();
 			for (CuisineInfo cuisine: cuisines)
