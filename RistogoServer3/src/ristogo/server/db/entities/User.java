@@ -352,9 +352,9 @@ public class User
 	{
 		if (followedUsers == null) {
 			Iterable<User> users = DBManager.session().query(User.class,
-			"MATCH (user1:User)-[:FOLLOWS]->(user2:User) " +
+			"MATCH (user1:User)-[fol:FOLLOWS]->(user2:User) " +
 			"WHERE user1.username = $username " +
-			"RETURN (user2)--()",
+			"RETURN (user2)-[:LOCATED]->(:City)",
 			Map.ofEntries(Map.entry("username", username)));
 			followedUsers = new ArrayList<User>();
 			users.forEach(followedUsers::add);
@@ -451,7 +451,7 @@ public class User
 		Iterable<User> users = DBManager.session().query(User.class,
 			"MATCH (u:User) " +
 			"WHERE u.username <> $username " + filterQuery +
-			"RETURN (u)--() " +
+			"RETURN (u)-[:LOCATED]->() " +
 			"ORDER BY u.username " +
 			"SKIP $skip " +
 			"LIMIT $limit",
