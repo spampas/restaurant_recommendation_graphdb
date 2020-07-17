@@ -352,7 +352,7 @@ public class RequestHandler extends Thread
 		Collection<User> users = User.loadFollowersOf(regex, loggedUser, pageFilter.getPage(), pageFilter.getPerPage());
 		List<UserInfo> infos = new ArrayList<UserInfo>();
 		users.forEach((User u) -> {
-			infos.add(new UserInfo(u.getUsername(), new CityInfo(u.getCity().getName()), u.isFollowedBy(loggedUser)));
+			infos.add(new UserInfo(u.getUsername(), new CityInfo(u.getCity().getName()), loggedUser.isFollowedBy(u)));
 		});
 		return new ResponseMessage(infos.toArray(new UserInfo[0]));
 	}
