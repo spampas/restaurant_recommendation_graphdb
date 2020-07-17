@@ -329,7 +329,7 @@ public class Restaurant
 		parameters.put("city", city.getName());
 		parameters.put("distance", distance * 1000);
 		parameters.put("depth", depth.ordinal()+1);
-		parameters.put("price", price.getLowerThen());
+		parameters.put("price", price.getLowerValues());
 		parameters.put("skip", page*perPage);
 		parameters.put("limit", perPage);
 		parameters.put("username", user.getUsername());

@@ -1,5 +1,6 @@
 package ristogo.common.net.entities.enums;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
@@ -30,23 +31,26 @@ public enum Price
 			return "Unknown";
 		}
 	}
-	
-	public List<Price> getLowerThen() {
-		switch(this) {
-		case ECONOMIC:
-			return Arrays.asList(Price.ECONOMIC);
-		case LOW:
-			return Arrays.asList(Price.ECONOMIC, Price.LOW);
-		case MIDDLE:
-			return Arrays.asList(Price.ECONOMIC, Price.LOW, Price.MIDDLE);
-		case HIGH:
-			return Arrays.asList(Price.ECONOMIC, Price.LOW, Price.MIDDLE, Price.HIGH);
+
+	public List<Price> getLowerValues()
+	{
+		List<Price> prices = new ArrayList<Price>();
+		switch (this) {
 		case LUXURY:
-			return Arrays.asList(Price.ECONOMIC, Price.LOW, Price.MIDDLE, Price.HIGH, Price.LUXURY);
+			prices.add(Price.LUXURY);
+		case HIGH:
+			prices.add(Price.HIGH);
+		case MIDDLE:
+			prices.add(Price.MIDDLE);
+		case LOW:
+			prices.add(Price.LOW);
+		case ECONOMIC:
+			prices.add(Price.ECONOMIC);
+			break;
 		default:
 			Logger.getLogger(Price.class.getName()).severe("Invalid enum value.");
 			return null;
 		}
-	
+		return prices;
 	}
 }
