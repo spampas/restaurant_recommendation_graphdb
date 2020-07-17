@@ -1,9 +1,12 @@
 package ristogo.ui.controls.bars;
 
+import java.awt.Font;
+
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import ristogo.ui.config.GUIConfig;
 
 public class PageBar extends ToolBar
 {
@@ -15,6 +18,7 @@ public class PageBar extends ToolBar
 		HBox spacer = new HBox();
 		HBox.setHgrow(spacer, Priority.ALWAYS);
 		previous.setText("<<");
+		next.setFont(GUIConfig.getTitleFont());
 		next.setText(">>");
 		previous.setVisible(false);
 		getItems().addAll(previous, spacer, next);

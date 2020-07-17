@@ -24,8 +24,8 @@ public class CuisinesTableView extends RistogoTableView<CuisineBean>
 	{
 		super();
 		this.liked = liked;
-		setMinWidth(350);
-		setMaxWidth(400);
+		//setMinWidth(350);
+		//setMaxWidth(400);
 	}
 
 	@Override
