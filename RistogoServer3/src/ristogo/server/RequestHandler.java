@@ -418,12 +418,12 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod
 	private ResponseMessage handleSetCity(RequestMessage reqMsg)
 	{
-		CityInfo city = reqMsg.getEntity(CityInfo.class);
+		StringFilter city = reqMsg.getEntity(StringFilter.class);
 		if (city == null)
 			return new ResponseMessage("No city selected.");
-		City savedCity = DBManager.session().load(City.class, city.getName(), 0);
+		City savedCity = DBManager.session().load(City.class, city.getValue(), 0);
 		if(savedCity == null)
-			return new ResponseMessage("Can't find selected city " + city.getName() + ".");
+			return new ResponseMessage("Can't find selected city " + city.getValue() + ".");
 		loggedUser.setCity(savedCity);
 		return new ResponseMessage();
 	}
