@@ -22,9 +22,9 @@ public class City
 	@Property
 	private double longitude;
 
-	@Relationship(type = "LOCATED")
+	@Relationship(type = "LOCATED", direction = Relationship.INCOMING)
 	private List<Restaurant> restaurants;
-	@Relationship(type = "LOCATED")
+	@Relationship(type = "LOCATED", direction = Relationship.INCOMING)
 	private List<User> users;
 	@Relationship(type = "ROAD", direction = Relationship.UNDIRECTED)
 	private List<Road> roads;

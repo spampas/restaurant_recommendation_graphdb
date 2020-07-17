@@ -419,6 +419,7 @@ public class RequestHandler extends Thread
 	private ResponseMessage handleSetCity(RequestMessage reqMsg)
 	{
 		StringFilter city = reqMsg.getEntity(StringFilter.class);
+		//DBManager.session().load(User.class, loggedUser.getUsername(), 1);
 		if (city == null)
 			return new ResponseMessage("No city selected.");
 		City savedCity = DBManager.session().load(City.class, city.getValue(), 0);
