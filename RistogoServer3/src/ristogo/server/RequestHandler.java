@@ -425,6 +425,7 @@ public class RequestHandler extends Thread
 		if(savedCity == null)
 			return new ResponseMessage("Can't find selected city " + city.getValue() + ".");
 		loggedUser.setCity(savedCity);
+		DBManager.session().save(loggedUser);
 		return new ResponseMessage();
 	}
 	
