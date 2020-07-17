@@ -1,7 +1,6 @@
 package ristogo.ui.boxes;
 
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextField;
@@ -30,7 +29,7 @@ public class AddCityControlBox extends ControlBox
 
 		nameField.textProperty().addListener(this::textChangeListener);
 		latField.textProperty().addListener(this::textChangeListener);
-		latField.textProperty().addListener(this::textChangeListener);
+		lonField.textProperty().addListener(this::textChangeListener);
 
 		addControl(nameField);
 		addControl(latField);

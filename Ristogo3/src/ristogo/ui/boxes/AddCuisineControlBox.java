@@ -1,7 +1,6 @@
 package ristogo.ui.boxes;
 
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 import javafx.beans.value.ObservableValue;
 import ristogo.common.net.entities.CuisineInfo;

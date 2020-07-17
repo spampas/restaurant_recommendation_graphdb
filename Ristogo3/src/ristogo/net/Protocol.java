@@ -200,11 +200,6 @@ public class Protocol implements AutoCloseable
 		return sendRequest(ActionRequest.LIST_CUISINES, nameFilter, pageFilter);
 	}
 
-	public ResponseMessage listCuisines(StringFilter nameFilter)
-	{
-		return sendRequest(ActionRequest.LIST_CUISINES, nameFilter);
-	}
-
 	public ResponseMessage addCuisine(CuisineInfo cuisine)
 	{
 		return sendRequest(ActionRequest.ADD_CUISINE, cuisine);
@@ -230,11 +225,6 @@ public class Protocol implements AutoCloseable
 		return sendRequest(ActionRequest.UNLIKE_CUISINE, nameFilter);
 	}
 
-	public ResponseMessage listCities()
-	{
-		return sendRequest(ActionRequest.LIST_CITIES);
-	}
-
 	public ResponseMessage listCities(StringFilter nameFilter, PageFilter pageFilter)
 	{
 		return sendRequest(ActionRequest.LIST_CITIES, nameFilter, pageFilter);
@@ -243,11 +233,6 @@ public class Protocol implements AutoCloseable
 	public ResponseMessage listCities(PageFilter pageFilter)
 	{
 		return sendRequest(ActionRequest.LIST_CITIES, pageFilter);
-	}
-
-	public ResponseMessage listCities(StringFilter nameFilter)
-	{
-		return sendRequest(ActionRequest.LIST_CITIES, nameFilter);
 	}
 
 	public ResponseMessage addCity(CityInfo city)

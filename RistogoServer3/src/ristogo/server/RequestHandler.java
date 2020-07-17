@@ -30,8 +30,6 @@ import ristogo.common.net.entities.RestaurantInfo;
 import ristogo.common.net.entities.StatisticInfo;
 import ristogo.common.net.entities.StringFilter;
 import ristogo.common.net.entities.UserInfo;
-import ristogo.common.net.entities.enums.LikesFrom;
-import ristogo.common.net.entities.enums.Price;
 import ristogo.common.net.enums.ActionRequest;
 import ristogo.server.annotations.RequestHandlerMethod;
 import ristogo.server.db.DBManager;

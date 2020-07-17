@@ -19,10 +19,10 @@ public class CuisinesDetailsBox extends TableDetailsBox
 		PagedTableView<CuisineBean> ptv = new PagedTableView<CuisineBean>(tv);
 		ptv.setFindHint("Search liked cuisines...");
 		ptv.setDeleteDisable(true);
-		controlBox.setOnClick((cuisine) -> {
-			if (cuisine == null || cuisine.isEmpty())
+		controlBox.setOnClick((cuisineOld, cuisine) -> {
+			if (cuisine == null || cuisine.getName().isEmpty())
 				return;
-			ResponseMessage resMsg = Protocol.getInstance().likeCuisine(new StringFilter(cuisine));
+			ResponseMessage resMsg = Protocol.getInstance().likeCuisine(new StringFilter(cuisine.getName()));
 			if (!resMsg.isSuccess()) {
 				new ErrorBox("Error", "An error has occured while trying to add the cuisine.", resMsg.getErrorMsg()).showAndWait();
 				return;
