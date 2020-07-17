@@ -50,20 +50,28 @@ public class RestaurantFormPanel extends BasePanel
 		cuisineSelector.textProperty().addListener(this::textChangeListener);
 		citySelector.textProperty().addListener(this::textChangeListener);
 
+		commitButton.setDisable(true);
+		commitButton.setOnAction(this::handleCommitButtonAction);
+
+		FormButton clearButton = new FormButton("Clear");
+		clearButton.setOnAction((event) -> {
+			clearRestaurant();
+		});
+
 		HBox nameBox = new HBox(20);
 		HBox cuisineBox = new HBox(20);
 		HBox priceBox = new HBox(20);
 		HBox cityBox = new HBox(20);
+		HBox buttonBox = new HBox(20);
 
 		nameBox.getChildren().addAll(nameLabel, nameField);
 		cuisineBox.getChildren().addAll(cuisineLabel, cuisineSelector);
 		priceBox.getChildren().addAll(costLabel, priceField);
 		cityBox.getChildren().addAll(cityLabel, citySelector);
+		buttonBox.getChildren().addAll(commitButton, clearButton);
 
-		commitButton.setDisable(true);
-		commitButton.setOnAction(this::handleCommitButtonAction);
 
-		addAllContent(nameBox, cuisineBox, priceBox, cityBox, descriptionLabel, descriptionField, commitButton);
+		addAllContent(nameBox, cuisineBox, priceBox, cityBox, descriptionLabel, descriptionField, buttonBox);
 	}
 
 	private void textChangeListener(ObservableValue<? extends String> observable, String oldValue, String newValue)
@@ -100,13 +108,7 @@ public class RestaurantFormPanel extends BasePanel
 	{
 		this.restaurant = restaurant;
 		if (restaurant == null) {
-			nameField.clear();
-			cuisineSelector.clear();
-			priceField.getSelectionModel().clearSelection();;
-			citySelector.clear();
-			descriptionField.clear();
-			commitButton.setText("Create");
-			commitButton.setDisable(true);
+			clearRestaurant();
 			return;
 		}
 		nameField.setText(restaurant.getName());
@@ -116,5 +118,17 @@ public class RestaurantFormPanel extends BasePanel
 		descriptionField.setText(restaurant.getDescription());
 		commitButton.setDisable(false);
 		commitButton.setText("Commit");
+	}
+
+	public void clearRestaurant()
+	{
+		this.restaurant = null;
+		nameField.clear();
+		cuisineSelector.clear();
+		priceField.getSelectionModel().clearSelection();;
+		citySelector.clear();
+		descriptionField.clear();
+		commitButton.setText("Create");
+		commitButton.setDisable(true);
 	}
 }
