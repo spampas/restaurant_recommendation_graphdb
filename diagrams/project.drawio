@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-07-18T15:26:27.978Z" agent="5.0 (X11)" etag="NuPSOGlpPo9D-HzwFP1v" version="13.4.6" type="github" pages="3">
+<mxfile host="app.diagrams.net" modified="2020-07-18T15:30:13.605Z" agent="5.0 (X11)" etag="yHPw3Dx7a31jjoO7Zv7a" version="13.4.6" type="github" pages="3">
   <diagram id="JviSozrBulg9Kmm3xye5" name="Common">
     <mxGraphModel dx="4174" dy="760" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="690" pageHeight="980" math="0" shadow="0">
       <root>
@@ -675,29 +675,29 @@
     </mxGraphModel>
   </diagram>
   <diagram id="Pk8JM_PUX-o-FUwHjQY8" name="Client">
-    <mxGraphModel dx="6497" dy="1267" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="690" pageHeight="980" math="0" shadow="0">
+    <mxGraphModel dx="7675" dy="1900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="690" pageHeight="980" math="0" shadow="0">
       <root>
         <mxCell id="cAoB1MuaTmi9jZh-CBl9-0" />
         <mxCell id="cAoB1MuaTmi9jZh-CBl9-1" parent="cAoB1MuaTmi9jZh-CBl9-0" />
         <mxCell id="91a0gUxXutVOsIY53eHC-5" value="&amp;lt;&amp;lt;use&amp;gt;&amp;gt;" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;labelBackgroundColor=none;endArrow=classic;endFill=1;" edge="1" parent="cAoB1MuaTmi9jZh-CBl9-1" source="F5lW8yJVWhXkFWwTmocq-0" target="tjd1U6DQk7s2RUzMnpMZ-0">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="F5lW8yJVWhXkFWwTmocq-0" value="ristogo" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=110;tabHeight=20;tabPosition=left;html=1;verticalAlign=bottom;labelPosition=left;verticalLabelPosition=top;align=right;spacing=-18;spacingLeft=0;spacingRight=-37;" vertex="1" parent="cAoB1MuaTmi9jZh-CBl9-1">
+        <mxCell id="F5lW8yJVWhXkFWwTmocq-0" value="ristogo" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=70;tabHeight=20;tabPosition=left;html=1;verticalAlign=bottom;labelPosition=left;verticalLabelPosition=top;align=right;spacing=-18;spacingLeft=0;spacingRight=-37;" vertex="1" parent="cAoB1MuaTmi9jZh-CBl9-1">
           <mxGeometry x="-4140" y="110" width="1910" height="1190" as="geometry" />
         </mxCell>
-        <mxCell id="91a0gUxXutVOsIY53eHC-4" value="ristogo.server.db.entities" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=180;tabHeight=20;tabPosition=left;html=1;verticalAlign=bottom;labelPosition=left;verticalLabelPosition=top;align=right;spacing=-18;spacingLeft=0;spacingRight=-158;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="cAoB1MuaTmi9jZh-CBl9-1">
+        <mxCell id="91a0gUxXutVOsIY53eHC-4" value="ristogo.net" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=90;tabHeight=21;tabPosition=left;html=1;verticalAlign=bottom;labelPosition=left;verticalLabelPosition=top;align=right;spacing=-18;spacingLeft=0;spacingRight=-61;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="cAoB1MuaTmi9jZh-CBl9-1">
           <mxGeometry x="-4130.01" y="149" width="440.01" height="441" as="geometry" />
         </mxCell>
-        <mxCell id="91a0gUxXutVOsIY53eHC-2" value="ristogo.server.db.entities" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=180;tabHeight=20;tabPosition=left;html=1;verticalAlign=bottom;labelPosition=left;verticalLabelPosition=top;align=right;spacing=-18;spacingLeft=0;spacingRight=-158;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="cAoB1MuaTmi9jZh-CBl9-1">
+        <mxCell id="91a0gUxXutVOsIY53eHC-2" value="ristogo.config" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=110;tabHeight=18;tabPosition=left;html=1;verticalAlign=bottom;labelPosition=left;verticalLabelPosition=top;align=right;spacing=-18;spacingLeft=0;spacingRight=-83;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="cAoB1MuaTmi9jZh-CBl9-1">
           <mxGeometry x="-2520" y="202.25" width="270" height="141.5" as="geometry" />
         </mxCell>
         <mxCell id="91a0gUxXutVOsIY53eHC-3" value="&amp;lt;&amp;lt;use&amp;gt;&amp;gt;" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;labelBackgroundColor=none;endArrow=classic;endFill=1;" edge="1" parent="cAoB1MuaTmi9jZh-CBl9-1" source="eP4EkdO6mA7hEMxZuOpP-0" target="w5BizDYepYVyIoQ-9EYI-0">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="eP4EkdO6mA7hEMxZuOpP-0" value="ristogo.ui" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=130;tabHeight=20;tabPosition=left;html=1;verticalAlign=bottom;labelPosition=left;verticalLabelPosition=top;align=right;spacing=-18;spacingLeft=0;spacingRight=-102;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="cAoB1MuaTmi9jZh-CBl9-1">
+        <mxCell id="eP4EkdO6mA7hEMxZuOpP-0" value="ristogo.ui" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=80;tabHeight=20;tabPosition=left;html=1;verticalAlign=bottom;labelPosition=left;verticalLabelPosition=top;align=right;spacing=-18;spacingLeft=0;spacingRight=-54;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="cAoB1MuaTmi9jZh-CBl9-1">
           <mxGeometry x="-3630" y="150" width="1080" height="1130" as="geometry" />
         </mxCell>
-        <mxCell id="91a0gUxXutVOsIY53eHC-0" value="ristogo.server.db.entities" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=180;tabHeight=20;tabPosition=left;html=1;verticalAlign=bottom;labelPosition=left;verticalLabelPosition=top;align=right;spacing=-18;spacingLeft=0;spacingRight=-158;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="cAoB1MuaTmi9jZh-CBl9-1">
+        <mxCell id="91a0gUxXutVOsIY53eHC-0" value="ristogo.ui.panels" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=130;tabHeight=20;tabPosition=left;html=1;verticalAlign=bottom;labelPosition=left;verticalLabelPosition=top;align=right;spacing=-18;spacingLeft=0;spacingRight=-104;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="cAoB1MuaTmi9jZh-CBl9-1">
           <mxGeometry x="-3610.01" y="900" width="1050" height="210" as="geometry" />
         </mxCell>
         <mxCell id="hMwD7UuURHUBrFU12fob-30" value="&amp;lt;&amp;lt;use&amp;gt;&amp;gt;" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;dashed=1;labelBackgroundColor=none;" edge="1" parent="cAoB1MuaTmi9jZh-CBl9-1" source="cAoB1MuaTmi9jZh-CBl9-2" target="w5BizDYepYVyIoQ-9EYI-42">
@@ -793,7 +793,7 @@
         <mxCell id="tjd1U6DQk7s2RUzMnpMZ-1" value="&lt;div&gt;ristogo.ui.beans&lt;/div&gt;&lt;div&gt;ristogo.ui.boxes&lt;/div&gt;&lt;div&gt;ristogo.ui.controls&lt;/div&gt;&lt;div&gt;ristogo.ui.dialogs&lt;br&gt;&lt;/div&gt;" style="shape=folder;fontStyle=1;spacingTop=0;tabWidth=110;tabHeight=10;tabPosition=left;html=1;verticalAlign=middle;labelPosition=center;verticalLabelPosition=middle;align=center;spacing=0;spacingLeft=0;spacingRight=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="cAoB1MuaTmi9jZh-CBl9-1">
           <mxGeometry x="-3165" y="1150" width="160" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="91a0gUxXutVOsIY53eHC-1" value="ristogo.server.db.entities" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=180;tabHeight=20;tabPosition=left;html=1;verticalAlign=bottom;labelPosition=left;verticalLabelPosition=top;align=right;spacing=-18;spacingLeft=0;spacingRight=-158;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="cAoB1MuaTmi9jZh-CBl9-1">
+        <mxCell id="91a0gUxXutVOsIY53eHC-1" value="ristogo.ui.config" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=125;tabHeight=24;tabPosition=left;html=1;verticalAlign=bottom;labelPosition=left;verticalLabelPosition=top;align=right;spacing=-18;spacingLeft=0;spacingRight=-100;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="cAoB1MuaTmi9jZh-CBl9-1">
           <mxGeometry x="-3005" y="186" width="255" height="144" as="geometry" />
         </mxCell>
         <mxCell id="hMwD7UuURHUBrFU12fob-2" value="BasePane" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;gradientColor=none;fillColor=none;" vertex="1" parent="cAoB1MuaTmi9jZh-CBl9-1">
