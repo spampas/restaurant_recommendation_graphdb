@@ -133,6 +133,31 @@ public class RistogoServer
 		logLevelOpt.setType(Level.class);
 		logLevelOpt.setArgName("LEVEL");
 		options.addOption(logLevelOpt);
+		
+		
+		Option dbName = new Option("d", "dbname", true, "Set Neo4j database name.");
+		dbName.setArgName("DBNAME");
+		dbName.setType(String.class);
+		options.addOption(dbName);
+		Option dbHost = new Option("D", "dbhost", true, "Set Neo4j database address.");
+		dbHost.setArgName("DBHOST");
+		dbHost.setType(String.class);
+		options.addOption(dbHost);
+		
+		Option dbPassword = new Option("p", "dbpassword", true, "Set Neo4j database password.");
+		dbPassword.setArgName("DBPASSWORD");
+		dbPassword.setType(String.class);
+		options.addOption(dbPassword);
+		
+		Option dbUser = new Option("u", "dbuser", true, "Set Neo4j database user.");
+		dbUser.setArgName("DBUSER");
+		dbUser.setType(String.class);
+		options.addOption(dbUser);
+		
+		Option dbPortOpt = new Option("q", "dbport", true, "Set db port (default: 7687).");
+		dbPortOpt.setType(Integer.class);
+		dbPortOpt.setArgName("DBPORT");
+		options.addOption(dbPortOpt);
 
 		return options;
 	}
@@ -141,7 +166,14 @@ public class RistogoServer
 	{
 		if (cmd.hasOption("help")) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("ristogoserver [-h | --help] [-P <PORT> | --port <PORT>] [-l <LEVEL> | --log-level <LEVEL>]",
+			formatter.printHelp("ristogoserver [-h | --help]"
+					+ "[-P <PORT> | --port <PORT>]"
+					+ "[-q <DBPORT>  | --dbport <DBPORT>]"
+					+ "[-u <DBUSER>  | --dbuser <DBUSER>]"
+					+ "[-p <DBPASSWORD>  | --dbpassword <DBPASSWORD>]"
+					+ "[-D <DBHOST>  | --dbhost <DBHOST>]"
+					+ "[-d <DBNAME>  | --dbname <DBNAME>]"
+					+ "[-l <LEVEL> | --log-level <LEVEL>]",
 				"", options, "\nLOG LEVELS:\n" +
 				"ALL: print all logs.\n" +
 				"FINEST: print all tracing logs.\n" +
@@ -182,6 +214,49 @@ public class RistogoServer
 			Logger.getLogger(RistogoServer.class.getName()).config("Using default port 8888.");
 			port = 8888;
 		}
+		if (cmd.hasOption("dbport")) {
+			try {
+				int dbport = Integer.parseInt(cmd.getOptionValue("port", "8888"));
+				if (dbport < 0 || dbport > 65535) {
+					NumberFormatException ex = new NumberFormatException("The port must be a number between 0 and 65535.");
+					Logger.getLogger(RistogoServer.class.getName()).throwing(RistogoServer.class.getName(), "parseOptions", ex);
+					throw ex;
+				}
+				DBManager.setPort(dbport);
+			} catch (NumberFormatException ex) {
+				Logger.getLogger(RistogoServer.class.getName()).warning("Invalid port specified. Using default: 8888.");
+			}
+		} else {
+			Logger.getLogger(RistogoServer.class.getName()).config("Using default dbport 7687.");
+		}
+		if(cmd.hasOption("dbname")) {
+			String name = cmd.getOptionValue("dbname");
+			if(!name.isBlank())
+				DBManager.setDatabaseName(name);
+		}
+		if(cmd.hasOption("dbhost")) {
+			String host = cmd.getOptionValue("dbhost");
+			if(!host.isBlank())
+				DBManager.setHost(host);
+		}
+		if(cmd.hasOption("dbuser")) {
+			String user = cmd.getOptionValue("dbuser");
+			if(!user.isBlank())
+				DBManager.setUsername(user);
+		}
+		if(cmd.hasOption("dbpassword")) {
+			String password = cmd.getOptionValue("dbpassword");
+			if(!password.isBlank())
+				DBManager.setUsername(password);
+		}
+		if(cmd.hasOption("dbuser")) {
+			String user = cmd.getOptionValue("dbuser");
+			if(!user.isBlank())
+				DBManager.setUsername(user);
+		}
+		
+		
+		
 	}
 
 	private static void setLogLevel(Level level)

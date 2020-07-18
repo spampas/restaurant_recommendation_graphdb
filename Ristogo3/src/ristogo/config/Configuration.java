@@ -69,4 +69,14 @@ public class Configuration implements Serializable
 	{
 		return logLevel;
 	}
+
+	public void setServerIp(String serverIp)
+	{
+		this.serverIp = serverIp;
+	}
+
+	public void setServerPort(int serverPort)
+	{
+		this.serverPort = serverPort;
+	}
 }

@@ -13,8 +13,8 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-
 import ristogo.config.Configuration;
+
 public class Ristogo
 {
 	public static void main(String[] args)
@@ -44,12 +44,17 @@ public class Ristogo
 	private static Options createOptions()
 	{
 		Options options = new Options();
-		options.addOption(new Option("g", "gui", false, "force load the Graphical User Interface."));
-		options.addOption(new Option("c", "cli", false, "force load the Command Line Interface."));
 		options.addOption(new Option("h", "help", false, "print this message."));
+		Option serverAddress = new Option("H", "host", true, "server address");
+		serverAddress.setType(String.class);
+		serverAddress.setArgName("HOST");
+		options.addOption(serverAddress);
 		Option logLevelOpt = new Option("l", "log-level", true, "set log level.");
 		logLevelOpt.setType(Level.class);
 		logLevelOpt.setArgName("LEVEL");
+		Option serverPort = new Option("p", "port", true, "server port" );
+		serverPort.setType(Integer.class);
+		serverPort.setArgName("PORT");
 		options.addOption(logLevelOpt);
 
 		return options;
@@ -59,7 +64,10 @@ public class Ristogo
 	{
 		if (cmd.hasOption("help")) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("ristogo [-h | --help] [-l <LEVEL> | --log-level <LEVEL>]",
+			formatter.printHelp("ristogo [-h | --help] "
+					+ "[-p <PORT>  | --port <PORT>]"
+					+ "[-H <HOSTNAME>  | --host <HOSTNAME>]"
+					+ "[-l <LEVEL> | --log-level <LEVEL>]",
 				"", options, "\nLOG LEVELS:\n" +
 				"ALL: print all logs.\n" +
 				"FINEST: print all tracing logs.\n" +
@@ -85,9 +93,27 @@ public class Ristogo
 			setLogLevel(logLevel);
 		}
 
-		if (cmd.hasOption("gui")) {
-			Logger.getLogger(Ristogo.class.getName()).config("Forcing GUI by command line argument.");
-			launchGUI(cmd.getArgs());
+		if(cmd.hasOption("host")) {
+			if (cmd.hasOption("port")) {
+				try {
+					int port = Integer.parseInt(cmd.getOptionValue("port", "8888"));
+					if (port < 0 || port > 65535) {
+						NumberFormatException ex = new NumberFormatException("The port must be a number between 0 and 65535.");
+						Logger.getLogger(Ristogo.class.getName()).throwing(Ristogo.class.getName(), "parseOptions", ex);
+						throw ex;
+					}
+					Configuration.getConfig().setServerPort(port);
+				} catch (NumberFormatException ex) {
+					Logger.getLogger(Ristogo.class.getName()).warning("Invalid port specified. Using default: 8888.");
+				}
+			} else {
+				Logger.getLogger(Ristogo.class.getName()).config("Using default port 8888.");
+			}
+		}
+		if(cmd.hasOption("host")) {
+			String host = cmd.getOptionValue("host");
+				if(!host.isBlank())
+					Configuration.getConfig().setServerIp(host);
 		}
 	}
 
