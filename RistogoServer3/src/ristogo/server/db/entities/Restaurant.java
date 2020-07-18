@@ -270,7 +270,7 @@ public class Restaurant
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
 			"MATCH (u:User)-[:LIKES]->(r:Restaurant)-[:LOCATED]->(city:City{name:$city}) "
 			+ "RETURN r, count(u) as rank "
-			+ "ORDER BY rank DESC ",
+			+ "ORDER BY rank DESC, r.name ",
 			Map.ofEntries(Map.entry("city", getCity().getName())));
 		List<Restaurant> ranking = new ArrayList<Restaurant>();
 		found.forEach(ranking::add);
@@ -282,7 +282,7 @@ public class Restaurant
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
 			"MATCH (u:User)-[:LIKES]->(r:Restaurant)-[:SERVES]->(cuisine:Cuisine{name:$cuisine}) "	
 			+ "RETURN r, count(u) as rank "
-			+ "ORDER BY rank DESC ",
+			+ "ORDER BY rank DESC, r.name  ",
 			Map.ofEntries(Map.entry("cuisine", getCuisine().getName())));
 		List<Restaurant> ranking = new ArrayList<Restaurant>();
 		found.forEach(ranking::add);
@@ -295,7 +295,7 @@ public class Restaurant
 			"MATCH (city:City{name:$city})<-[:LOCATED]-(r:Restaurant)-[:SERVES]->(cuisine:Cuisine{name:$cuisine})"
 			+ ", (user:User)-[:LIKES]->(r) "
 			+ "RETURN r, count(user) as rank "
-			+ "ORDER BY rank DESC ",
+			+ "ORDER BY rank DESC, r.name ",
 			Map.ofEntries(Map.entry("cuisine", getCuisine().getName()),
 					Map.entry("city", getCity().getName())));
 		List<Restaurant> ranking = new ArrayList<Restaurant>();
@@ -341,7 +341,7 @@ public class Restaurant
 				"WITH distance(p1,p2) as dist, r, f " +
 				"WHERE dist <= $distance AND NOT EXISTS ((r)-[:LIKES|OWNS]-(:User{username:$username})) " +
 				"RETURN (r)--(), count(DISTINCT f) as likes " +
-				"ORDER BY likes DESC " +
+				"ORDER BY likes DESC, r.name " +
 				"SKIP $skip " +
 				"LIMIT $limit ";
 
