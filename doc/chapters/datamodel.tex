@@ -8,6 +8,18 @@ application.
 	\caption{Data model UML diagram (analysis classes).}\label{fig:datamodel}
 \end{figure}
 
+It's worth noting that the relationships between \code{User}/\code{Restaurant}
+and \code{City}, and the relationship between \code{Restaurant} and
+\code{Cuisine}, may not be always present. This happens, for example, when the
+administrator deletes a \code{City}/\code{Cuisine} that is related with a
+\code{User}/\code{Restaurant}. In this case, the application will show
+\code{N/D} (Not Defined) when the user views a \cde{User} or \code{Restaurant}
+with a deleted relationships. The user or the restaurant's owner may re-add the
+relationship with the \code{City}/\code{Cuisine} afterwards.
+
+\figref{fig:metagraph} shows the metagraph of the database. The blue node is a
+User node. \figref{fig:graphsnapshot} shows a snapshot of the database.
+
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=0.6\textwidth]{metagraph}
@@ -20,9 +32,6 @@ application.
 	\includegraphics[width=0.6\textwidth]{graph}
 	\caption{Graph snapshot (example).}\label{fig:graphsnapshot}
 \end{figure}
-
-\figref{fig:metagraph} shows the metagraph of the database. The blue node is a
-User node. \figref{fig:graphsnapshot} shows a snapshot of the database.
 
 The following nodes and relations are defined:
 \begin{itemize}
@@ -79,7 +88,7 @@ Four typical ``on-graph'' queries have been defined. The queries allow to
 implement the function of restaurant recommendations, user recommendations and
 statistics of restaurant of the application on the graph database.
 
-\subsection{Restaurant Recommendations}
+\subsection{Restaurant Recommendations}\label{sec:restrecommend}
 \begin{itemize}
 	\item [\underline{Domain-Specific}] Find restaurants, which a given user
 		has not liked yet, which are located in a given city, or are
@@ -100,7 +109,7 @@ statistics of restaurant of the application on the graph database.
 		restaurant nodes for the number of \code{LIKES} relation.
 \end{itemize}
 
-\subsection{User Recommendations}
+\subsection{User Recommendations}\label{sec:userrecommend}
 \begin{itemize}
 	\item [\underline{Domain-Specific}] Find users who are not followed by a
 		given user, who lives in a given city, or lives a certain number
