@@ -85,17 +85,17 @@ public class RequestHandler extends Thread
 			return;
 		}
 
-		System.out.println("--- RECEIVED ---");
-		System.out.println(reqMsg.toXML());
+		//System.out.println("--- RECEIVED ---");
+		//System.out.println(reqMsg.toXML());
 
 		if (loggedUser != null)
 			loggedUser = DBManager.session().load(User.class, loggedUser.getUsername(), 1);
 
 		ResponseMessage resMsg = dispatchMessage(reqMsg);
 
-		System.out.println("--- RESPONSE ---");
-		System.out.println(resMsg.toXML());
-		System.out.println("----------------");
+		//System.out.println("--- RESPONSE ---");
+		//System.out.println(resMsg.toXML());
+		//System.out.println("----------------");
 
 		resMsg.send(outputStream);
 		DBManager.getInstance().close();
