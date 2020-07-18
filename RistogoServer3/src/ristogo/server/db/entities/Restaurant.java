@@ -338,7 +338,7 @@ public class Restaurant
 				"	point({longitude: c.longitude, latitude:c.latitude}) as p2 " +
 				"WITH distance(p1,p2) as dist, r, f " +
 				"WHERE dist <= $distance AND NOT EXISTS ((r)-[:LIKES|OWNS]-(:User{username:$username})) " +
-				"RETURN (r)--(), count(DISTINCT f) as likes " +
+				"RETURN r, (r)--(), count(DISTINCT f) as likes " +
 				"ORDER BY likes DESC, r.name " +
 				"SKIP $skip " +
 				"LIMIT $limit ";
