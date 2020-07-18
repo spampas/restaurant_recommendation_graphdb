@@ -3,7 +3,6 @@ package ristogo.server.db;
 import org.neo4j.ogm.config.Configuration;
 import org.neo4j.ogm.session.Session;
 import org.neo4j.ogm.session.SessionFactory;
-import org.neo4j.ogm.session.event.EventListener;
 
 public class DBManager
 {

@@ -120,7 +120,7 @@ public class Restaurant
 					"RETURN c",
 					Map.ofEntries(Map.entry("name", name)));
 			if(cuisine == null)
-				return new Cuisine("nd");
+				return new Cuisine("N/D");
 		}
 		
 		return cuisine;
@@ -135,7 +135,7 @@ public class Restaurant
 					"RETURN c",
 					Map.ofEntries(Map.entry("name", name)));
 				if(city == null)
-					return new City("nd",Double.NaN,Double.NaN);
+					return new City("N/D", Double.NaN, Double.NaN);
 		}
 		return city;
 	}
@@ -193,7 +193,6 @@ public class Restaurant
 		regexFilter = "AND r.name =~ $regex ";
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
 			"MATCH (u:User)-[like:LIKES]->(r:Restaurant)<-[:OWNS]-(o:User) " +
-			", (c:Cuisine)<-[:SERVES]-(r)-[:LOCATED]->(ci:City) " +
 			"WHERE u.username = $username " + regexFilter +
 			"RETURN (r)--() " +
 			"ORDER BY r.name " +
@@ -251,7 +250,6 @@ public class Restaurant
 	{
 		Iterable<Restaurant> found = DBManager.session().query(Restaurant.class,
 			"MATCH (u:User)-[like:LIKES]->(r:Restaurant)<-[own:OWNS]-(o:User) " +
-			", (c:Cuisine)<-[serve:SERVES]-(r)-[located:LOCATED]->(ci:City) " +
 			"WHERE u.username = $username " +
 			"RETURN (r)--() " +
 			"ORDER BY r.name " +

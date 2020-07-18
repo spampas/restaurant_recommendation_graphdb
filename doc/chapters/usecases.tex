@@ -63,12 +63,17 @@ the user to be logged in):
 	\item[Change User City]  Change the city where a user lives;
 \end{description}
 
-The \textit{User Recommendation Parameters} allow to select users not followed
-by the customer by filtering them by the city in which they live (or by the
-distance from the city where the customer lives) and the types of cuisine they
-like.
-
 The \textit{Restaurant Recommendation Parameters} allow to select restaurants
 that the customer does not known by number of friends' likes, by the city in
 which they are located (or by the distance from the city where the customer
-lives), by the cuisine they offer and by the price.
+lives), by the cuisine they offer and by the price. This is done by running the
+query defined in~\secref{sec:restrecommend}.
+
+The \textit{User Recommendation Parameters} allow to select users not followed
+by the customer by filtering them by the city in which they live (or by the
+distance from the city where the customer lives) and the types of cuisine they
+like. This is done by running the query defined in~\secref{sec:userrecommend}.
+
+The \emph{Find City} and \emph{Find Cuisine} use cases include the case when the
+user must select a city/cuisine \exgratia{when filling a form} and the
+application gives the user suggestions on the available cities and cuisines.
