@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import ristogo.Ristogo;
 import ristogo.common.net.entities.UserInfo;
 import ristogo.net.Protocol;
 import ristogo.ui.config.GUIConfig;

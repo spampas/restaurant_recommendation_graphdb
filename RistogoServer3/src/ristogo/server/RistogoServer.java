@@ -125,10 +125,12 @@ public class RistogoServer
 	{
 		Options options = new Options();
 		options.addOption(new Option("h", "help", false, "Print this message."));
+		
 		Option portOpt = new Option("P", "port", true, "Set listening port (default: 8888).");
 		portOpt.setType(Integer.class);
 		portOpt.setArgName("PORT");
 		options.addOption(portOpt);
+		
 		Option logLevelOpt = new Option("l", "log-level", true, "Set log level.");
 		logLevelOpt.setType(Level.class);
 		logLevelOpt.setArgName("LEVEL");
@@ -139,6 +141,7 @@ public class RistogoServer
 		dbName.setArgName("DBNAME");
 		dbName.setType(String.class);
 		options.addOption(dbName);
+		
 		Option dbHost = new Option("D", "dbhost", true, "Set Neo4j database address.");
 		dbHost.setArgName("DBHOST");
 		dbHost.setType(String.class);

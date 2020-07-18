@@ -14,6 +14,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import ristogo.config.Configuration;
+import ristogo.ui.RistogoGUI;
 
 public class Ristogo
 {
@@ -37,13 +38,14 @@ public class Ristogo
 		if (cmd == null || !cmd.hasOption("log-level"))
 			setLogLevel(config.getLogLevel());
 
-		launchGUI(args);
+		launchGUI(cmd.getArgs());
 
 	}
 
 	private static Options createOptions()
 	{
 		Options options = new Options();
+		options.addOption(new Option("g", "gui", false, "force load the Graphical User Interface."));
 		options.addOption(new Option("h", "help", false, "print this message."));
 		Option serverAddress = new Option("H", "host", true, "server address");
 		serverAddress.setType(String.class);
@@ -81,6 +83,12 @@ public class Ristogo
 			);
 			close();
 		}
+		
+		if (cmd.hasOption("gui")) {
+			Logger.getLogger(Ristogo.class.getName()).config("Forcing GUI by command line argument.");
+			launchGUI(cmd.getArgs());
+		}
+		
 		if (cmd.hasOption("log-level")) {
 			String logLevelName = cmd.getOptionValue("log-level").toUpperCase();
 			Level logLevel;
@@ -92,9 +100,8 @@ public class Ristogo
 			}
 			setLogLevel(logLevel);
 		}
-
-		if(cmd.hasOption("host")) {
-			if (cmd.hasOption("port")) {
+			
+		if (cmd.hasOption("port")) {
 				try {
 					int port = Integer.parseInt(cmd.getOptionValue("port", "8888"));
 					if (port < 0 || port > 65535) {
@@ -109,7 +116,7 @@ public class Ristogo
 			} else {
 				Logger.getLogger(Ristogo.class.getName()).config("Using default port 8888.");
 			}
-		}
+	
 		if(cmd.hasOption("host")) {
 			String host = cmd.getOptionValue("host");
 				if(!host.isBlank())
@@ -122,7 +129,7 @@ public class Ristogo
 	private static void launchGUI(String[] args)
 	{
 		Logger.getLogger(Ristogo.class.getName()).entering(Ristogo.class.getName(), "launchGUI", args);
-		ristogo.ui.RistogoGUI.launch(args);
+		RistogoGUI.launch(args);
 		Logger.getLogger(Ristogo.class.getName()).exiting(Ristogo.class.getName(), "launchGUI", args);
 		close();
 	}
