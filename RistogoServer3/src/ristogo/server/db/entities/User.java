@@ -255,7 +255,7 @@ public class User
 				"RETURN c",
 				Map.ofEntries(Map.entry("username", username)));
 				if(city == null)
-					return new City("nd", 0, 0);
+					return new City("N/D", Double.NaN, Double.NaN);
 		}
 		return city;
 	}

@@ -87,10 +87,10 @@ public class RequestHandler extends Thread
 
 		System.out.println("--- RECEIVED ---");
 		System.out.println(reqMsg.toXML());
-		
+
 		if (loggedUser != null)
-			     loggedUser = DBManager.session().load(User.class, loggedUser.getUsername(), 1);
-		
+			loggedUser = DBManager.session().load(User.class, loggedUser.getUsername(), 1);
+
 		ResponseMessage resMsg = dispatchMessage(reqMsg);
 
 		System.out.println("--- RESPONSE ---");
@@ -412,7 +412,6 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod
 	private ResponseMessage handleGetCity(RequestMessage reqMsg)
 	{
-		loggedUser = DBManager.session().load(User.class, loggedUser.getUsername(), 1);
 		CityInfo city = new CityInfo(loggedUser.getCity().getName(), loggedUser.getCity().getLatitude(), loggedUser.getCity().getLongitude());
 		return new ResponseMessage(city);
 	}
@@ -421,7 +420,6 @@ public class RequestHandler extends Thread
 	private ResponseMessage handleSetCity(RequestMessage reqMsg)
 	{
 		StringFilter city = reqMsg.getEntity(StringFilter.class);
-		loggedUser = DBManager.session().load(User.class, loggedUser.getUsername(), 1);
 		if (city == null)
 			return new ResponseMessage("No city selected.");
 		City savedCity = DBManager.session().load(City.class, city.getValue(), 0);
