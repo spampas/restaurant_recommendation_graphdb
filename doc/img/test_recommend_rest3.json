@@ -1,0 +1,44 @@
+﻿[
+  {
+    "r": {
+"identity": 35,
+"labels": [
+        "Restaurant"
+      ],
+"properties": {
+"name": "Bob's Restaurant",
+"description": "Pizza <3",
+"price": "MIDDLE"
+      }
+    },
+    "likes": 3
+  },
+  {
+    "r": {
+"identity": 48,
+"labels": [
+        "Restaurant"
+      ],
+"properties": {
+"name": "Judy's pizza",
+"description": "The best pizzas of the world!",
+"price": "HIGH"
+      }
+    },
+    "likes": 3
+  },
+  {
+    "r": {
+"identity": 49,
+"labels": [
+        "Restaurant"
+      ],
+"properties": {
+"name": "Judy's pizza Firenze",
+"description": "The best pizzas of the world!",
+"price": "HIGH"
+      }
+    },
+    "likes": 2
+  }
+]
