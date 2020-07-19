@@ -4,7 +4,7 @@ We have tested the application in all of its functions. In particular, all the
 on-graph queries have been tested multiple times.
 
 Tests have been performed on a test database created from us, whose dump can be
-found in db/ristogo.dump
+found in \code{db/ristogo.dump}.
 
 \section{User Recommendations}
 
@@ -40,10 +40,11 @@ cities in which they live.
 	\caption{Users followed by simone.}\label{fig:usersfollowed}
 \end{figure}
 
-So, as you can see from the table, the application returns the correct result as
-it shows ``frank'' and ``heidi'' users who are the users who like the Fish
-cuisine and who live within a radius of 80 kilometers from Pisa. Note that in
-the table, as expected, they are sorted by distance from Pisa.
+So, as you can see from the table in \figref{fig:tableuserform}, the application
+returns the correct result as it shows ``frank'' and ``heidi'' users who are the
+users who like the Fish cuisine and who live within a radius of 80 kilometers
+from Pisa. Note that in the table, as expected, they are sorted by distance from
+Pisa.
 
 \begin{figure}[htb]
 	\centering
@@ -56,13 +57,18 @@ the table, as expected, they are sorted by distance from Pisa.
 We have tested the recommendation on restaurants, here we are providing an
 example of the correctness of our results.
 
-Let's suppose to have the following situation, looking at the User ``carol'' we
-have the follower/following network in figure
+Let's suppose to have the situation shown in~\figref{fig:recommendres1}, looking
+at the user ``carol'' and his followers/followed users.
 
-%Aggiungere test_recommend_res1.svg
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=1\textwidth]{test_recommend_rest1}
+	\caption{Followers of carol and users followed by carol.}\label{fig:recommendres1}
+\end{figure}
 
-Now, suppose that carol want to find a restaurant that SERVES Pizza with a Price
-ranking of Luxury or lower, at most 80 km distant from Livorno.
+Now, suppose that carol want to find a restaurant that \code{SERVES} Pizza with
+a price of \code{Luxury} or lower, at most 80 km distant from Livorno. She would
+fill the form like in~\figreg{resrecform}.
 
 \begin{figure}[H]
 	\centering
@@ -70,30 +76,41 @@ ranking of Luxury or lower, at most 80 km distant from Livorno.
 	\caption{Restaurant Recommendations Form.}\label{fig:resrecform}
 \end{figure}
 
-In the system we have the following Restaurants which serves Pizza.
+In the system we have the Restaurants shown in~\figref{fig:recommendres2} which
+serves Pizza.
 
-%Aggiungere test_recommend_res2.svg
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=1\textwidth]{test_recommend_rest2}
+	\caption{Restuarants which serves Pizza.}\label{fig:recommendres2}
+\end{figure}
 
 Now the system will suggest to carol the restaurants which serves pizza ordered
 by the number of likes of friends and friends of friends and excluding the
 restaurants she already likes or owns.
 
-The result provided by the application is the following:
+The result provided by the application is shown in~\figref{fig:recresult}.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\textwidth]{test_recommend_result}
-	\caption{Restaurant Recommendations Form.}\label{fig:resrecform}
+	\caption{Restaurant Recommendations Form.}\label{fig:recresult}
 \end{figure}
 
 We can then check in the database that result is correct, in fact looking at the
-database we have the situation shown in the graph. In figure are shown only the
-relationships from friends or friends of friends of carol with the restaurants
-which serves pizza.  Counting the LIKES relationship we can see that effectively
-Bob's Restaurant and Judy's Pizza have 3 likes each other, instead Judy's Pizza
-Florence has only two likes, thus is shown after.
+database we have the situation shown in~\figref{fig:recommendres3}.
 
-%Aggiungere test_recommend_res3.svg
+In the figure are shown only the relationships from friends or friends of
+friends of carol with the restaurants which serves pizza. Counting the
+\code{LIKES} relationship we can see that effectively Bob's Restaurant and
+Judy's Pizza have 3 likes each other, instead Judy's Pizza Florence has only two
+likes, thus is shown after.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=1\textwidth]{test_recommend_rest3}
+	\caption{Graph snapshot for restaurant recommendations.}\label{fig:recommendres3}
+\end{figure}
 
 Here we can see the results in json:
 

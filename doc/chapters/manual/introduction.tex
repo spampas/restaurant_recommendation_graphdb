@@ -1,7 +1,7 @@
 \section{Introduction}
 
-Ristogo is an application used to recommend restaurants to people. Every user
-can be only a customer or also a restaurateur, which can manage more
+\standout{Ristogo} is an application used to recommend restaurants to people.
+Every user can be only a customer or also a restaurateur, which can manage more
 functionalities.
 
 Every user can follow other users as in a social application and can also put
@@ -13,3 +13,15 @@ user, using his/her friends preferences.
 Restaurateurs can manage their restaurants modifying information in every moment
 and can see the position (calculated with the number of likes) in the
 restaurant's ranking with the same cuisine or in the same city.
+
+To run the server:
+\begin{verbatim}
+$ java -jar RistogoServer.jar
+\end{verbatim}
+To run the client:
+\begin{verbatim}
+$ java -jar Ristogo.jar
+\end{verbatim}
+The \code{-h} option can be used to view all the command line options available.
+By default, the server expect to find a local Neo4j database with the password
+\code{password}.
