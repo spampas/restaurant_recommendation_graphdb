@@ -125,38 +125,37 @@ public class RistogoServer
 	{
 		Options options = new Options();
 		options.addOption(new Option("h", "help", false, "Print this message."));
-		
+
 		Option portOpt = new Option("P", "port", true, "Set listening port (default: 8888).");
 		portOpt.setType(Integer.class);
 		portOpt.setArgName("PORT");
 		options.addOption(portOpt);
-		
+
 		Option logLevelOpt = new Option("l", "log-level", true, "Set log level.");
 		logLevelOpt.setType(Level.class);
 		logLevelOpt.setArgName("LEVEL");
 		options.addOption(logLevelOpt);
-		
-		
+
 		Option dbName = new Option("d", "dbname", true, "Set Neo4j database name.");
 		dbName.setArgName("DBNAME");
 		dbName.setType(String.class);
 		options.addOption(dbName);
-		
+
 		Option dbHost = new Option("D", "dbhost", true, "Set Neo4j database address.");
 		dbHost.setArgName("DBHOST");
 		dbHost.setType(String.class);
 		options.addOption(dbHost);
-		
+
 		Option dbPassword = new Option("p", "dbpassword", true, "Set Neo4j database password.");
 		dbPassword.setArgName("DBPASSWORD");
 		dbPassword.setType(String.class);
 		options.addOption(dbPassword);
-		
+
 		Option dbUser = new Option("u", "dbuser", true, "Set Neo4j database user.");
 		dbUser.setArgName("DBUSER");
 		dbUser.setType(String.class);
 		options.addOption(dbUser);
-		
+
 		Option dbPortOpt = new Option("q", "dbport", true, "Set db port (default: 7687).");
 		dbPortOpt.setType(Integer.class);
 		dbPortOpt.setArgName("DBPORT");
@@ -219,7 +218,7 @@ public class RistogoServer
 		}
 		if (cmd.hasOption("dbport")) {
 			try {
-				int dbport = Integer.parseInt(cmd.getOptionValue("port", "8888"));
+				int dbport = Integer.parseInt(cmd.getOptionValue("port", "7687"));
 				if (dbport < 0 || dbport > 65535) {
 					NumberFormatException ex = new NumberFormatException("The port must be a number between 0 and 65535.");
 					Logger.getLogger(RistogoServer.class.getName()).throwing(RistogoServer.class.getName(), "parseOptions", ex);
@@ -227,7 +226,7 @@ public class RistogoServer
 				}
 				DBManager.setPort(dbport);
 			} catch (NumberFormatException ex) {
-				Logger.getLogger(RistogoServer.class.getName()).warning("Invalid port specified. Using default: 8888.");
+				Logger.getLogger(RistogoServer.class.getName()).warning("Invalid db port specified. Using default: 7687.");
 			}
 		} else {
 			Logger.getLogger(RistogoServer.class.getName()).config("Using default dbport 7687.");
@@ -257,9 +256,6 @@ public class RistogoServer
 			if(!user.isBlank())
 				DBManager.setUsername(user);
 		}
-		
-		
-		
 	}
 
 	private static void setLogLevel(Level level)

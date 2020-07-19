@@ -83,12 +83,6 @@ public class Ristogo
 			);
 			close();
 		}
-		
-		if (cmd.hasOption("gui")) {
-			Logger.getLogger(Ristogo.class.getName()).config("Forcing GUI by command line argument.");
-			launchGUI(cmd.getArgs());
-		}
-		
 		if (cmd.hasOption("log-level")) {
 			String logLevelName = cmd.getOptionValue("log-level").toUpperCase();
 			Level logLevel;
@@ -100,7 +94,7 @@ public class Ristogo
 			}
 			setLogLevel(logLevel);
 		}
-			
+
 		if (cmd.hasOption("port")) {
 				try {
 					int port = Integer.parseInt(cmd.getOptionValue("port", "8888"));
@@ -116,15 +110,13 @@ public class Ristogo
 			} else {
 				Logger.getLogger(Ristogo.class.getName()).config("Using default port 8888.");
 			}
-	
+
 		if(cmd.hasOption("host")) {
 			String host = cmd.getOptionValue("host");
 				if(!host.isBlank())
 					Configuration.getConfig().setServerIp(host);
 		}
 	}
-
-
 
 	private static void launchGUI(String[] args)
 	{
