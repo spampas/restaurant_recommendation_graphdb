@@ -472,20 +472,21 @@ public class RequestHandler extends Thread
 	@RequestHandlerMethod(true)
 	private ResponseMessage handleDeleteUser(RequestMessage reqMsg)
 	{
-		UserInfo user = (UserInfo)reqMsg.getEntity();
-
+		StringFilter user = (StringFilter)reqMsg.getEntity();
+		if(user == null)
+			return new ResponseMessage("No user selected");
 		try {
-			User.validateUsername(user.getUsername());
+			User.validateUsername(user.getValue());
 		} catch (IllegalArgumentException ex) {
 			return new ResponseMessage(ex.getMessage());
 		}
-		if(!loggedUser.isAdmin() || !loggedUser.getUsername().equals(user.getUsername()))
+		if(!loggedUser.isAdmin() && !loggedUser.getUsername().equals(user.getValue()))
 			return new ResponseMessage("You don't have permissions to do this");
-		User removedUser = DBManager.session().load(User.class, user.getUsername(), 0);
+		User removedUser = DBManager.session().load(User.class, user.getValue(), 0);
 		DBManager.session().delete(removedUser);
 		if (removedUser == null)
 			return new ResponseMessage("No such user.");
-		return new ResponseMessage(new UserInfo(removedUser.getUsername()));
+		return new ResponseMessage();
 	}
 
 	@RequestHandlerMethod
