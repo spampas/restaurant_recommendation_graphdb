@@ -480,8 +480,7 @@ public class RequestHandler extends Thread
 		} catch (IllegalArgumentException ex) {
 			return new ResponseMessage(ex.getMessage());
 		}
-		if(!loggedUser.isAdmin() && !loggedUser.getUsername().equals(user.getValue()))
-			return new ResponseMessage("You don't have permissions to do this");
+		
 		User removedUser = DBManager.session().load(User.class, user.getValue(), 0);
 		DBManager.session().delete(removedUser);
 		if (removedUser == null)
