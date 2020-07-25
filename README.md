@@ -4,3 +4,11 @@ This project has been developed as a workgroup during the classes of Large-Scale
 
 To have more details, see the [design](design.pdf) and the [documentation](documentation.pdf)
 
+
+
+To run the application you need to create a graph database on Neo4J using the dumb in the [db](./db/ristogo.dump) folder. After starting the database, from the command line, execute the [binary codes](./bin) with the following commands:
+
+ java -jar RistoGoServer3-1.0.0.jar
+ 
+ java -jar RistoGo3-1.0.0.jar
+
